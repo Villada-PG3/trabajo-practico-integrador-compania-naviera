@@ -32,7 +32,26 @@ erDiagram
 
     Lugar_ocupa }o--|| Puerto : tiene
     
+     HistorialReserva }o--|| Reserva : registra_cambios
+    HistorialPago }o--|| Pago : registra_cambios
 
+    HistorialReserva {
+        int id_historial_reserva PK
+        int id_reserva FK
+        date fecha_cambio
+        string cambio_realizado
+        int estado_reserva FK
+        int usuario_responsable FK
+    }
+
+    HistorialPago {
+        int id_historial_pago PK
+        int id_pago FK
+        date fecha_cambio
+        string cambio_realizado
+        int estado_pago FK
+        int usuario_responsable FK
+    }
 
     Puertoxactividad{
         int id_puertoxactividad PK
