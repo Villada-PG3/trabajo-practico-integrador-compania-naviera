@@ -1,53 +1,63 @@
 erDiagram
-    Cubierta }o--|| Navio : tiene
-    Camarote }o--|| Cubierta : tiene
+
+    Pasajero }o--|| Reserva : incluye
+    HistorialReserva }o--|| Reserva : registra_cambios
+
+    Tripulante ||--o{ ViajeX_Navio : asigna
+    ViajeX_Navio }o--|| Navio : puede_ser
+    Navio ||--o{ Cubierta : tiene
 
     Viaje ||--o{ Itinerarioviaj : para
-    Orden }o--|| Itinerario : tiene
-    Tipo_itinerario ||--o{ Itinerario : pertenece
-    Orden ||--o{ Puerto : posee
-    Tripulante ||--o{ ViajeX_Navio : asigna
     ViajeX_Navio }o--|| Viaje : puede_ser
-    Navio ||--o{ ViajeX_Navio : puede_ser
 
-    Reserva ||--o{ Pago : paga
+    Orden }o--|| Itinerario : tiene
+    Itinerario ||--o{ Itinerarioviaj : sigue
+
+    
+    Tripulante ||--o{ OcupacionCamarote : es_tripulante
+
+    Puerto ||--o{ Puertoxactividad : Posee
+    Puerto ||--o{ Lugar_ocupa : tiene
+
+    Cubierta ||--o{ Camarote : tiene
+    
+    Tipo_itinerario ||--o{ Itinerario : pertenece
+
+    Puerto }o--|| Orden : posee  
     
     Cliente ||--o{ Reserva : hace
-    Reserva ||--o{ Pasajero : incluye
 
-
+    EstadoPago ||--o{ Pago : clasifica
     
     MetodoPago ||--o{ Pago : usa
-    EstadoPago ||--o{ Pago : clasifica
+
+    Reserva ||--o{ Pago : paga
+
     EstadoReserva ||--o{ Reserva : clasifica
+
     Trabajador ||--o{ Tripulante: puede_ser
-    Itinerarioviaj }o--|| Itinerario : sigue
     
     ViajeX_Navio ||--o{ Reserva : tiene
-    Tipo_de_navio ||--o{ Navio : tiene
+
+    Navio }o--|| Tipo_de_navio : tiene
 
     Usuario ||--o{ Cliente : representa
-
 
     Estado_Camarote ||--o{ Camarote :Puede
     
     Actividades_posibles ||--o{ Puertoxactividad : Posee
-    Puerto ||--o{ Puertoxactividad : Posee
 
-    Lugar_ocupa }o--|| Puerto : tiene
-    
-    HistorialReserva }o--|| Reserva : registra_cambios
-    HistorialPago }o--|| Pago : registra_cambios
+    Pago ||--o{ HistorialPago : registra_cambios
     
     Rol ||--o{ Usuario : tiene
-    Tripulante ||--o{ OcupacionCamarote : es_tripulante
+    
     Pasajero ||--o{ OcupacionCamarote : es_pasajero
+
     Camarote ||--o{ OcupacionCamarote : asignado_a
 
-    Pasajero }|--|| EstadoPasajero : tiene
+    EstadoPasajero ||--|{ Pasajero : tiene
 
-    Camarote }|--|| TipoCamarote : tiene
-
+    TipoCamarote ||--|{ Camarote : tiene
     
     TipoPersona ||--o{ OcupacionCamarote : define
 
