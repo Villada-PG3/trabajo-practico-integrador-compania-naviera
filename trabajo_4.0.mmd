@@ -1,7 +1,7 @@
 erDiagram
     Cubierta }o--|| Navio : tiene
     Camarote }o--|| Cubierta : tiene
-    Camarote ||--o{ CamaroteXReserva : asignado_a
+
     Viaje ||--o{ Itinerarioviaj : para
     Orden }o--|| Itinerario : tiene
     Tipo_itinerario ||--o{ Itinerario : pertenece
@@ -9,7 +9,7 @@ erDiagram
     Tripulante ||--o{ ViajeX_Navio : asigna
     ViajeX_Navio }o--|| Viaje : puede_ser
     Navio ||--o{ ViajeX_Navio : puede_ser
-    CamaroteXReserva }o--|| Reserva : incluye
+
     Reserva ||--o{ Pago : paga
     
     Cliente ||--o{ Reserva : hace
@@ -28,8 +28,7 @@ erDiagram
 
     Usuario ||--o{ Cliente : representa
 
-    CamaroteXTripulante o{--|| Tripulante : ocupa
-    Camarote ||--o{ CamaroteXTripulante : asignado_a
+
     Estado_Camarote ||--o{ Camarote :Puede
     
     Actividades_posibles ||--o{ Puertoxactividad : Posee
@@ -41,6 +40,27 @@ erDiagram
     HistorialPago }o--|| Pago : registra_cambios
     
     Rol ||--o{ Usuario : tiene
+    Tripulante ||--o{ OcupacionCamarote : es_tripulante
+    Pasajero ||--o{ OcupacionCamarote : es_pasajero
+    Camarote ||--o{ OcupacionCamarote : asignado_a
+
+    
+    TipoPersona ||--o{ OcupacionCamarote : define
+
+    TipoPersona {
+    int id_tipo_persona PK
+    string descripcion
+    }
+
+    OcupacionCamarote {
+        int id_ocupacion_camarote PK
+        int id_camarote FK
+        int id_tipo_persona FK
+        int id_persona
+        date fecha_inicio
+        date fecha_fin
+    }
+
 
     HistorialReserva {
         int id_historial_reserva PK
@@ -235,11 +255,7 @@ erDiagram
         int itinerario FK
     }
 
-    CamaroteXReserva {
-        int id_camarote_reserva PK
-        int id_reserva FK
-        int id_camarote FK
-    }
+
 
     Usuario {
         int id_usuario PK
@@ -255,10 +271,3 @@ erDiagram
         string descripcion
     }
 
-    CamaroteXTripulante {
-        int id_camarote_tripulante PK
-        int id_camarote FK
-        int id_tripulante FK
-        date fecha_inicio
-        date fecha_fin
-    }
