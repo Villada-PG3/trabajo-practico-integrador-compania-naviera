@@ -13,4 +13,5 @@ urlpatterns = [
     path('menu/', views.menu_user, name='menu_user'),
     path('registro/', views.registro_usuario, name='registro'),
     path('', views.main_view, name='home'),
+    
 ]
