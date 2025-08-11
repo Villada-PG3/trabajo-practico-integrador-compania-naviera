@@ -1,0 +1,90 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SEA STAR - Cruceros</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="min-h-screen font-sans bg-gradient-to-br from-blue-800 to-blue-900 text-white">
+
+  <!-- Navigation -->
+  <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-sm">★</div>
+      <span class="font-bold text-lg">SEA STAR</span>
+    </div>
+    <div class="hidden md:flex items-center gap-6">
+      <a href="index.html" class="relative hover:text-orange-400 transition">Inicio</a>
+      <a href="contactanos.html" class="relative hover:text-orange-400 transition">Contáctanos</a>
+      <a href="cruceros.html" class="relative hover:text-orange-400 transition">Cruceros</a>
+      <a href="#" class="relative hover:text-orange-400 transition">Reservas</a>
+      <a href="ofertas.html" class="relative hover:text-orange-400 transition">Ofertas</a>
+      <a href="{% url 'login' %}" class="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full hover:bg-orange-500 transition">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="text-white" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="flex flex-col lg:flex-row min-h-[calc(100vh-80px)]">
+    <!-- Left Panel -->
+    <div class="flex-1 lg:flex-[0.4] p-6 lg:p-16 flex flex-col justify-center">
+      <div class="max-w-xl space-y-6">
+        <p class="text-lg leading-relaxed">
+          En SEA STAR, nos dedicamos a crear experiencias inolvidables en el mar.
+        </p>
+        <p class="text-lg leading-relaxed">
+          Con destinos soñados, atención personalizada y el máximo confort, te 
+          invitamos a descubrir el mundo a bordo de nuestros cruceros.
+        </p>
+        <p class="text-lg leading-relaxed">
+          Viajar nunca fue tan placentero.
+        </p>
+        <a href="{% url 'registro' %}" class="inline-block bg-white/20 border border-white/30 hover:bg-orange-500 transition px-6 py-3 font-semibold tracking-wide text-white text-center">REGÍSTRATE</a>
+        
+
+        <!-- Social Icons -->
+        <div class="flex gap-4 mt-6">
+          <a href="https://instagram.com" target="_blank" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-orange-500 transform hover:scale-110 transition">
+            <i class="fab fa-instagram text-2xl"></i>
+          </a>
+          <a href="mailto:contacto@seastar.com" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-orange-500 transform hover:scale-110 transition">
+            <i class="fas fa-envelope text-2xl"></i>
+          </a>
+          <a href="https://wa.me/1234567890" target="_blank" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-orange-500 transform hover:scale-110 transition">
+            <i class="fab fa-whatsapp text-2xl"></i>
+          </a>
+          <a href="https://facebook.com" target="_blank" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-orange-500 transform hover:scale-110 transition">
+            <i class="fab fa-facebook-f text-2xl"></i>
+          </a>
+          <a href="https://twitter.com" target="_blank" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-orange-500 transform hover:scale-110 transition">
+            <i class="fab fa-twitter text-2xl"></i>
+          </a>
+          <a href="https://youtube.com" target="_blank" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-orange-500 transform hover:scale-110 transition">
+            <i class="fab fa-youtube text-2xl"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Image Panel -->
+    <div class="relative flex-1 lg:flex-[0.6]">
+      <img src="{% static 'a.jpg' %}" alt="Crucero SEA STAR" class="w-full h-full object-cover"/>
+      <div class="absolute bottom-8 right-8 bg-white/10 backdrop-blur-md rounded-md p-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-sm">★</div>
+          <span class="font-bold text-white">SEA STAR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
