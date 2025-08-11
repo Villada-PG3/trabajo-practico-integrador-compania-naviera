@@ -3,28 +3,31 @@ erDiagram
     Camarote }o--|| Cubierta : tiene
     Camarote ||--o{ CamaroteXReserva : asignado_a
     Viaje ||--o{ Itinerarioviaj : para
-    Itinerario ||--o{ Orden : tiene
+    Orden }o--|| Itinerario : tiene
     Tipo_itinerario ||--o{ Itinerario : pertenece
-    Orden ||--o{ Orden_Puerto : tiene
-    Puerto ||--o{ Orden_Puerto : tiene
-
+    Orden ||--o{ Puerto : posee
     Tripulante ||--o{ ViajeX_Navio : asigna
     ViajeX_Navio }o--|| Viaje : puede_ser
     Navio ||--o{ ViajeX_Navio : puede_ser
     CamaroteXReserva }o--|| Reserva : incluye
     Reserva ||--o{ Pago : paga
-    Cliente ||--o{ Pasajero: puede_ser
-    Cliente ||--o{ Reserva: puede_hacer
+    
+    Cliente ||--o{ Reserva : hace
+    Reserva ||--o{ Pasajero : incluye
+
+
+    
     MetodoPago ||--o{ Pago : usa
     EstadoPago ||--o{ Pago : clasifica
     EstadoReserva ||--o{ Reserva : clasifica
     Trabajador ||--o{ Tripulante: puede_ser
     Itinerarioviaj }o--|| Itinerario : sigue
-    Pasajero ||--o{ Reserva: puede
+    
     ViajeX_Navio ||--o{ Reserva : tiene
     Tipo_de_navio ||--o{ Navio : tiene
 
     Usuario ||--o{ Cliente : representa
+
     CamaroteXTripulante o{--|| Tripulante : ocupa
     Camarote ||--o{ CamaroteXTripulante : asignado_a
     Estado_Camarote ||--o{ Camarote :Puede
@@ -34,9 +37,9 @@ erDiagram
 
     Lugar_ocupa }o--|| Puerto : tiene
     
-    HistorialReserva }o--|| Reserva : registra_cambios
+     HistorialReserva }o--|| Reserva : registra_cambios
     HistorialPago }o--|| Pago : registra_cambios
-
+    
     HistorialReserva {
         int id_historial_reserva PK
         int id_reserva FK
@@ -163,9 +166,12 @@ erDiagram
 
     Pasajero {
         int id_pasajero PK
-        int Id_cliente FK
+        int id_reserva FK
+        string nombre
+        string apellido
         date fecha_inicio
         date fecha_fin
+
     }
 
     Reserva {
@@ -174,7 +180,6 @@ erDiagram
         int Id_Viaje_Navio FK
         int EstadoReserva FK
         int Cliente FK
-        int Pasajero FK
         date created_at
         date updated_at
     }
@@ -249,10 +254,4 @@ erDiagram
         int id_tripulante FK
         date fecha_inicio
         date fecha_fin
-    }
-
-    Orden_Puerto {
-    int id_orden_puerto PK
-    int id_orden FK
-    int id_puerto FK
     }
