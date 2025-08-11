@@ -3,9 +3,11 @@ erDiagram
     Camarote }o--|| Cubierta : tiene
     Camarote ||--o{ CamaroteXReserva : asignado_a
     Viaje ||--o{ Itinerarioviaj : para
-    Orden }o--|| Itinerario : tiene
+    Itinerario ||--o{ Orden : tiene
     Tipo_itinerario ||--o{ Itinerario : pertenece
-    Orden ||--o{ Puerto : posee
+    Orden ||--o{ Orden_Puerto : tiene
+    Puerto ||--o{ Orden_Puerto : tiene
+
     Tripulante ||--o{ ViajeX_Navio : asigna
     ViajeX_Navio }o--|| Viaje : puede_ser
     Navio ||--o{ ViajeX_Navio : puede_ser
@@ -32,7 +34,7 @@ erDiagram
 
     Lugar_ocupa }o--|| Puerto : tiene
     
-     HistorialReserva }o--|| Reserva : registra_cambios
+    HistorialReserva }o--|| Reserva : registra_cambios
     HistorialPago }o--|| Pago : registra_cambios
 
     HistorialReserva {
@@ -247,4 +249,10 @@ erDiagram
         int id_tripulante FK
         date fecha_inicio
         date fecha_fin
+    }
+
+    Orden_Puerto {
+    int id_orden_puerto PK
+    int id_orden FK
+    int id_puerto FK
     }
