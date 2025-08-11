@@ -44,6 +44,10 @@ erDiagram
     Pasajero ||--o{ OcupacionCamarote : es_pasajero
     Camarote ||--o{ OcupacionCamarote : asignado_a
 
+    Pasajero }|--|| EstadoPasajero : tiene
+
+    Camarote }|--|| TipoCamarote : tiene
+
     
     TipoPersona ||--o{ OcupacionCamarote : define
 
@@ -130,6 +134,12 @@ erDiagram
         int numero_de_camarote
         int numero_de_cubierta FK
         int id_estado_camarote FK
+        int id_tipo_camarote FK
+    }
+    TipoCamarote {
+        int id_tipo_camarote PK
+        string nombre
+        string descripcion
     }
 
     Cubierta {
@@ -199,7 +209,14 @@ erDiagram
         string apellido
         date fecha_inicio
         date fecha_fin
+        int id_estado_pasajero FK
 
+    }
+
+    EstadoPasajero {
+        int id_estado_pasajero PK
+        string nombre
+        string descripcion
     }
 
     Reserva {
