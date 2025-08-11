@@ -1,7 +1,7 @@
 erDiagram
     Cubierta }o--|| Navio : tiene
     Camarote }o--|| Cubierta : tiene
-    Camarote ||--o{ CamaroteXReserva : asignado_a
+
     Viaje ||--o{ Itinerarioviaj : para
     Orden }o--|| Itinerario : tiene
     Tipo_itinerario ||--o{ Itinerario : pertenece
@@ -9,22 +9,26 @@ erDiagram
     Tripulante ||--o{ ViajeX_Navio : asigna
     ViajeX_Navio }o--|| Viaje : puede_ser
     Navio ||--o{ ViajeX_Navio : puede_ser
-    CamaroteXReserva }o--|| Reserva : incluye
+
     Reserva ||--o{ Pago : paga
-    Cliente ||--o{ Pasajero: puede_ser
-    Cliente ||--o{ Reserva: puede_hacer
+    
+    Cliente ||--o{ Reserva : hace
+    Reserva ||--o{ Pasajero : incluye
+
+
+    
     MetodoPago ||--o{ Pago : usa
     EstadoPago ||--o{ Pago : clasifica
     EstadoReserva ||--o{ Reserva : clasifica
     Trabajador ||--o{ Tripulante: puede_ser
     Itinerarioviaj }o--|| Itinerario : sigue
-    Pasajero ||--o{ Reserva: puede
+    
     ViajeX_Navio ||--o{ Reserva : tiene
     Tipo_de_navio ||--o{ Navio : tiene
 
     Usuario ||--o{ Cliente : representa
-    CamaroteXTripulante o{--|| Tripulante : ocupa
-    Camarote ||--o{ CamaroteXTripulante : asignado_a
+
+
     Estado_Camarote ||--o{ Camarote :Puede
     
     Actividades_posibles ||--o{ Puertoxactividad : Posee
@@ -35,7 +39,52 @@ erDiagram
 =======
 >>>>>>> origin/django
     
+     HistorialReserva }o--|| Reserva : registra_cambios
+    HistorialPago }o--|| Pago : registra_cambios
+    
+    Rol ||--o{ Usuario : tiene
+    Tripulante ||--o{ OcupacionCamarote : es_tripulante
+    Pasajero ||--o{ OcupacionCamarote : es_pasajero
+    Camarote ||--o{ OcupacionCamarote : asignado_a
 
+    Pasajero }|--|| EstadoPasajero : tiene
+
+    Camarote }|--|| TipoCamarote : tiene
+
+    
+    TipoPersona ||--o{ OcupacionCamarote : define
+
+    TipoPersona {
+    int id_tipo_persona PK
+    string descripcion
+    }
+
+    OcupacionCamarote {
+        int id_ocupacion_camarote PK
+        int id_camarote FK
+        int id_tipo_persona FK
+        int id_persona
+        date fecha_inicio
+        date fecha_fin
+    }
+
+
+    HistorialReserva {
+        int id_historial_reserva PK
+        int id_reserva FK
+        date fecha_cambio
+        string cambio_realizado
+
+    }
+
+    HistorialPago {
+        int id_historial_pago PK
+        int id_pago FK
+        date fecha_cambio
+        string cambio_realizado
+        int estado_pago FK
+        int usuario_responsable FK
+    }
 
     Puertoxactividad{
         int id_puertoxactividad PK
@@ -88,6 +137,12 @@ erDiagram
         int numero_de_camarote
         int numero_de_cubierta FK
         int id_estado_camarote FK
+        int id_tipo_camarote FK
+    }
+    TipoCamarote {
+        int id_tipo_camarote PK
+        string nombre
+        string descripcion
     }
 
     Cubierta {
@@ -141,13 +196,30 @@ erDiagram
         int Id_cliente PK
         string nombre
         int id_usuario FK
+        string apellido
+        string dni
+        string direccion
+        date fecha_nacimiento
+        string nacionalidad
+        string genero
+
     }
 
     Pasajero {
         int id_pasajero PK
-        int Id_cliente FK
+        int id_reserva FK
+        string nombre
+        string apellido
         date fecha_inicio
         date fecha_fin
+        int id_estado_pasajero FK
+
+    }
+
+    EstadoPasajero {
+        int id_estado_pasajero PK
+        string nombre
+        string descripcion
     }
 
     Reserva {
@@ -156,7 +228,6 @@ erDiagram
         int Id_Viaje_Navio FK
         int EstadoReserva FK
         int Cliente FK
-        int Pasajero FK
         date created_at
         date updated_at
     }
@@ -219,25 +290,19 @@ erDiagram
         int itinerario FK
     }
 
-    CamaroteXReserva {
-        int id_camarote_reserva PK
-        int id_reserva FK
-        int id_camarote FK
-    }
+
 
     Usuario {
         int id_usuario PK
         string username
         string email
         string Contrasenia
-        string rol
-        boolean activo
+        int id_rol FK
+        
+    }
+    Rol {
+        int id_rol PK
+        string nombre
+        string descripcion
     }
 
-    CamaroteXTripulante {
-        int id_camarote_tripulante PK
-        int id_camarote FK
-        int id_tripulante FK
-        date fecha_inicio
-        date fecha_fin
-    }
