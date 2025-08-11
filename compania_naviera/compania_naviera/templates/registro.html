@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - SEA STAR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-800 to-blue-600 text-white">
+
+  <!-- NAVIGATION -->
+  <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-sm">★</div>
+      <span class="font-bold text-lg">SEA STAR</span>
+    </div>
+    <div class="hidden md:flex items-center gap-6">
+      <a href="{% url 'home' %}" class="relative hover:text-orange-400 transition">Inicio</a>
+      <a href="#" class="relative hover:text-orange-400 transition">Contáctanos</a>
+      <a href="#" class="relative hover:text-orange-400 transition">Cruceros</a>
+      <a href="#" class="relative hover:text-orange-400 transition">Reservas</a>
+      <a href="#" class="relative hover:text-orange-400 transition">Ofertas</a>
+      <a href="{% url 'login' %}" class="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full hover:bg-orange-500 transition">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="text-white" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex justify-center items-center min-h-screen px-4 py-8">
+    <div class="bg-white/20 p-8 rounded-xl shadow-xl backdrop-blur-md max-w-md w-full">
+      <a href="{% url 'home' %}" class="text-sm text-slate-300 hover:text-orange-400 mb-6 block">← Volver al inicio</a>
+      <h1 class="text-3xl font-semibold text-center mb-6">Regístrate</h1>
+
+      <form method="POST" id="registerForm">
+        {% csrf_token %}
+        <div class="mb-6">
+          <label for="nombre" class="block text-sm font-medium text-white">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70" placeholder="Ingresa tu nombre completo" required>
+        </div>
+
+        <div class="mb-6">
+          <label for="apellido" class="block text-sm font-medium text-white">Apellido</label>
+          <input type="text" id="apellido" name="apellido" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70" placeholder="Ingresa tu apellido" required>
+        </div>
+
+        <div class="mb-6">
+          <label for="username" class="block text-sm font-medium text-white">Nombre de usuario</label>
+          <input type="text" id="username" name="username" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70" placeholder="Nombre de usuario" required>
+        </div>
+
+        <div class="mb-6">
+          <label for="email" class="block text-sm font-medium text-white">Correo electrónico</label>
+          <input type="email" id="email" name="email" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70" placeholder="correo@ejemplo.com" required>
+        </div>
+
+        <div class="mb-6">
+          <label for="telefono" class="block text-sm font-medium text-white">Teléfono</label>
+          <input type="tel" id="telefono" name="telefono" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70" placeholder="+1 234 567 8900" required>
+        </div>
+
+        <div class="mb-6">
+          <label for="pais" class="block text-sm font-medium text-white">País de procedencia</label>
+          <input type="text" id="pais" name="pais" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70" placeholder="Ej: Argentina" required>
+        </div>
+
+        <div class="mb-6">
+        <label for="metodo_pago" class="block text-sm font-medium text-white">Método de pago</label>
+        <select id="metodo_pago" name="metodo_pago"
+            class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
+            style="background-color:rgba(255,255,255,0.1);">
+            <option value="" class="text-white bg-blue-800">Selecciona un método</option>
+            <option value="tarjeta" class="text-gray-900">Tarjeta de crédito/débito</option>
+            <option value="paypal" class="text-gray-900">PayPal</option>
+            <option value="transferencia" class="text-gray-900">Transferencia bancaria</option>
+            <option value="efectivo" class="text-gray-900">Efectivo</option>
+            <option value="mercadopago" class="text-gray-900">Mercado Pago</option>
+        </select>
+        </div>
+
+        <!-- Campos adicionales si selecciona tarjeta -->
+        <div id="tarjeta_campos" style="display:none;">
+          <div class="mb-6">
+            <label for="numero_tarjeta" class="block text-sm font-medium text-white">Número de tarjeta</label>
+            <input type="text" id="numero_tarjeta" name="numero_tarjeta" maxlength="19"
+              class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
+              placeholder="1234 5678 9012 3456">
+          </div>
+
+          <div class="mb-6 flex gap-4">
+            <div class="flex-1">
+              <label for="vencimiento" class="block text-sm font-medium text-white">Vencimiento</label>
+              <input type="text" id="vencimiento" name="vencimiento" maxlength="5"
+                class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
+                placeholder="MM/AA">
+            </div>
+            <div class="flex-1">
+              <label for="cvv" class="block text-sm font-medium text-white">CVV</label>
+              <input type="text" id="cvv" name="cvv" maxlength="4"
+                class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
+                placeholder="123">
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label for="nombre_titular" class="block text-sm font-medium text-white">Nombre del titular</label>
+            <input type="text" id="nombre_titular" name="nombre_titular"
+              class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
+              placeholder="Como figura en la tarjeta">
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label for="password1" class="block text-sm font-medium text-white">Contraseña</label>
+          <input type="password" id="password1" name="password1"
+            class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
+            placeholder="Crea una contraseña segura" required>
+        </div>
+
+        <div class="mb-6">
+          <label for="password2" class="block text-sm font-medium text-white">Confirmar contraseña</label>
+          <input type="password" id="password2" name="password2"
+            class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
+            placeholder="Confirma tu contraseña" required>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-semibold rounded-lg hover:shadow-lg focus:outline-none transition">
+          Crear cuenta
+        </button>
+      </form>
+
+      <div class="text-center mt-6 text-sm text-white">
+        ¿Ya tienes una cuenta? <a href="{% url 'login' %}" class="text-orange-400 hover:underline">Inicia sesión</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const metodoPago = document.getElementById('metodo_pago');
+      const tarjetaCampos = document.getElementById('tarjeta_campos');
+
+      metodoPago.addEventListener('change', function () {
+        tarjetaCampos.style.display = this.value === 'tarjeta' ? 'block' : 'none';
+      });
+    });
+  </script>
+
+</body>
+</html>
