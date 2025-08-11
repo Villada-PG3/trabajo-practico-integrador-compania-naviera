@@ -67,8 +67,7 @@ erDiagram
         int id_reserva FK
         date fecha_cambio
         string cambio_realizado
-        int estado_reserva FK
-        int usuario_responsable FK
+
     }
 
     HistorialPago {
@@ -184,6 +183,13 @@ erDiagram
         int Id_cliente PK
         string nombre
         int id_usuario FK
+        string apellido
+        string dni
+        string direccion
+        date fecha_nacimiento
+        string nacionalidad
+        string genero
+
     }
 
     Pasajero {
