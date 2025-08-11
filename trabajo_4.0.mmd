@@ -1,76 +1,72 @@
 erDiagram
-
-    Pasajero }o--|| Reserva : incluye
-    HistorialReserva }o--|| Reserva : registra_cambios
-
-    Tripulante ||--o{ ViajeX_Navio : asigna
-    ViajeX_Navio }o--|| Navio : puede_ser
-    Navio ||--o{ Cubierta : tiene
+    Cubierta }o--|| Navio : tiene
+    Camarote }o--|| Cubierta : tiene
 
     Viaje ||--o{ Itinerarioviaj : para
-    ViajeX_Navio }o--|| Viaje : puede_ser
-
     Orden }o--|| Itinerario : tiene
-    Itinerario ||--o{ Itinerarioviaj : sigue
-
-    
-    Tripulante ||--o{ OcupacionCamarote : es_tripulante
-
-    Puerto ||--o{ Puertoxactividad : Posee
-    Puerto ||--o{ Lugar_ocupa : tiene
-
-    Cubierta ||--o{ Camarote : tiene
-    
     Tipo_itinerario ||--o{ Itinerario : pertenece
-
-    Puerto }o--|| Orden : posee  
-    
-    Cliente ||--o{ Reserva : hace
-
-    EstadoPago ||--o{ Pago : clasifica
-    
-    MetodoPago ||--o{ Pago : usa
+    Orden ||--o{ Puerto : posee
+    Tripulante ||--o{ ViajeX_Navio : asigna
+    ViajeX_Navio }o--|| Viaje : puede_ser
+    Navio ||--o{ ViajeX_Navio : puede_ser
 
     Reserva ||--o{ Pago : paga
+    
+    Cliente ||--o{ Reserva : hace
+    Reserva ||--o{ Pasajero : incluye
 
+
+    
+    MetodoPago ||--o{ Pago : usa
+    EstadoPago ||--o{ Pago : clasifica
     EstadoReserva ||--o{ Reserva : clasifica
-
     Trabajador ||--o{ Tripulante: puede_ser
+    Itinerarioviaj }o--|| Itinerario : sigue
     
     ViajeX_Navio ||--o{ Reserva : tiene
-
-    Navio }o--|| Tipo_de_navio : tiene
+    Tipo_de_navio ||--o{ Navio : tiene
 
     Usuario ||--o{ Cliente : representa
 
-    Estado_Camarote ||--o{ Camarote :Puede
-    
-    Actividades_posibles ||--o{ Puertoxactividad : Posee
 
-    Pago ||--o{ HistorialPago : registra_cambios
+    Estado_Camarote ||--o{ Camarote :Puede
+    Actividades_posibles ||--o{ Puertoxactividad : Posee
+    Puerto ||--o{ Puertoxactividad: Posee
+     HistorialReserva }o--|| Reserva : registra_cambios
+    HistorialPago }o--|| Pago : registra_cambios
     
     Rol ||--o{ Usuario : tiene
-    
+    Tripulante ||--o{ OcupacionCamarote : es_tripulante
     Pasajero ||--o{ OcupacionCamarote : es_pasajero
-
     Camarote ||--o{ OcupacionCamarote : asignado_a
 
-    EstadoPasajero ||--|{ Pasajero : tiene
+    Pasajero }|--|| EstadoPasajero : tiene
 
-    TipoCamarote ||--|{ Camarote : tiene
+    Camarote }|--|| TipoCamarote : tiene
+
     
-    TipoPersona ||--o{ OcupacionCamarote : define
 
-    TipoPersona {
-    int id_tipo_persona PK
-    string descripcion
+    Imagen {
+        int id_imagen PK
+        string url
+        string descripcion
+        string tipo
+        date fecha_subida
+        int id_navio FK
+        int id_viaje FK
+        int id_camarote FK
     }
+
+    Navio ||--o{ Imagen : tiene
+    Viaje ||--o{ Imagen : tiene
+    Camarote ||--o{ Imagen : tiene
+
+    
 
     OcupacionCamarote {
         int id_ocupacion_camarote PK
         int id_camarote FK
         int id_tipo_persona FK
-        int id_persona
         date fecha_inicio
         date fecha_fin
     }
