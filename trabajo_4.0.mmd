@@ -40,6 +40,8 @@ erDiagram
      HistorialReserva }o--|| Reserva : registra_cambios
     HistorialPago }o--|| Pago : registra_cambios
     
+    Rol ||--o{ Usuario : tiene
+
     HistorialReserva {
         int id_historial_reserva PK
         int id_reserva FK
@@ -244,8 +246,13 @@ erDiagram
         string username
         string email
         string Contrasenia
-        string rol
-        boolean activo
+        int id_rol FK
+        
+    }
+    Rol {
+        int id_rol PK
+        string nombre
+        string descripcion
     }
 
     CamaroteXTripulante {
