@@ -2,6 +2,9 @@ erDiagram
     Cubierta }o--|| Navio : tiene
     Camarote }o--|| Cubierta : tiene
 
+    OcupacionCamarote ||--o{ ViajeX_Navio : pertenece_a
+
+
     Viaje ||--o{ Itinerarioviaj : para
     Itinerario ||--o{ Orden : tiene
     Itinerario }o--|| Tipo_itinerario : pertenece
@@ -40,6 +43,7 @@ erDiagram
     OcupacionCamarote }o--|| Tripulante : es_tripulante
     OcupacionCamarote }o--|| Pasajero : es_pasajero
     OcupacionCamarote }o--|| Camarote : asignado_a
+    
 
     EstadoPasajero ||--o{ Pasajero : tiene
 
@@ -61,13 +65,14 @@ erDiagram
     Imagen  o{--|| Navio : tiene
     Imagen o{--|| Viaje : tiene
     Imagen o{--|| Camarote : tiene
-    Puerto ||--o{ Lugar_ocupa : tiene
+    Puerto ||--o{ UbicacionPuerto : tiene
 
 
     OcupacionCamarote {
         int id_ocupacion_camarote PK
         int id_camarote FK
-        int id_tipo_persona FK
+        int tripulante FK 
+        int id_pasajero FK
         date fecha_inicio
         date fecha_fin
     }
@@ -131,7 +136,7 @@ erDiagram
     }
 
     Tipo_de_navio {
-        int id_tipo_tripulante PK
+        int id_tipo_navio PK
         string nombre
         string descripcion
     }
@@ -257,12 +262,12 @@ erDiagram
     Puerto {
         int id_puerto PK
         string nombre
-        int lugar_ocupa
+        
     }
 
-    Lugar_ocupa {
-        int id_lugar_ocupa
-        int puerto FK
+    UbicacionPuerto {
+        int id_UbicacionPuerto PK
+        int id_puerto FK
         int nro_muelle
         string nombre
     }
