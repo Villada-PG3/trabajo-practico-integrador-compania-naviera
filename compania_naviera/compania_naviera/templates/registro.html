@@ -67,51 +67,7 @@
           <input type="text" id="pais" name="pais" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70" placeholder="Ej: Argentina" required>
         </div>
 
-        <div class="mb-6">
-        <label for="metodo_pago" class="block text-sm font-medium text-white">Método de pago</label>
-        <select id="metodo_pago" name="metodo_pago"
-            class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"
-            style="background-color:rgba(255,255,255,0.1);">
-            <option value="" class="text-white bg-blue-800">Selecciona un método</option>
-            <option value="tarjeta" class="text-gray-900">Tarjeta de crédito/débito</option>
-            <option value="paypal" class="text-gray-900">PayPal</option>
-            <option value="transferencia" class="text-gray-900">Transferencia bancaria</option>
-            <option value="efectivo" class="text-gray-900">Efectivo</option>
-            <option value="mercadopago" class="text-gray-900">Mercado Pago</option>
-        </select>
-        </div>
 
-        <!-- Campos adicionales si selecciona tarjeta -->
-        <div id="tarjeta_campos" style="display:none;">
-          <div class="mb-6">
-            <label for="numero_tarjeta" class="block text-sm font-medium text-white">Número de tarjeta</label>
-            <input type="text" id="numero_tarjeta" name="numero_tarjeta" maxlength="19"
-              class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
-              placeholder="1234 5678 9012 3456">
-          </div>
-
-          <div class="mb-6 flex gap-4">
-            <div class="flex-1">
-              <label for="vencimiento" class="block text-sm font-medium text-white">Vencimiento</label>
-              <input type="text" id="vencimiento" name="vencimiento" maxlength="5"
-                class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
-                placeholder="MM/AA">
-            </div>
-            <div class="flex-1">
-              <label for="cvv" class="block text-sm font-medium text-white">CVV</label>
-              <input type="text" id="cvv" name="cvv" maxlength="4"
-                class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
-                placeholder="123">
-            </div>
-          </div>
-
-          <div class="mb-6">
-            <label for="nombre_titular" class="block text-sm font-medium text-white">Nombre del titular</label>
-            <input type="text" id="nombre_titular" name="nombre_titular"
-              class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-white/70"
-              placeholder="Como figura en la tarjeta">
-          </div>
-        </div>
 
         <div class="mb-6">
           <label for="password1" class="block text-sm font-medium text-white">Contraseña</label>
