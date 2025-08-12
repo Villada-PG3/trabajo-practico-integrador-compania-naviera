@@ -3,20 +3,21 @@ erDiagram
     Camarote }o--|| Cubierta : tiene
 
     Viaje ||--o{ Itinerarioviaj : para
-    Orden }o--|| Itinerario : tiene
-    Tipo_itinerario ||--o{ Itinerario : pertenece
+    Itinerario ||--o{ Orden : tiene
+    Itinerario }o--|| Tipo_itinerario : pertenece
     Orden ||--o{ Puerto : posee
     Tripulante ||--o{ ViajeX_Navio : asigna
     ViajeX_Navio }o--|| Viaje : puede_ser
     Navio ||--o{ ViajeX_Navio : puede_ser
 
-    Reserva ||--o{ Pago : paga
+    Pago }o--|| Reserva : paga
     
+    
+    Pasajero }o--|| Reserva : incluye
+
+     HistorialReserva }o--|| Reserva : registra_cambios
     Cliente ||--o{ Reserva : hace
-    Reserva ||--o{ Pasajero : incluye
 
-
-    
     MetodoPago ||--o{ Pago : usa
     EstadoPago ||--o{ Pago : clasifica
     EstadoReserva ||--o{ Reserva : clasifica
@@ -29,18 +30,18 @@ erDiagram
     Usuario ||--o{ Cliente : representa
 
 
-    Estado_Camarote ||--o{ Camarote :Puede
-    Actividades_posibles ||--o{ Puertoxactividad : Posee
+    Camarote }o--|| Estado_Camarote :Puede
+    Puertoxactividad }o--|| Actividades_posibles : Posee
     Puerto ||--o{ Puertoxactividad: Posee
-     HistorialReserva }o--|| Reserva : registra_cambios
+    
     HistorialPago }o--|| Pago : registra_cambios
     
     Rol ||--o{ Usuario : tiene
-    Tripulante ||--o{ OcupacionCamarote : es_tripulante
-    Pasajero ||--o{ OcupacionCamarote : es_pasajero
-    Camarote ||--o{ OcupacionCamarote : asignado_a
+    OcupacionCamarote }o--|| Tripulante : es_tripulante
+    OcupacionCamarote }o--|| Pasajero : es_pasajero
+    OcupacionCamarote }o--|| Camarote : asignado_a
 
-    Pasajero }|--|| EstadoPasajero : tiene
+    EstadoPasajero ||--o{ Pasajero : tiene
 
     Camarote }|--|| TipoCamarote : tiene
 
@@ -57,11 +58,11 @@ erDiagram
         int id_camarote FK
     }
 
-    Navio ||--o{ Imagen : tiene
-    Viaje ||--o{ Imagen : tiene
-    Camarote ||--o{ Imagen : tiene
+    Imagen  o{--|| Navio : tiene
+    Imagen o{--|| Viaje : tiene
+    Imagen o{--|| Camarote : tiene
+    Puerto ||--o{ Lugar_ocupa : tiene
 
-    
 
     OcupacionCamarote {
         int id_ocupacion_camarote PK
