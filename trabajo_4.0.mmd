@@ -43,10 +43,6 @@ erDiagram
 
     ViajeX_Navio ||--o{ Reserva : tiene
 
-    Estado_Camarote ||--o{ Camarote :Puede
-    Actividades_posibles ||--o{ Puertoxactividad : Posee
-    Puerto ||--o{ Puertoxactividad: Posee
-     HistorialReserva }o--|| Reserva : registra_cambios
     Camarote }o--|| Estado_Camarote : tiene
     Puertoxactividad }o--|| Actividades_posibles : posee
     Puerto ||--o{ Puertoxactividad : posee
