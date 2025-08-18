@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ofertas de Cruceros - Sea Star</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-800 to-blue-900 text-white font-sans">
+
+  <!-- NAVIGATION BAR -->
+  <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-sm">★</div>
+      <span class="font-bold text-lg">SEA STAR</span>
+    </div>
+    <div class="hidden md:flex items-center gap-6">
+      <a href="{% url 'home' %}" class="relative hover:text-orange-400 transition">Inicio</a>
+      <a href="{% url 'contacto' %}" class="relative hover:text-orange-400 transition">Contáctanos</a>
+      <a href="{% url 'cruceros' %}" class="relative hover:text-orange-400 transition">Cruceros</a>
+      <a href="{% url 'reservas' %}" class="relative hover:text-orange-400 transition">Reservas</a>
+      <a href="{% url 'ofertas' %}" class="relative hover:text-orange-400 transition">Ofertas</a>
+      <a href="{% url 'login' %}" class="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full hover:bg-orange-500 transition text-white">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="bg-blue-900 text-center text-3xl md:text-4xl font-bold py-8 shadow-md">
+    🌊 Ofertas Exclusivas - Sea Star Cruceros
+  </header>
+
+  <!-- INTRO -->
+  <section class="text-center max-w-3xl mx-auto text-lg md:text-xl mt-8 px-4">
+    ¡Descubrí las mejores escapadas marítimas con precios inigualables! Viví la experiencia de navegar con lujo, confort y paisajes de ensueño. Nuestras ofertas incluyen destinos paradisíacos, servicios premium y entretenimiento a bordo. Reservá hoy mismo tu crucero ideal.
+  </section>
+
+  <!-- OFERTAS -->
+  <section class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 py-12">
+    
+    <!-- Oferta 1 -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Caribe" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero por Caribe Clásico</h3>
+        <p class="text-slate-300 mb-4">7 noches desde Miami visitando Bahamas, Cozumel y Jamaica. Todo incluido, ideal para relajarte con vistas tropicales.</p>
+        <div class="text-orange-400 font-bold text-lg mb-4">USD 799</div>
+        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+      </div>
+    </div>
+
+    <!-- Oferta 2 -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a2.png' %}" alt="Mediterráneo" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero por el Mediterráneo</h3>
+        <p class="text-slate-300 mb-4">10 noches con salida desde Barcelona. Paradas en Roma, Mónaco y Santorini. Gastronomía europea de alta gama.</p>
+        <div class="text-orange-400 font-bold text-lg mb-4">USD 1199</div>
+        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+      </div>
+    </div>
+
+    <!-- Oferta 3 -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a5.jpg' %}" alt="Noruega" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero por Fiordos Noruegos</h3>
+        <p class="text-slate-300 mb-4">5 noches mág/cards/icas entre montañas, cascadas y auroras boreales. Salida desde Oslo con todo incluido.</p>
+        <div class="text-orange-400 font-bold text-lg mb-4">USD 999</div>
+        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+      </div>
+    </div>
+
+    <!-- Oferta 4 -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a3.jpg' %}" alt="Sudamérica" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero por Sudamérica Mágica</h3>
+        <p class="text-slate-300 mb-4">6 noches desde Buenos Aires, pasando por Punta del Este y Río de Janeiro. Diversión y cultura sin límites.</p>
+        <div class="text-orange-400 font-bold text-lg mb-4">USD 749</div>
+        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+      </div>
+    </div>
+
+    <!-- Oferta 5 -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a1.jpg' %}" alt="Alaska" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero por Alaska</h3>
+        <p class="text-slate-300 mb-4">Crucero de 8 días por glaciares, ballenas y parques nacionales. Perfecto para los amantes de la naturaleza.</p>
+        <div class="text-orange-400 font-bold text-lg mb-4">USD 1099</div>
+        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+      </div>
+    </div>
+
+    <!-- Oferta 6 -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a4.jpg' %}" alt="Asia" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero por Asia Oriental Deluxe</h3>
+        <p class="text-slate-300 mb-4">12 noches con paradas en Tokio, Shanghái, Hong Kong y Singapur. Cultura milenaria y tecnología de vanguardia.</p>
+        <div class="text-orange-400 font-bold text-lg mb-4">USD 1499</div>
+        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-blue-900 text-center text-slate-300 text-sm py-6 mt-12">
+    © 2025 Sea Star. Todos los derechos reservados. | Contacto: info@seastarcruceros.com
+  </footer>
+
+</body>
+</html>
