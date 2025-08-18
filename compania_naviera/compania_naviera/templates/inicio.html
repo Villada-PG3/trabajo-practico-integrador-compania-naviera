@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,11 +17,11 @@
       <span class="font-bold text-lg">SEA STAR</span>
     </div>
     <div class="hidden md:flex items-center gap-6">
-      <a href="index.html" class="relative hover:text-orange-400 transition">Inicio</a>
-      <a href="{% url 'contacto' %}">Contáctanos</a>
-      <a href="cruceros.html" class="relative hover:text-orange-400 transition">Cruceros</a>
-      <a href="#" class="relative hover:text-orange-400 transition">Reservas</a>
-      <a href="ofertas.html" class="relative hover:text-orange-400 transition">Ofertas</a>
+      <a href="{% url 'home' %}" class="relative hover:text-orange-400 transition">Inicio</a>
+      <a href="{% url 'contacto' %}" class="relative hover:text-orange-400 transition">Contáctanos</a>
+      <a href="{% url 'cruceros' %}" class="relative hover:text-orange-400 transition">Cruceros</a>
+      <a href="{% url 'reservas' %}" class="relative hover:text-orange-400 transition">Reservas</a>
+      <a href="{% url 'ofertas' %}" class="relative hover:text-orange-400 transition">Ofertas</a>
       <a href="{% url 'login' %}" class="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full hover:bg-orange-500 transition">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="text-white" viewBox="0 0 24 24">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -49,7 +48,6 @@
         </p>
         <a href="{% url 'registro' %}" class="inline-block bg-white/20 border border-white/30 hover:bg-orange-500 transition px-6 py-3 font-semibold tracking-wide text-white text-center">REGÍSTRATE</a>
         
-
         <!-- Social Icons -->
         <div class="flex gap-4 mt-6">
           <a href="https://instagram.com" target="_blank" class="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center hover:bg-orange-500 transform hover:scale-110 transition">

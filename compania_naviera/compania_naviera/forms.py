@@ -10,7 +10,7 @@ class FormularioRegistroPersonalizado(UserCreationForm):
         model = UsuarioPersonalizado
         fields = [
             'username', 'nombre', 'apellido', 'email', 'telefono',
-            'pais', 'metodo_pago', 'password1', 'password2'
+            'pais', 'password1', 'password2'
         ]
         widgets = {
             'password1': forms.PasswordInput(),
