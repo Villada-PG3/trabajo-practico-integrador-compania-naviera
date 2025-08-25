@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from compania_naviera import views
+from django.contrib.auth import views as auth_views
+from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,4 +15,5 @@ urlpatterns = [
     path('menu/', views.menu_user, name='menu_user'),
     path('registro/', views.RegistroUsuario.as_view(), name='registro'),
     path('', views.main_view, name='home'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
 ]
