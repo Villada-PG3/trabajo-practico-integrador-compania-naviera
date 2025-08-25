@@ -1,11 +1,11 @@
 erDiagram
-    
-    Navio ||--o{ Navio_Imagen : tiene    
+    Tripulante ||--o{ AsignacionTripulanteViaje : asignado_a
+    ViajeX_Navio }o--|| Navio : puede_ser
     Navio }o--|| Tipo_de_navio : tiene
     Cliente }o--|| Usuario : representa
     Rol ||--o{ Usuario : tiene
     
-    Tripulante ||--o{ AsignacionTripulanteViaje : asignado_a
+    
     Cubierta }o--|| Navio : tiene
     Camarote }o--|| Cubierta : tiene
 
@@ -23,7 +23,7 @@ erDiagram
     Orden ||--o{ Puerto : posee
 
     ViajeX_Navio }o--|| Viaje : puede_ser
-    ViajeX_Navio }o--|| Navio : puede_ser
+    
 
     
     ViajeX_Navio ||--o{ AsignacionTripulanteViaje : tiene
@@ -54,36 +54,7 @@ erDiagram
 
     Puerto ||--o{ UbicacionPuerto : tiene
 
-    Imagen ||--o{ Navio_Imagen : pertenece
-
-    Viaje_Imagen }o--|| Viaje : tiene
-    Viaje_Imagen }o--|| Imagen : pertenece
-
-    Camarote_Imagen }o--|| Camarote : tiene
-    Imagen ||--o{ Camarote_Imagen : pertenece
     Itinerario }o--|| Tipo_itinerario : pertenece
-    
-    Imagen {
-        int id_imagen PK
-        string url
-        string descripcion
-        date fecha_subida
-    }
-
-    Navio_Imagen {
-        int id_navio FK
-        int id_imagen FK
-    }
-
-    Viaje_Imagen {
-        int id_viaje FK
-        int id_imagen FK
-    }
-
-    Camarote_Imagen {
-        int id_camarote FK
-        int id_imagen FK
-    }
     
     
     OcupacionCamarote {
@@ -172,6 +143,7 @@ erDiagram
         int numero_de_cubierta FK
         int id_estado_camarote FK
         int id_tipo_camarote FK
+        url imagen
     }
 
     TipoCamarote {
@@ -198,6 +170,7 @@ erDiagram
         int cantidad_maxima_de_pasajeros
         int cantidad_de_motores
         int id_tipo_navio FK
+        url imagen
     }
 
     Viaje {
@@ -210,6 +183,7 @@ erDiagram
         time hora_llegada
         string lugar_destino
         date fecha_actual
+        url imagen
     }
 
 
