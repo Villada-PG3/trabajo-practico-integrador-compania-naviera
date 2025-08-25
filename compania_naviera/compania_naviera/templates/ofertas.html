@@ -24,7 +24,10 @@
         <h3 class="text-xl font-semibold mb-2">Crucero por Caribe Clásico</h3>
         <p class="text-slate-300 mb-4">7 noches desde Miami visitando Bahamas, Cozumel y Jamaica. Todo incluido, ideal para relajarte con vistas tropicales.</p>
         <div class="text-orange-400 font-bold text-lg mb-4">USD 799</div>
-        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
+          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
+        </a>
       </div>
     </div>
 
@@ -35,7 +38,10 @@
         <h3 class="text-xl font-semibold mb-2">Crucero por el Mediterráneo</h3>
         <p class="text-slate-300 mb-4">10 noches con salida desde Barcelona. Paradas en Roma, Mónaco y Santorini. Gastronomía europea de alta gama.</p>
         <div class="text-orange-400 font-bold text-lg mb-4">USD 1199</div>
-        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
+          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
+        </a>
       </div>
     </div>
 
@@ -46,7 +52,10 @@
         <h3 class="text-xl font-semibold mb-2">Crucero por Fiordos Noruegos</h3>
         <p class="text-slate-300 mb-4">5 noches mágicas entre montañas, cascadas y auroras boreales. Salida desde Oslo con todo incluido.</p>
         <div class="text-orange-400 font-bold text-lg mb-4">USD 999</div>
-        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
+          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
+        </a>
       </div>
     </div>
 
@@ -57,7 +66,10 @@
         <h3 class="text-xl font-semibold mb-2">Crucero por Sudamérica Mágica</h3>
         <p class="text-slate-300 mb-4">6 noches desde Buenos Aires, pasando por Punta del Este y Río de Janeiro. Diversión y cultura sin límites.</p>
         <div class="text-orange-400 font-bold text-lg mb-4">USD 749</div>
-        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
+          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
+        </a>
       </div>
     </div>
 
@@ -68,7 +80,10 @@
         <h3 class="text-xl font-semibold mb-2">Crucero por Alaska</h3>
         <p class="text-slate-300 mb-4">Crucero de 8 días por glaciares, ballenas y parques nacionales. Perfecto para los amantes de la naturaleza.</p>
         <div class="text-orange-400 font-bold text-lg mb-4">USD 1099</div>
-        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
+          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
+        </a>
       </div>
     </div>
 
@@ -79,7 +94,10 @@
         <h3 class="text-xl font-semibold mb-2">Crucero por Asia Oriental Deluxe</h3>
         <p class="text-slate-300 mb-4">12 noches con paradas en Tokio, Shanghái, Hong Kong y Singapur. Cultura milenaria y tecnología de vanguardia.</p>
         <div class="text-orange-400 font-bold text-lg mb-4">USD 1499</div>
-        <a href="{% url 'reservas' %}" class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">Reservar ahora</a>
+        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
+          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
+        </a>
       </div>
     </div>
   </section>

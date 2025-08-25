@@ -56,8 +56,11 @@ def contacto_view(request):
 def cruceros_view(request):
     return render(request, 'cruceros.html')
 
-def reservas_view(request):
-    return render(request, 'reservas.html')
+
 
 def ofertas_view(request):
     return render(request, 'ofertas.html')
+
+def cruceros_view(request):
+    return render(request, 'crucero.html')
+

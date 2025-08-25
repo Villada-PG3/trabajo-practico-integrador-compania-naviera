@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+  <!-- HEADER -->
+  <header class="bg-blue-900 text-center text-3xl md:text-4xl font-bold py-8 shadow-md">
+    🚢 Tipos de Cruceros - Sea Star
+  </header>
+
+  <!-- INTRO -->
+  <section class="text-center max-w-3xl mx-auto text-lg md:text-xl mt-8 px-4">
+    ¡Descubre la variedad de cruceros que ofrecemos! Desde aventuras familiares hasta escapadas de lujo,
+    cada crucero está diseñado para brindarte una experiencia inolvidable en el mar. Elige el que más se
+    adapte a tus deseos y prepárate para zarpar.
+  </section>
+
+  <!-- TIPOS DE CRUCEROS -->
+  <section class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 py-12">
+    
+    <!-- 1) Crucero Familiar -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Crucero Familiar" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero Familiar</h3>
+        <p class="text-slate-300 mb-4">Disfruta de unas vacaciones inolvidables con actividades para todas las edades. Desde clubes infantiles hasta entretenimiento para adultos, hay algo para cada miembro de la familia.</p>
+        <a href="{% url 'login' %}?next={% url 'cruceros' %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center">
+          Conocer Más
+        </a>
+      </div>
+    </div>
+
+    <!-- 2) Crucero de Aventura -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a2.png' %}" alt="Crucero de Aventura" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero de Aventura</h3>
+        <p class="text-slate-300 mb-4">Explora destinos exóticos y participa en actividades emocionantes como senderismo, buceo y exploración de islas. Ideal para los amantes de la adrenalina.</p>
+        <a href="{% url 'login' %}?next={% url 'cruceros' %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center">
+          Conocer Más
+        </a>
+      </div>
+    </div>
+
+    <!-- 3) Crucero de Lujo -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a5.jpg' %}" alt="Crucero de Lujo" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero de Lujo</h3>
+        <p class="text-slate-300 mb-4">Vive la experiencia de un crucero de lujo con suites elegantes, cenas gourmet y un servicio excepcional. Relájate en spas de clase mundial y disfruta de un ambiente exclusivo.</p>
+        <a href="{% url 'login' %}?next={% url 'cruceros' %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center">
+          Conocer Más
+        </a>
+      </div>
+    </div>
+
+    <!-- 4) Crucero Temático -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a3.jpg' %}" alt="Crucero Temático" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero Temático</h3>
+        <p class="text-slate-300 mb-4">Únete a nosotros en un crucero que celebra tus pasiones, ya sea música, gastronomía o bienestar. Disfruta de actividades y entretenimiento relacionados con el tema elegido.</p>
+        <a href="{% url 'login' %}?next={% url 'cruceros' %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center">
+          Conocer Más
+        </a>
+      </div>
+    </div>
+
+    <!-- 5) Crucero de Naturaleza -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a1.jpg' %}" alt="Crucero de Naturaleza" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero de Naturaleza</h3>
+        <p class="text-slate-300 mb-4">Descubre la belleza natural de los paisajes marinos y terrestres. Ideal para los amantes de la naturaleza, con excursiones a parques nacionales y reservas naturales.</p>
+        <a href="{% url 'login' %}?next={% url 'cruceros' %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center">
+          Conocer Más
+        </a>
+      </div>
+    </div>
+
+    <!-- 6) Crucero Cultural -->
+    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
+      <img src="{% static 'a4.jpg' %}" alt="Crucero Cultural" class="w-full h-52 object-cover">
+      <div class="p-6 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold mb-2">Crucero Cultural</h3>
+        <p class="text-slate-300 mb-4">Sumérgete en la cultura de los destinos que visitas. Disfruta de talleres, charlas y actividades que te conectarán con la historia y tradiciones locales.</p>
+        <a href="{% url 'login' %}?next={% url 'cruceros' %}"
+           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center">
+          Conocer Más
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER LOCAL (opcional) -->
+  <footer class="bg-blue-900 text-center text-slate-300 text-sm py-6 mt-12">
+    © 2025 Sea Star. Todos los derechos reservados. | Contacto: info@seastarcruceros.com
+  </footer>
+
+{% endblock %}
