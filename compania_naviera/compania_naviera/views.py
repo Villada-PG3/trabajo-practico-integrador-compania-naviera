@@ -1,12 +1,29 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
-from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil
+from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil, FormularioCambioContrasenia
 from .models import UsuarioPersonalizado
+
+
+@login_required
+def cambiar_contrasenia(request):
+    if request.method == 'POST':
+        form = FormularioCambioContrasenia(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Mantener sesión activa
+            messages.success(request, "Contraseña actualizada correctamente.")
+            return redirect('menu_user')
+        else:
+            messages.error(request, "Por favor corrige los errores.")
+    else:
+        form = FormularioCambioContrasenia(user=request.user)
+
+    return render(request, 'cambiar_contrasenia.html', {'form': form})
 
 def main_view(request):
     logout(request)  

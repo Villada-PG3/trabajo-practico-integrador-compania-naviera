@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cambiar Contraseña - SEA STAR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-800 to-blue-600 text-white min-h-screen flex items-center justify-center">
+
+  <div class="bg-white/20 p-8 rounded-xl shadow-xl backdrop-blur-md w-full max-w-md">
+    <h1 class="text-2xl font-semibold mb-6 text-center">Cambiar Contraseña</h1>
+
+    {% if messages %}
+    <div class="mb-4">
+      {% for message in messages %}
+      <div class="p-3 mb-2 rounded text-sm {% if message.tags == 'success' %}bg-green-500/80{% elif message.tags == 'error' %}bg-red-500/80{% endif %}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-4">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <p class="text-red-300 text-xs mt-1">{{ field.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="w-full py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-semibold rounded-lg hover:shadow-lg transition">
+        Actualizar Contraseña
+      </button>
+    </form>
+
+    <div class="text-center mt-6 text-sm text-white">
+      <a href="{% url 'menu_user' %}" class="text-orange-400 hover:underline">← Volver al menú</a>
+    </div>
+  </div>
+
+</body>
+</html>

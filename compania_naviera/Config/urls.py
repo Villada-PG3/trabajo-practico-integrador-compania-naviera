@@ -3,7 +3,7 @@ from django.urls import path, include
 from compania_naviera import views
 from django.contrib.auth import views as auth_views
 from django.urls import path
-
+from django.conf.urls.i18n import i18n_patterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
@@ -18,5 +18,5 @@ urlpatterns = [
     
     path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
     path('contacto_log/', views.contacto_log_view, name='contacto_log'),
-
+    path('cambiar_contrasenia/', views.cambiar_contrasenia, name='cambiar_contrasenia'),
 ]

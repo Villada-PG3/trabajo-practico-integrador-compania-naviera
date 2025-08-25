@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from .models import UsuarioPersonalizado
 
 class FormularioRegistroPersonalizado(UserCreationForm):
@@ -69,3 +69,28 @@ class FormularioEdicionPerfil(forms.ModelForm):
         if UsuarioPersonalizado.objects.filter(telefono=telefono).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("Ya existe un usuario con ese número de teléfono.")
         return telefono
+    
+
+
+class FormularioCambioContrasenia(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="Contraseña actual",
+        widget=forms.PasswordInput(attrs={
+            "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+            "placeholder": "Contraseña actual"
+        })
+    )
+    new_password1 = forms.CharField(
+        label="Nueva contraseña",
+        widget=forms.PasswordInput(attrs={
+            "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+            "placeholder": "Nueva contraseña"
+        })
+    )
+    new_password2 = forms.CharField(
+        label="Confirmar nueva contraseña",
+        widget=forms.PasswordInput(attrs={
+            "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+            "placeholder": "Confirmar nueva contraseña"
+        })
+    )
