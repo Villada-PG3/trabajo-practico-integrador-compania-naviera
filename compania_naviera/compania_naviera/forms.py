@@ -32,3 +32,8 @@ class FormularioRegistroPersonalizado(UserCreationForm):
         if UsuarioPersonalizado.objects.filter(username=username).exists():
             raise forms.ValidationError("Ya existe un usuario con ese nombre de usuario.")
         return username
+    def clean_telefono(self):
+        telefono = self.cleaned_data.get('telefono')
+        if UsuarioPersonalizado.objects.filter(telefono=telefono).exists():
+            raise forms.ValidationError("Ya existe un usuario con ese número de teléfono.")
+        return telefono

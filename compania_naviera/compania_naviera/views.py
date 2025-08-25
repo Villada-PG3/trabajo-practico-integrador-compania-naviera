@@ -64,3 +64,7 @@ def ofertas_view(request):
 def cruceros_view(request):
     return render(request, 'crucero.html')
 
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Has cerrado sesión correctamente.")
+    return redirect('home')  # o main_view
