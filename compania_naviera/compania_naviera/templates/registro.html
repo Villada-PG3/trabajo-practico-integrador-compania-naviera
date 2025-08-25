@@ -1,32 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro - SEA STAR</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gradient-to-br from-blue-800 to-blue-600 text-white">
+{% extends "base.html" %}
+{% load static %}
 
-  <!-- NAVIGATION -->
-  <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center">
-    <div class="flex items-center gap-2">
-      <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-sm">★</div>
-      <span class="font-bold text-lg">SEA STAR</span>
-    </div>
-    <div class="hidden md:flex items-center gap-6">
-      <a href="{% url 'home' %}" class="relative hover:text-orange-400 transition">Inicio</a>
-      <a href="{% url 'login' %}" class="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full hover:bg-orange-500 transition">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="text-white" viewBox="0 0 24 24">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
-        </svg>
-      </a>
-    </div>
-  </nav>
+{% block title %}Registro - SEA STAR{% endblock %}
 
+{% block content %}
   <!-- MAIN CONTENT -->
-  <div class="flex justify-center items-center min-h-screen px-4 py-8">
+  <div class="flex justify-center items-center min-h-screen px-4 py-8 text-white">
     <div class="bg-white/20 p-8 rounded-xl shadow-xl backdrop-blur-md max-w-md w-full">
       <a href="{% url 'home' %}" class="text-sm text-slate-300 hover:text-orange-400 mb-6 block">← Volver al inicio</a>
       <h1 class="text-3xl font-semibold text-center mb-6">Regístrate</h1>
@@ -62,6 +41,4 @@
       </div>
     </div>
   </div>
-
-</body>
-</html>
+{% endblock %}

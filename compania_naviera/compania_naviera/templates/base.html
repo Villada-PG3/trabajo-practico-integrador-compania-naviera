@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SEA STAR - Cruceros</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="min-h-screen font-sans bg-gradient-to-br from-blue-800 to-blue-900 text-white">
+
+  <!-- Navigation -->
+  <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <a href="{% url 'home' %}" class="flex items-center gap-2 hover:text-orange-400 transition">
+        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-sm">★</div>
+        <span class="font-bold text-lg">SEA STAR</span>
+      </a>
+    </div>
+    <div class="hidden md:flex items-center gap-6">
+      <a href="{% url 'contacto' %}" class="relative hover:text-orange-400 transition">Contáctanos</a>
+      <a href="{% url 'cruceros' %}" class="relative hover:text-orange-400 transition">Cruceros</a>
+      <a href="{% url 'reservas' %}" class="relative hover:text-orange-400 transition">Reservas</a>
+      <a href="{% url 'ofertas' %}" class="relative hover:text-orange-400 transition">Ofertas</a>
+      <a href="{% url 'login' %}" class="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full hover:bg-orange-500 transition">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="text-white" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Contenido dinámico -->
+  <main class="p-6">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+</body>
+</html>
