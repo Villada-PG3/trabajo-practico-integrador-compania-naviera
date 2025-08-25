@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
-from .forms import FormularioRegistroPersonalizado
+from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil
 from .models import UsuarioPersonalizado
 
 def main_view(request):
@@ -57,6 +57,8 @@ def cruceros_view(request):
     return render(request, 'cruceros.html')
 
 
+def contacto_log_view(request):
+    return render (request, "contacto_log.html")
 
 def ofertas_view(request):
     return render(request, 'ofertas.html')
@@ -68,3 +70,16 @@ def logout_view(request):
     logout(request)
     messages.success(request, "Has cerrado sesión correctamente.")
     return redirect('home')  # o main_view
+
+def editar_perfil(request):
+    if request.method == 'POST':
+        form = FormularioEdicionPerfil(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Perfil actualizado correctamente.")
+            return redirect('menu_user')
+        else:
+            messages.error(request, "Corrige los errores del formulario.")
+    else:
+        form = FormularioEdicionPerfil(instance=request.user)
+    return render(request, 'editar_perfil.html', {'form': form})

@@ -15,4 +15,8 @@ urlpatterns = [
     path('registro/', views.RegistroUsuario.as_view(), name='registro'),
     path('', views.main_view, name='home'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
+    
+    path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
+    path('contacto_log/', views.contacto_log_view, name='contacto_log'),
+
 ]
