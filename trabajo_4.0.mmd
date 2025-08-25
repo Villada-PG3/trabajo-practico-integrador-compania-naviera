@@ -1,17 +1,16 @@
 erDiagram
-
     
-    Usuario ||--o{ Cliente : representa
+    Navio ||--o{ Navio_Imagen : tiene    
+    Navio }o--|| Tipo_de_navio : tiene
+    Cliente }o--|| Usuario : representa
     Rol ||--o{ Usuario : tiene
-
+    
+    Tripulante ||--o{ AsignacionTripulanteViaje : asignado_a
     Cubierta }o--|| Navio : tiene
     Camarote }o--|| Cubierta : tiene
+
     Reserva ||--o{ Pago : paga
     EstadoPasajero ||--o{ Pasajero : tiene
-    
-    
-
-    
     
     OcupacionCamarote }o--|| ViajeX_Navio : pertenece_a
     Camarote ||--o{ OcupacionCamarote : asignado_a
@@ -20,39 +19,49 @@ erDiagram
 
     Viaje ||--o{ Itinerarioviaj : para
     Itinerario ||--o{ Orden : tiene
-    Itinerario }o--|| Tipo_itinerario : pertenece
+    
     Orden ||--o{ Puerto : posee
 
     ViajeX_Navio }o--|| Viaje : puede_ser
-    Navio ||--o{ ViajeX_Navio : puede_ser
+    ViajeX_Navio }o--|| Navio : puede_ser
 
-    Tripulante ||--o{ AsignacionTripulanteViaje : asignado_a
+    
     ViajeX_Navio ||--o{ AsignacionTripulanteViaje : tiene
 
     
-    Pasajero }o--|| Reserva : incluye
-    HistorialReserva }o--|| Reserva : registra_cambios
+    
+    Reserva ||--o{ HistorialReserva : registra_cambios
     Reserva  }o--|| Cliente : hace
 
     MetodoPago ||--o{ Pago : usa
     EstadoPago ||--o{ Pago : clasifica
-    EstadoReserva ||--o{ Reserva : clasifica
+    Reserva }o--|| EstadoReserva : clasifica
     Itinerarioviaj }o--|| Itinerario : sigue
     
-    Tipo_de_navio ||--o{ Navio : tiene
+    
 
     ViajeX_Navio ||--o{ Reserva : tiene
-
+    Pasajero }o--|| Reserva : incluye
     Camarote }o--|| Estado_Camarote : tiene
     Puertoxactividad }o--|| Actividades_posibles : posee
     Puerto ||--o{ Puertoxactividad : posee
     HistorialPago }o--|| Pago : registra_cambios
     
+    HistorialPago }o--|| EstadoPago : posee
+    Usuario ||--o{ HistorialPago : posee
 
-    
-
-    
     Camarote }|--|| TipoCamarote : tiene
+
+    Puerto ||--o{ UbicacionPuerto : tiene
+
+    Imagen ||--o{ Navio_Imagen : pertenece
+
+    Viaje_Imagen }o--|| Viaje : tiene
+    Viaje_Imagen }o--|| Imagen : pertenece
+
+    Camarote_Imagen }o--|| Camarote : tiene
+    Imagen ||--o{ Camarote_Imagen : pertenece
+    Itinerario }o--|| Tipo_itinerario : pertenece
     
     Imagen {
         int id_imagen PK
@@ -75,15 +84,7 @@ erDiagram
         int id_camarote FK
         int id_imagen FK
     }
-    Puerto ||--o{ UbicacionPuerto : tiene
-    Navio ||--o{ Navio_Imagen : tiene
-    Imagen ||--o{ Navio_Imagen : pertenece
-
-    Viaje ||--o{ Viaje_Imagen : tiene
-    Imagen ||--o{ Viaje_Imagen : pertenece
-
-    Camarote_Imagen }o--|| Camarote : tiene
-    Imagen ||--o{ Camarote_Imagen : pertenece
+    
     
     OcupacionCamarote {
         int id_ocupacion_camarote PK
@@ -278,11 +279,13 @@ erDiagram
         string nombre
         string descripcion
         int orden
+        int initerario FK
     }
 
     Puerto {
         int id_puerto PK
         string nombre
+        int orden FK
     }
 
     UbicacionPuerto {
