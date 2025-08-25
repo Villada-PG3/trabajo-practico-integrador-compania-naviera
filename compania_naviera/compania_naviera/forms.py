@@ -1,4 +1,3 @@
-# forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import UsuarioPersonalizado
@@ -12,10 +11,6 @@ class FormularioRegistroPersonalizado(UserCreationForm):
             'username', 'nombre', 'apellido', 'email', 'telefono',
             'pais', 'password1', 'password2'
         ]
-        widgets = {
-            'password1': forms.PasswordInput(),
-            'password2': forms.PasswordInput(),
-        }
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

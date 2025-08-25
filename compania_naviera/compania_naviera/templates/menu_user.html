@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gradient-to-br from-blue-800 to-blue-600 min-h-screen font-sans text-white">
 
-  <!-- NAVBAR MEJORADA -->
+  <!-- NAVBAR -->
   <nav class="bg-blue-900/90 backdrop-blur-md text-white px-8 py-5 flex justify-between items-center shadow-lg shadow-black/30 sticky top-0 z-50 rounded-b-xl">
     <div class="flex items-center gap-3">
       <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center text-blue-900 font-extrabold text-lg shadow-md">★</div>
@@ -20,20 +20,25 @@
       <a href="{% url 'cruceros' %}" class="hover:text-orange-400 transition">Cruceros</a>
       <a href="{% url 'reservas' %}" class="hover:text-orange-400 transition">Reservas</a>
       <a href="{% url 'ofertas' %}" class="hover:text-orange-400 transition">Ofertas</a>
+
       <div class="ml-4 flex items-center gap-3 bg-white/10 px-3 py-1 rounded-full shadow-inner">
         <div class="w-8 h-8 bg-white text-blue-900 font-bold text-lg rounded-full flex items-center justify-center border border-orange-300">
           {{ usuario.username|first|upper }}
         </div>
         <span>{{ usuario.username }}</span>
-        <a href="{% url 'logout' %}" class="text-xs bg-red-500/80 hover:bg-red-600 transition text-white px-3 py-1 rounded-full font-semibold">Salir</a>
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="text-xs bg-red-500/80 hover:bg-red-600 transition text-white px-3 py-1 rounded-full font-semibold ml-2">
+            Salir
+          </button>
+        </form>
       </div>
     </div>
   </nav>
 
   <!-- PANEL DE USUARIO -->
   <main class="max-w-6xl mx-auto px-4 py-10">
-
-    <!-- Tarjetas -->
+    <!-- Tarjetas de funciones -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
       <div class="bg-white/20 rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform cursor-pointer">
         <div class="text-white text-4xl mb-4">📅</div>
@@ -61,10 +66,8 @@
       </div>
     </div>
 
-    <!-- OFERTAS / CRUCEROS / NUEVO BLOQUE -->
+    <!-- Secciones adicionales -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-      <!-- Ofertas -->
       <section class="bg-white/10 rounded-2xl shadow-md p-6">
         <h2 class="text-xl font-bold mb-4 text-orange-400">🎁 Ofertas Exclusivas</h2>
         <ul class="space-y-3 text-sm">
@@ -83,7 +86,6 @@
         </ul>
       </section>
 
-      <!-- Cruceros -->
       <section class="bg-white/10 rounded-2xl shadow-md p-6">
         <h2 class="text-xl font-bold mb-4 text-blue-200">🛳️ Próximos Cruceros</h2>
         <ul class="space-y-3 text-sm">
@@ -102,7 +104,6 @@
         </ul>
       </section>
 
-      <!-- NUEVA SECCIÓN -->
       <section class="bg-white/10 rounded-2xl shadow-md p-6">
         <h2 class="text-xl font-bold mb-4 text-green-300">🎉 Actividades a Bordo</h2>
         <ul class="space-y-3 text-sm">
@@ -120,11 +121,9 @@
           </li>
         </ul>
       </section>
-
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="text-center text-sm text-white/60 mt-16 mb-6">
     &copy; 2025 SEA STAR. Todos los derechos reservados.
   </footer>
