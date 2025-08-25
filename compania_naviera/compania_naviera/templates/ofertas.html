@@ -4,101 +4,476 @@
 {% block title %}Ofertas de Cruceros - SEA STAR{% endblock %}
 
 {% block content %}
-  <!-- HEADER -->
-  <header class="bg-blue-900 text-center text-3xl md:text-4xl font-bold py-8 shadow-md text-white">
-    🌊 Ofertas Exclusivas - Sea Star Cruceros
-  </header>
 
-  <!-- INTRO -->
-  <section class="text-center max-w-3xl mx-auto text-lg md:text-xl mt-8 px-4 text-white">
-    ¡Descubrí las mejores escapadas marítimas con precios inigualables! Viví la experiencia de navegar con lujo, confort y paisajes de ensueño. Nuestras ofertas incluyen destinos paradisíacos, servicios premium y entretenimiento a bordo. Reservá hoy mismo tu crucero ideal.
-  </section>
+<!-- ======= HERO ======= -->
+<section class="mx-auto max-w-7xl px-6 lg:px-10 pt-8">
+  <div class="rounded-2xl bg-gradient-to-br from-blue-900/70 to-blue-700/40 border border-white/20 p-8 md:p-10 backdrop-blur-xl">
+    <div class="space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs tracking-wider">
+        <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-white text-blue-900 font-bold">★</span>
+        Sea Star · Ofertas
+      </div>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-white">🌊 Ofertas Exclusivas</h1>
+      <p class="text-white/90 max-w-3xl">
+        ¡Descubrí escapadas marítimas con precios inigualables! Lujo, confort y paisajes de ensueño.
+        Reservá hoy mismo tu crucero ideal.
+      </p>
+    </div>
+  </div>
+</section>
 
-  <!-- OFERTAS -->
-  <section class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 py-12 text-white">
-    
-    <!-- Oferta 1 -->
-    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
-      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Caribe" class="w-full h-52 object-cover">
-      <div class="p-6 flex flex-col flex-grow">
-        <h3 class="text-xl font-semibold mb-2">Crucero por Caribe Clásico</h3>
-        <p class="text-slate-300 mb-4">7 noches desde Miami visitando Bahamas, Cozumel y Jamaica. Todo incluido, ideal para relajarte con vistas tropicales.</p>
-        <div class="text-orange-400 font-bold text-lg mb-4">USD 799</div>
-        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
-          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
-        </a>
+<!-- ======= ESTILOS DEL FILTRO ======= -->
+<style>
+  .pill { display:inline-flex; align-items:center; gap:.5rem; padding:.375rem .75rem; border-radius:.75rem;
+          background-color:rgb(255 255 255 / .10); border:1px solid rgb(255 255 255 / .20);
+          font-size:.875rem; transition:background-color .2s; }
+  .pill:hover{ background-color:rgb(255 255 255 / .20); }
+  .pill-active{ background:#f97316; border-color:#f97316; color:white; box-shadow:0 0 0 2px rgb(251 146 60 / .5) }
+  .seg-btn{ padding:.375rem .75rem; font-size:.875rem; border-radius:.5rem; }
+  .seg-active{ background:rgb(255 255 255 / .20); color:white; box-shadow:inset 0 0 0 1px rgb(255 255 255 / .30) }
+  .range-wrap{ height:24px; }
+  input[type="range"]::-webkit-slider-runnable-track { height:6px; border-radius:999px; }
+  input[type="range"]::-webkit-slider-thumb { margin-top:-6px; width:18px; height:18px; border-radius:999px; }
+</style>
+
+<!-- ======= BARRA DE FILTROS ======= -->
+<section class="mx-auto max-w-7xl px-6 lg:px-10 mt-6">
+  <div class="mb-2 flex items-center justify-between lg:hidden">
+    <span class="text-sm text-white/80">Filtrar ofertas</span>
+    <button id="oToggleFilters" class="px-3 py-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-sm">
+      Mostrar filtros
+    </button>
+  </div>
+
+  <div id="oFilterBar"
+       class="rounded-2xl bg-white/10 border border-white/20 backdrop-blur-xl p-4 md:p-5 shadow-lg lg:sticky lg:top-2">
+    <div id="oFiltersBody" class="grid grid-cols-1 xl:grid-cols-12 gap-3 items-center">
+      <!-- Buscar -->
+      <div class="xl:col-span-4">
+        <label for="oq" class="sr-only">Buscar</label>
+        <div class="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-3 py-2">
+          <i class="fa-solid fa-magnifying-glass text-white/80"></i>
+          <input id="oq" type="text" placeholder="Buscar por destino, tipo..."
+                 class="w-full bg-transparent placeholder-white/60 focus:outline-none" />
+        </div>
+      </div>
+
+      <!-- Categorías -->
+      <div class="xl:col-span-5">
+        <div class="flex flex-wrap gap-2" id="oCatGroup" aria-label="Categorías">
+          <button data-cat="familiar"   class="pill"><i class="fa-solid fa-children"></i> Familiar</button>
+          <button data-cat="aventura"   class="pill"><i class="fa-solid fa-person-hiking"></i> Aventura</button>
+          <button data-cat="lujo"       class="pill"><i class="fa-solid fa-gem"></i> Lujo</button>
+          <button data-cat="tematico"   class="pill"><i class="fa-solid fa-masks-theater"></i> Temático</button>
+          <button data-cat="naturaleza" class="pill"><i class="fa-solid fa-leaf"></i> Naturaleza</button>
+          <button data-cat="cultural"   class="pill"><i class="fa-solid fa-landmark"></i> Cultural</button>
+        </div>
+      </div>
+
+      <!-- Noches -->
+      <div class="xl:col-span-2">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-white/80 whitespace-nowrap">Noches</span>
+          <div class="flex items-center gap-1">
+            <button data-n="all"  class="seg-btn seg-active">Todas</button>
+            <button data-n="short" class="seg-btn">≤7</button>
+            <button data-n="mid"   class="seg-btn">8–10</button>
+            <button data-n="long"  class="seg-btn">11+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Precio -->
+      <div class="xl:col-span-3 grid grid-cols-12 items-center gap-2">
+        <label for="oprice" class="col-span-3 text-sm whitespace-nowrap">Hasta</label>
+        <div class="col-span-7 range-wrap">
+          <input id="oprice" type="range" min="600" max="1600" step="50" class="w-full accent-orange-500" />
+        </div>
+        <div class="col-span-2 text-right text-sm font-semibold text-orange-400" id="oPriceLabel">USD 1600</div>
+      </div>
+
+      <!-- Orden -->
+      <div class="xl:col-span-2">
+        <label for="osort" class="sr-only">Ordenar</label>
+        <select id="osort" class="w-full bg-white/10 border border-white/20 rounded-xl px-2 py-2 text-sm focus:outline-none">
+          <option value="relevance">Orden: Recomendado</option>
+          <option value="price_asc">Precio: menor a mayor</option>
+          <option value="price_desc">Precio: mayor a menor</option>
+          <option value="nights_asc">Noches: menor a mayor</option>
+          <option value="nights_desc">Noches: mayor a menor</option>
+        </select>
+      </div>
+
+      <!-- Acciones -->
+      <div class="xl:col-span-2 flex gap-2 justify-end">
+        <button id="oClear" class="px-3 py-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-sm">Limpiar</button>
       </div>
     </div>
 
-    <!-- Oferta 2 -->
-    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
-      <img src="{% static 'a2.png' %}" alt="Mediterráneo" class="w-full h-52 object-cover">
-      <div class="p-6 flex flex-col flex-grow">
-        <h3 class="text-xl font-semibold mb-2">Crucero por el Mediterráneo</h3>
-        <p class="text-slate-300 mb-4">10 noches con salida desde Barcelona. Paradas en Roma, Mónaco y Santorini. Gastronomía europea de alta gama.</p>
-        <div class="text-orange-400 font-bold text-lg mb-4">USD 1199</div>
-        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
-          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
-        </a>
-      </div>
+    <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
+      <div id="oActiveChips" class="flex flex-wrap gap-2"></div>
+      <div class="text-sm text-white/80"><span id="oCount">6</span> resultados</div>
     </div>
+  </div>
+</section>
 
-    <!-- Oferta 3 -->
-    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
-      <img src="{% static 'a5.jpg' %}" alt="Noruega" class="w-full h-52 object-cover">
-      <div class="p-6 flex flex-col flex-grow">
-        <h3 class="text-xl font-semibold mb-2">Crucero por Fiordos Noruegos</h3>
-        <p class="text-slate-300 mb-4">5 noches mágicas entre montañas, cascadas y auroras boreales. Salida desde Oslo con todo incluido.</p>
-        <div class="text-orange-400 font-bold text-lg mb-4">USD 999</div>
-        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
-          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
-        </a>
-      </div>
-    </div>
+<!-- ======= GRID DE OFERTAS (CARDS MEJORADOS) ======= -->
+<section class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
+  <div id="oCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-white">
 
-    <!-- Oferta 4 -->
-    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
-      <img src="{% static 'a3.jpg' %}" alt="Sudamérica" class="w-full h-52 object-cover">
-      <div class="p-6 flex flex-col flex-grow">
-        <h3 class="text-xl font-semibold mb-2">Crucero por Sudamérica Mágica</h3>
-        <p class="text-slate-300 mb-4">6 noches desde Buenos Aires, pasando por Punta del Este y Río de Janeiro. Diversión y cultura sin límites.</p>
-        <div class="text-orange-400 font-bold text-lg mb-4">USD 749</div>
-        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
-          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
-        </a>
+    <!-- 1 · Familiar -->
+    <article data-card data-title="Crucero Caribe Clásico" data-cat="familiar" data-price="799" data-nights="7" data-dest="Bahamas Cozumel Jamaica"
+             class="group relative">
+      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
+                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Caribe" class="w-full h-56 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Familiar</span>
+            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 799</span>
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="text-xl font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por Caribe Clásico
+            </h3>
+            <p class="text-white/80 text-sm">
+              7 noches desde Miami visitando Bahamas, Cozumel y Jamaica. Todo incluido para relajarte con vistas tropicales.
+            </p>
+            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+              <div class="text-xs text-white/70 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 7 noches</span>
+                <span class="opacity-50">•</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Caribe</span>
+              </div>
+              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
+                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </article>
 
-    <!-- Oferta 5 -->
-    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
-      <img src="{% static 'a1.jpg' %}" alt="Alaska" class="w-full h-52 object-cover">
-      <div class="p-6 flex flex-col flex-grow">
-        <h3 class="text-xl font-semibold mb-2">Crucero por Alaska</h3>
-        <p class="text-slate-300 mb-4">Crucero de 8 días por glaciares, ballenas y parques nacionales. Perfecto para los amantes de la naturaleza.</p>
-        <div class="text-orange-400 font-bold text-lg mb-4">USD 1099</div>
-        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
-          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
-        </a>
+    <!-- 2 · Aventura -->
+    <article data-card data-title="Crucero Mediterráneo" data-cat="aventura" data-price="1199" data-nights="10" data-dest="Barcelona Roma Mónaco Santorini Mediterráneo"
+             class="group relative">
+      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
+                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
+          <div class="relative">
+            <img src="{% static 'a2.png' %}" alt="Mediterráneo" class="w-full h-56 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Aventura</span>
+            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 1199</span>
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="text-xl font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por el Mediterráneo
+            </h3>
+            <p class="text-white/80 text-sm">
+              10 noches desde Barcelona con paradas en Roma, Mónaco y Santorini. Gastronomía europea de alta gama.
+            </p>
+            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+              <div class="text-xs text-white/70 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 10 noches</span>
+                <span class="opacity-50">•</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Mediterráneo</span>
+              </div>
+              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
+                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </article>
 
-    <!-- Oferta 6 -->
-    <div class="bg-white/5 rounded-xl overflow-hidden shadow-lg hover:scale-105 transition-transform flex flex-col">
-      <img src="{% static 'a4.jpg' %}" alt="Asia" class="w-full h-52 object-cover">
-      <div class="p-6 flex flex-col flex-grow">
-        <h3 class="text-xl font-semibold mb-2">Crucero por Asia Oriental Deluxe</h3>
-        <p class="text-slate-300 mb-4">12 noches con paradas en Tokio, Shanghái, Hong Kong y Singapur. Cultura milenaria y tecnología de vanguardia.</p>
-        <div class="text-orange-400 font-bold text-lg mb-4">USD 1499</div>
-        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-           class="mt-auto bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-b-xl text-center block">
-          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
-        </a>
+    <!-- 3 · Lujo -->
+    <article data-card data-title="Fiordos Noruegos" data-cat="lujo" data-price="999" data-nights="5" data-dest="Oslo Fiordos Noruega"
+             class="group relative">
+      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
+                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
+          <div class="relative">
+            <img src="{% static 'a5.jpg' %}" alt="Noruega" class="w-full h-56 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Lujo</span>
+            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 999</span>
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="text-xl font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por Fiordos Noruegos
+            </h3>
+            <p class="text-white/80 text-sm">5 noches entre montañas, cascadas y auroras boreales. Salida desde Oslo.</p>
+            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+              <div class="text-xs text-white/70 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 5 noches</span>
+                <span class="opacity-50">•</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Fiordos</span>
+              </div>
+              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
+                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </article>
+
+    <!-- 4 · Temático -->
+    <article data-card data-title="Sudamérica Mágica" data-cat="tematico" data-price="749" data-nights="6" data-dest="Buenos Aires Punta del Este Río de Janeiro Sudamérica"
+             class="group relative">
+      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
+                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
+          <div class="relative">
+            <img src="{% static 'a3.jpg' %}" alt="Sudamérica" class="w-full h-56 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Temático</span>
+            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 749</span>
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="text-xl font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por Sudamérica Mágica
+            </h3>
+            <p class="text-white/80 text-sm">6 noches desde Buenos Aires, pasando por Punta del Este y Río de Janeiro.</p>
+            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+              <div class="text-xs text-white/70 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 6 noches</span>
+                <span class="opacity-50">•</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Sudamérica</span>
+              </div>
+              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
+                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 5 · Naturaleza -->
+    <article data-card data-title="Alaska Salvaje" data-cat="naturaleza" data-price="1099" data-nights="8" data-dest="Alaska Glaciares Ballenas Parques"
+             class="group relative">
+      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
+                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
+          <div class="relative">
+            <img src="{% static 'a1.jpg' %}" alt="Alaska" class="w-full h-56 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Naturaleza</span>
+            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 1099</span>
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="text-xl font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por Alaska
+            </h3>
+            <p class="text-white/80 text-sm">8 días entre glaciares, ballenas y parques nacionales. Naturaleza en su máxima expresión.</p>
+            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+              <div class="text-xs text-white/70 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 8 noches</span>
+                <span class="opacity-50">•</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Alaska</span>
+              </div>
+              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
+                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 6 · Cultural -->
+    <article data-card data-title="Asia Oriental Deluxe" data-cat="cultural" data-price="1499" data-nights="12" data-dest="Tokio Shanghái Hong Kong Singapur Asia"
+             class="group relative">
+      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
+                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
+          <div class="relative">
+            <img src="{% static 'a4.jpg' %}" alt="Asia" class="w-full h-56 object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
+            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Cultural</span>
+            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 1499</span>
+          </div>
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="text-xl font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-ship text-orange-400"></i> Asia Oriental Deluxe
+            </h3>
+            <p class="text-white/80 text-sm">12 noches por Tokio, Shanghái, Hong Kong y Singapur. Cultura milenaria y vanguardia.</p>
+            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+              <div class="text-xs text-white/70 flex items-center gap-2">
+                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 12 noches</span>
+                <span class="opacity-50">•</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Asia Oriental</span>
+              </div>
+              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
+                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ======= JS DEL FILTRADO ======= -->
+<script>
+(function () {
+  const $  = (sel, ctx=document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
+  const maxPrice = 1600;
+  const state = { q:"", cats:new Set(), nights:"all", price:maxPrice, sort:"relevance" };
+
+  const cardsWrap   = $("#oCards");
+  const cards       = $$("#oCards [data-card]");
+  const inputQ      = $("#oq");
+  const price       = $("#oprice");
+  const priceLabel  = $("#oPriceLabel");
+  const sortSel     = $("#osort");
+  const clearBtn    = $("#oClear");
+  const catBtns     = $$("#oCatGroup .pill");
+  const segBtns     = $$("#oFilterBar .seg-btn");
+  const activeChips = $("#oActiveChips");
+  const matchCount  = $("#oCount");
+  const toggleBtn   = $("#oToggleFilters");
+  const filtersBody = $("#oFiltersBody");
+
+  function norm(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+  function inNights(n){
+    n = Number(n);
+    if (state.nights === "all") return true;
+    if (state.nights === "short") return n <= 7;
+    if (state.nights === "mid")   return n >= 8 && n <= 10;
+    if (state.nights === "long")  return n >= 11;
+    return true;
+  }
+  function updatePriceUI(){ priceLabel.textContent = "USD " + state.price; }
+
+  function chip(text, onRemove){
+    const el = document.createElement("button");
+    el.className = "px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-sm flex items-center gap-2 hover:bg-white/20";
+    el.innerHTML = `<span>${text}</span><i class="fa-solid fa-xmark text-white/80"></i>`;
+    el.addEventListener("click", onRemove);
+    activeChips.appendChild(el);
+  }
+  function renderChips(){
+    activeChips.innerHTML = "";
+    if (state.q.trim()){ chip("Búsqueda: " + state.q, () => { state.q=""; inputQ.value=""; apply(); }); }
+    state.cats.forEach(c => {
+      const map = {familiar:"Familiar", aventura:"Aventura", lujo:"Lujo", tematico:"Temático", naturaleza:"Naturaleza", cultural:"Cultural"};
+      chip(map[c]||c, () => {
+        state.cats.delete(c);
+        const btn = catBtns.find(b => b.dataset.cat === c);
+        if (btn) btn.classList.remove("pill-active");
+        apply();
+      });
+    });
+    if (state.nights!=="all"){
+      const map = {short:"≤7 noches", mid:"8–10 noches", long:"11+ noches"};
+      chip(map[state.nights], () => {
+        state.nights="all";
+        segBtns.forEach(b=>b.classList.remove("seg-active"));
+        segBtns[0].classList.add("seg-active");
+        apply();
+      });
+    }
+    if (state.price<maxPrice){
+      chip("≤ USD " + state.price, () => { state.price=maxPrice; price.value=maxPrice; updatePriceUI(); apply(); });
+    }
+  }
+
+  function apply(){
+    const q = norm(state.q);
+    let visible = [];
+    cards.forEach(card => {
+      const title = norm(card.dataset.title);
+      const dest  = norm(card.dataset.dest);
+      const cat   = norm(card.dataset.cat);
+      const p     = Number(card.dataset.price);
+      const n     = Number(card.dataset.nights);
+      const show  = (!q || title.includes(q) || dest.includes(q))
+                 && (state.cats.size===0 || state.cats.has(cat))
+                 && (p <= state.price)
+                 && inNights(n);
+      card.classList.toggle("hidden", !show);
+      if (show) visible.push(card);
+    });
+
+    matchCount.textContent = visible.length;
+
+    if (state.sort!=="relevance"){
+      const s = {
+        price_asc:(a,b)=>a.dataset.price - b.dataset.price,
+        price_desc:(a,b)=>b.dataset.price - a.dataset.price,
+        nights_asc:(a,b)=>a.dataset.nights - b.dataset.nights,
+        nights_desc:(a,b)=>b.dataset.nights - a.dataset.nights,
+      }[state.sort];
+      if (s){
+        const hidden = cards.filter(c=>c.classList.contains("hidden"));
+        visible.sort(s).forEach(c=>cardsWrap.appendChild(c));
+        hidden.forEach(c=>cardsWrap.appendChild(c));
+      }
+    }
+    renderChips();
+  }
+
+  // Eventos
+  inputQ.addEventListener("input", e => { state.q = e.target.value; apply(); });
+  price.addEventListener("input", e => { state.price = Number(e.target.value); updatePriceUI(); apply(); });
+  sortSel.addEventListener("change", e => { state.sort = e.target.value; apply(); });
+  clearBtn.addEventListener("click", () => {
+    state.q=""; state.cats.clear(); state.nights="all"; state.price=maxPrice; state.sort="relevance";
+    inputQ.value=""; price.value=maxPrice; updatePriceUI(); sortSel.value="relevance";
+    catBtns.forEach(b=>b.classList.remove("pill-active"));
+    segBtns.forEach(b=>b.classList.remove("seg-active")); segBtns[0].classList.add("seg-active");
+    apply();
+  });
+
+  catBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.cat;
+      if (state.cats.has(key)){ state.cats.delete(key); btn.classList.remove("pill-active"); }
+      else { state.cats.add(key); btn.classList.add("pill-active"); }
+      apply();
+    });
+  });
+
+  segBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      segBtns.forEach(b=>b.classList.remove("seg-active"));
+      btn.classList.add("seg-active");
+      state.nights = btn.dataset.n;
+      apply();
+    });
+  });
+
+  // Toggle filtros (mobile)
+  const mqDesktop = window.matchMedia("(min-width: 1024px)");
+  let open = mqDesktop.matches;
+  const setBody = () => { const el = document.getElementById("oFiltersBody"); if (el) el.style.display = (mqDesktop.matches || open) ? "grid" : "none"; };
+  setBody();
+  const tgl = document.getElementById("oToggleFilters");
+  if (tgl) {
+    tgl.addEventListener("click", () => {
+      open = !open; setBody(); tgl.textContent = open ? "Ocultar filtros" : "Mostrar filtros";
+    });
+  }
+  window.addEventListener("resize", setBody);
+
+  // init
+  price.value = maxPrice; updatePriceUI(); apply();
+})();
+</script>
+
 {% endblock %}
