@@ -15,7 +15,7 @@ class UsuarioPersonalizado(AbstractUser):
     email = models.EmailField(unique=True)
     telefono = models.CharField(max_length=20, blank=True)
     pais = models.CharField(max_length=50, blank=True)
-    rol = models.ForeignKey(Rol, on_delete=models.PROTECT, related_name='usuarios')
+    rol = models.ForeignKey(Rol, on_delete=models.PROTECT, related_name='usuarios', null=True, blank=True)
 
 
     # Evitar conflicto con auth.User
