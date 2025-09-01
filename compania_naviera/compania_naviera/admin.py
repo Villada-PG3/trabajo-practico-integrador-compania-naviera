@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.utils.html import format_html
 from .models import *
 
 # --- ROL ---
@@ -55,6 +56,12 @@ class NavioAdmin(admin.ModelAdmin):
     search_fields = ('nombre',)
     list_filter = ('tipo_navio',)
 
+    def imagen_miniatura(self, obj):
+        if obj.imagen:
+            return format_html('<img src="{}" width="50" height="50" />', obj.imagen)
+        return "-"
+    imagen_miniatura.short_description = "Imagen"
+
 # --- CUBIERTA ---
 @admin.register(Cubierta)
 class CubiertaAdmin(admin.ModelAdmin):
@@ -81,12 +88,24 @@ class CamaroteAdmin(admin.ModelAdmin):
     search_fields = ('numero_de_camarote', 'cubierta__navio__nombre')
     list_filter = ('tipo_camarote', 'estado_camarote', 'cubierta__navio')
 
+    def imagen_miniatura(self, obj):
+        if obj.imagen:
+            return format_html('<img src="{}" width="50" height="50" />', obj.imagen)
+        return "-"
+    imagen_miniatura.short_description = "Imagen"
+
 # --- ITINERARIO ---
 @admin.register(Itinerario)
 class ItinerarioAdmin(admin.ModelAdmin):
     list_display = ('id', 'categoria', 'imagen_miniatura')
     search_fields = ('categoria__nombre',)
     list_filter = ('categoria',)
+
+    def imagen_miniatura(self, obj):
+        if obj.imagen:
+            return format_html('<img src="{}" width="50" height="50" />', obj.imagen)
+        return "-"
+    imagen_miniatura.short_description = "Imagen"
 
 # --- ORDEN ---
 @admin.register(Orden)
@@ -129,6 +148,11 @@ class ViajeAdmin(admin.ModelAdmin):
     search_fields = ('nombre', 'lugar_destino')
     list_filter = ('fecha_de_salida', 'fecha_fin')
 
+    def imagen_miniatura(self, obj):
+        if obj.imagen:
+            return format_html('<img src="{}" width="50" height="50" />', obj.imagen)
+        return "-"
+    imagen_miniatura.short_description = "Imagen"
 
 # --- VIAJE X NAVIO ---
 @admin.register(ViajeXNavio)
