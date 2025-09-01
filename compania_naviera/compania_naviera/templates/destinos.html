@@ -1,0 +1,27 @@
+{% extends "base_login.html" %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold text-center mb-8">Nuestros Destinos</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {% for puerto in destinos %}
+    <div class="bg-white/10 p-6 rounded-xl shadow-lg backdrop-blur-md">
+      <h2 class="text-2xl font-semibold mb-2">{{ puerto.nombre }} - {{ puerto.pais }}</h2>
+      <p class="mb-4">{{ puerto.descripcion }}</p>
+
+      <h3 class="font-semibold mb-2">Actividades disponibles:</h3>
+      <ul class="list-disc ml-5 text-sm">
+        {% for actividad in puerto.actividades.all %}
+        <li>{{ actividad.nombre }}: {{ actividad.descripcion }}</li>
+        {% empty %}
+        <li>No hay actividades disponibles.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% empty %}
+    <p>No hay destinos disponibles por el momento.</p>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

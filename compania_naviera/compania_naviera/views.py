@@ -8,6 +8,10 @@ from django.views.generic.edit import CreateView
 from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil, FormularioCambioContrasenia
 from .models import UsuarioPersonalizado
 
+def destinos_view(request):
+    destinos = Puerto.objects.prefetch_related('actividades').all()
+    return render(request, 'destinos.html', {'destinos': destinos})
+
 
 @login_required
 def cambiar_contrasenia(request):
