@@ -19,4 +19,6 @@ urlpatterns = [
     path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
     path('contacto_log/', views.contacto_log_view, name='contacto_log'),
     path('cambiar_contrasenia/', views.cambiar_contrasenia, name='cambiar_contrasenia'),
+    path('destinos/', views.destinos_view, name='destinos'),
+
 ]
