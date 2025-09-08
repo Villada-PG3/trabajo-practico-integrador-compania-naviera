@@ -6,10 +6,10 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
 from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil, FormularioCambioContrasenia
-from .models import UsuarioPersonalizado
+from .models import UsuarioPersonalizado, Viaje
 
 def destinos_view(request):
-    destinos = Puerto.objects.prefetch_related('actividades').all()
+    destinos = Viaje.objects.prefetch_related('actividades').all()
     return render(request, 'destinos.html', {'destinos': destinos})
 
 
