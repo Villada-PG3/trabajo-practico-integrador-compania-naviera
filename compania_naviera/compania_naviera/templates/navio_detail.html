@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ navio.nombre }} – Detalle{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-5xl px-6 lg:px-10 py-10">
+  <div class="rounded-2xl bg-gradient-to-br from-blue-900/70 to-blue-700/40 border border-white/20 p-8 md:p-10 backdrop-blur-xl">
+    <div class="grid md:grid-cols-2 gap-8">
+      
+      <!-- Imagen -->
+      <div>
+        {% if navio.imagen %}
+          <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="rounded-xl w-full h-80 object-cover shadow-lg">
+        {% else %}
+          <img src="{% static 'placeholder.jpg' %}" alt="{{ navio.nombre }}" class="rounded-xl w-full h-80 object-cover shadow-lg">
+        {% endif %}
+      </div>
+
+      <!-- Información -->
+      <div class="space-y-4">
+        <h1 class="text-3xl font-extrabold">{{ navio.nombre }}</h1>
+        <p class="text-white/80">Tipo: {{ navio.tipo_navio.nombre }}</p>
+        <ul class="space-y-1 text-sm text-white/70">
+          <li><strong>Altura:</strong> {{ navio.altura }} m</li>
+          <li><strong>Eslora:</strong> {{ navio.eslora }} m</li>
+          <li><strong>Manga:</strong> {{ navio.manga }} m</li>
+          <li><strong>Desplazamiento:</strong> {{ navio.desplazamiento }} t</li>
+          <li><strong>Autonomía:</strong> {{ navio.autonomia_de_viaje }} días</li>
+          <li><strong>Capacidad de pasajeros:</strong> {{ navio.cantidad_maxima_de_pasajeros }}</li>
+          <li><strong>Motores:</strong> {{ navio.cantidad_de_motores }}</li>
+        </ul>
+
+        <a href="{% url 'cruceros' %}" class="inline-block mt-4 px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Volver a la lista</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

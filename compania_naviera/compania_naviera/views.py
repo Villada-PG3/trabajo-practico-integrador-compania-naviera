@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView
 from django.utils.timezone import now
 
 from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil, FormularioCambioContrasenia
-from .models import UsuarioPersonalizado, Viaje,ItinerarioViaje
+from .models import UsuarioPersonalizado, Viaje,ItinerarioViaje, Navio
 
 def destinos_view(request):
     destinos = ItinerarioViaje.objects.prefetch_related('Viaje').all()
@@ -37,12 +37,9 @@ from .models import Viaje
 
 def main_view(request):
     logout(request)  
-    cruceros = (
-        Viaje.objects.filter(fecha_de_salida__gte=now())
-        .order_by('fecha_de_salida')[:6]
-    )
 
-    return render(request, 'inicio.html', {'cruceros': cruceros})
+
+    return render(request, 'inicio.html')
 
 
 class RegistroUsuario(CreateView):
@@ -86,9 +83,14 @@ def menu_user(request):
 def contacto_view(request):
     return render(request, 'contacto.html')
 
-def cruceros_view(request):
-    return render(request, 'cruceros.html')
 
+def cruceros_view(request):
+    cruceros = Navio.objects.all()
+    return render(request, 'cruceros.html', {'cruceros': cruceros})
+
+def navio_detail_view(request, pk):
+    navio = get_object_or_404(Navio, pk=pk)
+    return render(request, 'navio_detail.html', {'navio': navio})
 
 def contacto_log_view(request):
     return render (request, "contacto_log.html")
@@ -96,8 +98,6 @@ def contacto_log_view(request):
 def ofertas_view(request):
     return render(request, 'ofertas.html')
 
-def cruceros_view(request):
-    return render(request, 'crucero.html')
 
 def logout_view(request):
     logout(request)
