@@ -5,10 +5,10 @@
   <h1 class="text-3xl font-bold text-center mb-8">Nuestros Destinos</h1>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  {% for puerto in destinos %}
+  {% for Viaje in destinos %}
     <div class="bg-white/10 p-6 rounded-xl shadow-lg backdrop-blur-md">
-      <h2 class="text-2xl font-semibold mb-2">{{ puerto.nombre }} - {{ puerto.pais }}</h2>
-      <p class="mb-4">{{ puerto.descripcion }}</p>
+      <h2 class="text-2xl font-semibold mb-2">{{ Viaje.puerto.nombre }} - {{ Viaje.puerto.pais }}</h2>
+      <p class="mb-4">{{ Viaje.puerto.descripcion }}</p>
 
       <h3 class="font-semibold mb-2">Actividades disponibles:</h3>
       <ul class="list-disc ml-5 text-sm">
