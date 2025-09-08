@@ -3,7 +3,7 @@
 
 {% block content %}
 <section class="min-h-[80vh] flex items-center justify-center px-6">
-  <form method="POST" action="{% url 'contacto' %}"
+  <form method="POST" action="{% url 'contacto_log' %}"
         class="relative w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 md:p-10 shadow-2xl space-y-6 text-white">
     {% csrf_token %}
 

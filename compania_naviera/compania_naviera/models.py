@@ -193,6 +193,10 @@ class Viaje(models.Model):
 class ViajeXNavio(models.Model):
     navio = models.ForeignKey(Navio, on_delete=models.PROTECT)
     viaje = models.ForeignKey(Viaje, on_delete=models.CASCADE)
+    precio = models.IntegerField(default=0)  
+
+    def __str__(self):  
+        return f"{self.precio}"  
 
     def __str__(self):
         return f"{self.viaje.nombre} - {self.navio.nombre}"

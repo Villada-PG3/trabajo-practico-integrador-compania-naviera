@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView
 from django.utils.timezone import now
 
 from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil, FormularioCambioContrasenia
-from .models import UsuarioPersonalizado, Viaje,ItinerarioViaje, Navio
+from .models import UsuarioPersonalizado, Viaje,ItinerarioViaje, Navio, ViajeXNavio
 
 def destinos_view(request):
     destinos = ItinerarioViaje.objects.prefetch_related('Viaje').all()
@@ -96,7 +96,9 @@ def contacto_log_view(request):
     return render (request, "contacto_log.html")
 
 def ofertas_view(request):
-    return render(request, 'ofertas.html')
+    # Traemos solo viajes futuros
+    ofertas = ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=now()).select_related('navio', 'viaje')
+    return render(request, 'ofertas.html', {'ofertas': ofertas})
 
 
 def logout_view(request):

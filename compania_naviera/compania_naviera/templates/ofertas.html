@@ -116,212 +116,60 @@
     </div>
   </div>
 </section>
-
-<!-- ======= GRID DE OFERTAS (CARDS MEJORADOS) ======= -->
+<!-- ======= GRID DE OFERTAS (DINÁMICO) ======= -->
 <section class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
   <div id="oCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-white">
 
-    <!-- 1 · Familiar -->
-    <article data-card data-title="Crucero Caribe Clásico" data-cat="familiar" data-price="799" data-nights="7" data-dest="Bahamas Cozumel Jamaica"
-             class="group relative">
-      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
-                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
-          <div class="relative">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Caribe" class="w-full h-56 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
-            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Familiar</span>
-            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 799</span>
-          </div>
-          <div class="p-6 flex flex-col gap-3">
-            <h3 class="text-xl font-semibold flex items-center gap-2">
-              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por Caribe Clásico
-            </h3>
-            <p class="text-white/80 text-sm">
-              7 noches desde Miami visitando Bahamas, Cozumel y Jamaica. Todo incluido para relajarte con vistas tropicales.
-            </p>
-            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-              <div class="text-xs text-white/70 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 7 noches</span>
-                <span class="opacity-50">•</span>
-                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Caribe</span>
+    {% for oferta in ofertas %}
+      <article data-card
+               data-title="{{ oferta.viaje.destino }}"
+               data-cat="{{ oferta.viaje.tipo|default:'otros' }}"
+               data-price="{{ oferta.precio }}"
+               data-nights="{{ oferta.viaje.noches }}"
+               data-dest="{{ oferta.viaje.destino }}"
+               class="group relative">
+        <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+          <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
+                      transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
+            <div class="relative">
+              {% if oferta.navio.imagen %}
+                <img src="{{ oferta.navio.imagen.url }}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
+              {% else %}
+                <img src="{% static 'placeholder.jpg' %}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
+              {% endif %}
+              <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
+              <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">
+                {{ oferta.viaje.tipo|title|default:"Otros" }}
+              </span>
+              <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">
+                USD {{ oferta.precio }}
+              </span>
+            </div>
+            <div class="p-6 flex flex-col gap-3">
+              <h3 class="text-xl font-semibold flex items-center gap-2">
+                <i class="fa-solid fa-ship text-orange-400"></i> {{ oferta.viaje.destino }}
+              </h3>
+              <p class="text-white/80 text-sm">
+                {{ oferta.viaje.noches }} noches desde {{ oferta.viaje.origen }}. {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
+              </p>
+              <div class="mt-auto flex items-center justify-between gap-3 pt-2">
+                <div class="text-xs text-white/70 flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> {{ oferta.viaje.noches }} noches</span>
+                  <span class="opacity-50">•</span>
+                  <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.destino }}</span>
+                </div>
+                <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
+                   class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
+                  {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
+                </a>
               </div>
-              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
-                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
-              </a>
             </div>
           </div>
         </div>
-      </div>
-    </article>
-
-    <!-- 2 · Aventura -->
-    <article data-card data-title="Crucero Mediterráneo" data-cat="aventura" data-price="1199" data-nights="10" data-dest="Barcelona Roma Mónaco Santorini Mediterráneo"
-             class="group relative">
-      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
-                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
-          <div class="relative">
-            <img src="{% static 'a2.png' %}" alt="Mediterráneo" class="w-full h-56 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
-            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Aventura</span>
-            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 1199</span>
-          </div>
-          <div class="p-6 flex flex-col gap-3">
-            <h3 class="text-xl font-semibold flex items-center gap-2">
-              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por el Mediterráneo
-            </h3>
-            <p class="text-white/80 text-sm">
-              10 noches desde Barcelona con paradas en Roma, Mónaco y Santorini. Gastronomía europea de alta gama.
-            </p>
-            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-              <div class="text-xs text-white/70 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 10 noches</span>
-                <span class="opacity-50">•</span>
-                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Mediterráneo</span>
-              </div>
-              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
-                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <!-- 3 · Lujo -->
-    <article data-card data-title="Fiordos Noruegos" data-cat="lujo" data-price="999" data-nights="5" data-dest="Oslo Fiordos Noruega"
-             class="group relative">
-      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
-                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
-          <div class="relative">
-            <img src="{% static 'a5.jpg' %}" alt="Noruega" class="w-full h-56 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
-            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Lujo</span>
-            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 999</span>
-          </div>
-          <div class="p-6 flex flex-col gap-3">
-            <h3 class="text-xl font-semibold flex items-center gap-2">
-              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por Fiordos Noruegos
-            </h3>
-            <p class="text-white/80 text-sm">5 noches entre montañas, cascadas y auroras boreales. Salida desde Oslo.</p>
-            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-              <div class="text-xs text-white/70 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 5 noches</span>
-                <span class="opacity-50">•</span>
-                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Fiordos</span>
-              </div>
-              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
-                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <!-- 4 · Temático -->
-    <article data-card data-title="Sudamérica Mágica" data-cat="tematico" data-price="749" data-nights="6" data-dest="Buenos Aires Punta del Este Río de Janeiro Sudamérica"
-             class="group relative">
-      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
-                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
-          <div class="relative">
-            <img src="{% static 'a3.jpg' %}" alt="Sudamérica" class="w-full h-56 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
-            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Temático</span>
-            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 749</span>
-          </div>
-          <div class="p-6 flex flex-col gap-3">
-            <h3 class="text-xl font-semibold flex items-center gap-2">
-              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por Sudamérica Mágica
-            </h3>
-            <p class="text-white/80 text-sm">6 noches desde Buenos Aires, pasando por Punta del Este y Río de Janeiro.</p>
-            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-              <div class="text-xs text-white/70 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 6 noches</span>
-                <span class="opacity-50">•</span>
-                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Sudamérica</span>
-              </div>
-              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
-                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <!-- 5 · Naturaleza -->
-    <article data-card data-title="Alaska Salvaje" data-cat="naturaleza" data-price="1099" data-nights="8" data-dest="Alaska Glaciares Ballenas Parques"
-             class="group relative">
-      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
-                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
-          <div class="relative">
-            <img src="{% static 'a1.jpg' %}" alt="Alaska" class="w-full h-56 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
-            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Naturaleza</span>
-            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 1099</span>
-          </div>
-          <div class="p-6 flex flex-col gap-3">
-            <h3 class="text-xl font-semibold flex items-center gap-2">
-              <i class="fa-solid fa-ship text-orange-400"></i> Crucero por Alaska
-            </h3>
-            <p class="text-white/80 text-sm">8 días entre glaciares, ballenas y parques nacionales. Naturaleza en su máxima expresión.</p>
-            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-              <div class="text-xs text-white/70 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 8 noches</span>
-                <span class="opacity-50">•</span>
-                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Alaska</span>
-              </div>
-              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
-                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <!-- 6 · Cultural -->
-    <article data-card data-title="Asia Oriental Deluxe" data-cat="cultural" data-price="1499" data-nights="12" data-dest="Tokio Shanghái Hong Kong Singapur Asia"
-             class="group relative">
-      <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-        <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
-                    transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
-          <div class="relative">
-            <img src="{% static 'a4.jpg' %}" alt="Asia" class="w-full h-56 object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
-            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">Cultural</span>
-            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">USD 1499</span>
-          </div>
-          <div class="p-6 flex flex-col gap-3">
-            <h3 class="text-xl font-semibold flex items-center gap-2">
-              <i class="fa-solid fa-ship text-orange-400"></i> Asia Oriental Deluxe
-            </h3>
-            <p class="text-white/80 text-sm">12 noches por Tokio, Shanghái, Hong Kong y Singapur. Cultura milenaria y vanguardia.</p>
-            <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-              <div class="text-xs text-white/70 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> 12 noches</span>
-                <span class="opacity-50">•</span>
-                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Asia Oriental</span>
-              </div>
-              <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                 class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
-                {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
+      </article>
+    {% empty %}
+      <p class="col-span-3 text-center text-white/80">No hay ofertas disponibles en este momento.</p>
+    {% endfor %}
 
   </div>
 </section>
