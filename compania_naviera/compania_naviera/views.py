@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
+from django.utils.timezone import now
 
 from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil, FormularioCambioContrasenia
 from .models import UsuarioPersonalizado, Viaje
@@ -29,9 +30,20 @@ def cambiar_contrasenia(request):
 
     return render(request, 'cambiar_contrasenia.html', {'form': form})
 
+from django.shortcuts import render
+from django.contrib.auth import logout
+from django.utils.timezone import now
+from .models import Viaje
+
 def main_view(request):
     logout(request)  
-    return render(request, 'inicio.html')
+    cruceros = (
+        Viaje.objects.filter(fecha_de_salida__gte=now())
+        .order_by('fecha_de_salida')[:6]
+    )
+
+    return render(request, 'inicio.html', {'cruceros': cruceros})
+
 
 class RegistroUsuario(CreateView):
     form_class = FormularioRegistroPersonalizado
