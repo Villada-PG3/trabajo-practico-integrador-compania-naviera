@@ -117,7 +117,7 @@
 
 
 
-  <!-- Destinos destacados (mismas imágenes que Ofertas) -->
+  <!-- Destinos destacados (los 6 primeros viajes) -->
   <div class="mt-14 mx-auto max-w-7xl px-6 lg:px-10">
     <div class="flex items-end justify-between gap-4">
       <h2 class="text-2xl md:text-3xl font-extrabold">Destinos destacados</h2>
@@ -125,78 +125,25 @@
     </div>
 
     <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- 1 -->
-      <article class="group relative overflow-hidden rounded-2xl border border-white/20">
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Caribe" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
-          <div>
-            <h3 class="font-semibold">Caribe Clásico</h3>
-            <p class="text-xs text-white/80">Bahamas • Cozumel • Jamaica</p>
+      {% for viaje in proximos_viajes %}
+        <article class="group relative overflow-hidden rounded-2xl border border-white/20">
+          {% if viaje.imagen %}
+            <img src="{{ viaje.imagen }}" alt="{{ viaje.nombre }}" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
+          {% else %}
+            <img src="{% static 'default-viaje.jpg' %}" alt="{{ viaje.nombre }}" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
+          {% endif %}
+          <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
+          <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
+            <div>
+              <h3 class="font-semibold">{{ viaje.nombre }}</h3>
+              <p class="text-xs text-white/80">{{ viaje.lugar_destino }} • {{ viaje.fecha_de_salida }}</p>
+            </div>
+            <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Conocer</a>
           </div>
-          <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Conocer</a>
-        </div>
-      </article>
-      <!-- 2 -->
-      <article class="group relative overflow-hidden rounded-2xl border border-white/20">
-        <img src="{% static 'a2.png' %}" alt="Mediterráneo" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
-          <div>
-            <h3 class="font-semibold">Mediterráneo</h3>
-            <p class="text-xs text-white/80">Roma • Mónaco • Santorini</p>
-          </div>
-          <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Conocer</a>
-        </div>
-      </article>
-      <!-- 3 -->
-      <article class="group relative overflow-hidden rounded-2xl border border-white/20">
-        <img src="{% static 'a5.jpg' %}" alt="Fiordos" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
-          <div>
-            <h3 class="font-semibold">Fiordos Noruegos</h3>
-            <p class="text-xs text-white/80">Oslo • Bergen • Tromsø</p>
-          </div>
-          <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Conocer</a>
-        </div>
-      </article>
-      <!-- 4 -->
-      <article class="group relative overflow-hidden rounded-2xl border border-white/20">
-        <img src="{% static 'a3.jpg' %}" alt="Sudamérica" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
-          <div>
-            <h3 class="font-semibold">Sudamérica Mágica</h3>
-            <p class="text-xs text-white/80">BA • Punta del Este • Río</p>
-          </div>
-          <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Conocer</a>
-        </div>
-      </article>
-      <!-- 5 -->
-      <article class="group relative overflow-hidden rounded-2xl border border-white/20">
-        <img src="{% static 'a1.jpg' %}" alt="Alaska" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
-          <div>
-            <h3 class="font-semibold">Alaska Salvaje</h3>
-            <p class="text-xs text-white/80">Glaciares • Ballenas • Parques</p>
-          </div>
-          <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Conocer</a>
-        </div>
-      </article>
-      <!-- 6 -->
-      <article class="group relative overflow-hidden rounded-2xl border border-white/20">
-        <img src="{% static 'a4.jpg' %}" alt="Asia Oriental" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
-          <div>
-            <h3 class="font-semibold">Asia Oriental Deluxe</h3>
-            <p class="text-xs text-white/80">Tokio • Shanghái • Singapur</p>
-          </div>
-          <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Conocer</a>
-        </div>
-      </article>
+        </article>
+      {% empty %}
+        <p>No hay viajes disponibles por el momento.</p>
+      {% endfor %}
     </div>
   </div>
 
