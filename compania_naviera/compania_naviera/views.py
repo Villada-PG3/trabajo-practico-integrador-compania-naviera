@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.utils.timezone import now
+from .models import Viaje
 
 from .forms import FormularioRegistroPersonalizado, FormularioEdicionPerfil, FormularioCambioContrasenia
 from .models import UsuarioPersonalizado, Viaje,ItinerarioViaje, Navio, ViajeXNavio
@@ -30,16 +31,15 @@ def cambiar_contrasenia(request):
 
     return render(request, 'cambiar_contrasenia.html', {'form': form})
 
-from django.shortcuts import render
-from django.contrib.auth import logout
-from django.utils.timezone import now
-from .models import Viaje
-
 def main_view(request):
-    logout(request)  
+    logout(request)
+    proximos_viajes = Viaje.objects.filter(
+        fecha_de_salida__gte=now().date()
+    ).order_by('fecha_de_salida')[:6]
 
-
-    return render(request, 'inicio.html')
+    return render(request, 'inicio.html', {
+        'proximos_viajes': proximos_viajes
+    })
 
 
 class RegistroUsuario(CreateView):
