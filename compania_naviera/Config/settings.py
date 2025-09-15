@@ -11,9 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -28,6 +27,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
+    "unfold",              
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,14 +51,15 @@ ROOT_URLCONF = 'Config.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Carpeta templates global
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "compania_naviera" / "templates"],  # si usás esta carpeta
+        "APP_DIRS": True,                                       # ✅ necesario
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
@@ -116,3 +117,11 @@ AUTH_USER_MODEL = 'compania_naviera.UsuarioPersonalizado'
 # Redirecciones de login/logout
 LOGIN_REDIRECT_URL = 'menu_user'
 LOGOUT_REDIRECT_URL = 'home'
+
+
+UNFOLD = {
+    "SITE_TITLE": "SEA STAR Admin",
+    "SITE_HEADER": "SEA STAR — Panel",
+    "SITE_URL": "/admin/",
+    # "SITE_LOGO": "compania_naviera/a2.png",  # si ponés logo en static/, descomentá y ajustá
+}
