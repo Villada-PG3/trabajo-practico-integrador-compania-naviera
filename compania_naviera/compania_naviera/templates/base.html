@@ -21,11 +21,8 @@
     </div>
 
     <div class="hidden md:flex items-center gap-6">
-      {% if user.is_authenticated %}
-        <a href="{% url 'contacto_log' %}" class="relative hover:text-orange-400 transition">Contáctanos</a>
-      {% else %}
+
         <a href="{% url 'contacto' %}" class="relative hover:text-orange-400 transition">Contáctanos</a>
-      {% endif %}
 
       <a href="{% url 'cruceros' %}" class="relative hover:text-orange-400 transition">Cruceros</a>
       <a href="{% url 'destinos' %}" class="relative hover:text-orange-400 transition">Destinos</a>
