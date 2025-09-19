@@ -11,10 +11,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='usuariopersonalizado',
-            name='metodo_pago',
-        ),
+
         migrations.AlterField(
             model_name='usuariopersonalizado',
             name='groups',
