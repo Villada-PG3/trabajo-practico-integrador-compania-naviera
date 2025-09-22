@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Pagos - SEA STAR{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-7xl px-6 lg:px-10 pt-8 pb-16">
+  <div class="rounded-2xl bg-gradient-to-br from-blue-900/70 to-blue-700/40 border border-white/20 p-8 backdrop-blur-xl shadow-xl">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-extrabold">Resumen de Pagos</h1>
+        <p class="text-white/80 mt-2 text-sm md:text-base">Consultá tus pagos asociados a reservas, métodos utilizados y estado de cada operación.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-4 text-center">
+        <div class="bg-white/10 border border-white/20 rounded-xl px-4 py-3">
+          <div class="text-sm text-white/70">Pagos registrados</div>
+          <div class="text-2xl font-bold">{{ total_pagos }}</div>
+        </div>
+        <div class="bg-white/10 border border-white/20 rounded-xl px-4 py-3">
+          <div class="text-sm text-white/70">Monto total</div>
+          <div class="text-2xl font-bold">USD {{ total_monto|floatformat:2 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+    <section class="bg-white/10 border border-white/20 rounded-2xl p-6">
+      <h2 class="text-xl font-semibold mb-4 text-orange-300">Montos por estado</h2>
+      {% if resumen_estados %}
+        <ul class="space-y-3 text-sm">
+          {% for estado in resumen_estados %}
+            <li class="bg-white/10 rounded-xl px-4 py-3 flex items-center justify-between">
+              <span class="font-medium">{{ estado.nombre }}</span>
+              <span class="text-white/80">{{ estado.cantidad }} pago{{ estado.cantidad|pluralize }} · USD {{ estado.monto|floatformat:2 }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-white/70 text-sm">Todavía no registraste pagos.</p>
+      {% endif %}
+    </section>
+
+    <section class="bg-white/10 border border-white/20 rounded-2xl p-6">
+      <h2 class="text-xl font-semibold mb-4 text-blue-200">Métodos utilizados</h2>
+      {% if resumen_metodos %}
+        <ul class="space-y-3 text-sm">
+          {% for metodo in resumen_metodos %}
+            <li class="bg-white/10 rounded-xl px-4 py-3 flex items-center justify-between">
+              <span class="font-medium">{{ metodo.nombre }}</span>
+              <span class="text-white/80">{{ metodo.cantidad }} pago{{ metodo.cantidad|pluralize }} · USD {{ metodo.monto|floatformat:2 }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-white/70 text-sm">No se registraron métodos de pago aún.</p>
+      {% endif %}
+    </section>
+  </div>
+
+  <section class="mt-10">
+    <h2 class="text-2xl font-extrabold mb-4">Detalle de operaciones</h2>
+
+    {% if pagos %}
+      <div class="space-y-6">
+        {% for pago in pagos %}
+          {% with viaje=pago.reserva.viaje_navio.viaje navio=pago.reserva.viaje_navio.navio %}
+            <article class="bg-white/10 border border-white/20 rounded-2xl p-6 shadow-lg">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <div>
+                  <h3 class="text-xl font-semibold">{{ viaje.nombre }}</h3>
+                  <p class="text-white/70 text-sm">Navío: {{ navio.nombre }} · Reserva #{{ pago.reserva.id }}</p>
+                  <p class="text-white/80 text-sm mt-1">Estado: <span class="font-semibold text-orange-300">{{ pago.estado_pago.nombre }}</span></p>
+                </div>
+                <div class="text-right">
+                  <div class="text-sm text-white/70">Fecha pago</div>
+                  <div class="text-lg font-semibold">{{ pago.fecha_pago|date:"d/m/Y" }}</div>
+                  <div class="text-sm text-white/60 mt-2">Monto</div>
+                  <div class="text-2xl font-bold text-orange-400">USD {{ pago.monto|floatformat:2 }}</div>
+                </div>
+              </div>
+
+              <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <p class="text-white/60 uppercase tracking-wide text-xs">Método de pago</p>
+                  <p class="text-white font-semibold">{{ pago.metodo_pago.nombre }}</p>
+                  <p class="text-white/70 mt-2">{{ pago.metodo_pago.descripcion }}</p>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <p class="text-white/60 uppercase tracking-wide text-xs">Creado</p>
+                  <p class="text-white font-semibold">{{ pago.created_at|date:"d/m/Y H:i" }}</p>
+                  <p class="text-white/70 mt-2">Actualizado: {{ pago.updated_at|date:"d/m/Y H:i" }}</p>
+                </div>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <p class="text-white/60 uppercase tracking-wide text-xs">Cliente</p>
+                  <p class="text-white font-semibold">{{ pago.reserva.cliente.nombre }} {{ pago.reserva.cliente.apellido }}</p>
+                  <p class="text-white/70 mt-2">DNI: {{ pago.reserva.cliente.dni }}</p>
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <h4 class="text-lg font-semibold mb-2">Historial de cambios</h4>
+                {% if pago.historialpago_set.all %}
+                  <div class="space-y-2 text-sm">
+                    {% for movimiento in pago.historialpago_set.all %}
+                      <div class="bg-white/5 border border-white/10 rounded-lg px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <div>
+                          <p class="font-medium">{{ movimiento.estado_pago.nombre }}</p>
+                          <p class="text-white/70">{{ movimiento.cambio_realizado }}</p>
+                        </div>
+                        <div class="text-right text-white/60">
+                          <p>{{ movimiento.fecha_cambio|date:"d/m/Y" }}</p>
+                          <p class="text-xs">Por {{ movimiento.usuario_responsable.username }}</p>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <p class="text-white/70 text-sm">Sin movimientos registrados.</p>
+                {% endif %}
+              </div>
+            </article>
+          {% endwith %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="bg-white/10 border border-white/20 rounded-2xl p-10 text-center">
+        <p class="text-lg font-semibold">Aún no registraste pagos.</p>
+        <p class="text-white/70 mt-2">Cuando generes reservas y avances con el pago, verás el detalle aquí.</p>
+        <a href="{% url 'ofertas' %}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium">Ver ofertas disponibles</a>
+      </div>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}
