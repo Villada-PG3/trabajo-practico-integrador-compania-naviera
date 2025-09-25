@@ -14,6 +14,7 @@ from .forms import (
     FormularioCambioContrasenia,
     FormularioEdicionPerfil,
     FormularioRegistroPersonalizado,
+    FormularioReserva,
 )
 from .models import (
     ActividadPosible,
@@ -27,6 +28,8 @@ from .models import (
     UsuarioPersonalizado,
     Viaje,
     ViajeXNavio,
+    Cliente,
+    EstadoReserva,
 )
 
 
@@ -294,3 +297,41 @@ def editar_perfil(request):
     else:
         form = FormularioEdicionPerfil(instance=request.user)
     return render(request, "editar_perfil.html", {"form": form})
+
+
+@login_required
+def mis_reservas_view(request):
+    usuario = request.user
+    reservas = (
+        Reserva.objects.filter(cliente__usuario=usuario)
+        .select_related("viaje_navio__viaje", "viaje_navio__navio", "estado_reserva")
+        .order_by("-created_at")
+    )
+    return render(request, "mis_reservas.html", {"reservas": reservas})
+
+
+@login_required
+def crear_reserva_view(request):
+    # Verificar si el cliente existe
+    try:
+        cliente = Cliente.objects.get(usuario=request.user)
+        # Opcional: verificar si tiene fecha de nacimiento
+        if not cliente.fecha_nacimiento:
+            messages.warning(request, "Completa tu perfil antes de poder crear reservas.")
+            return redirect("editar_perfil")  # o a un formulario de perfil de cliente
+    except Cliente.DoesNotExist:
+        messages.warning(request, "Debes completar tu perfil antes de crear reservas.")
+        return redirect("editar_perfil")  # o a un formulario de perfil de cliente
+
+    if request.method == "POST":
+        form = FormularioReserva(request.POST)
+        if form.is_valid():
+            reserva = form.save(commit=False)
+            reserva.cliente = cliente
+            reserva.save()
+            messages.success(request, "Reserva creada correctamente.")
+            return redirect("mis_reservas")
+    else:
+        form = FormularioReserva()
+
+    return render(request, "crear_reserva.html", {"form": form})

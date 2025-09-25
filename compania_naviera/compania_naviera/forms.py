@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from .models import UsuarioPersonalizado
+from .models import UsuarioPersonalizado, Reserva, ViajeXNavio
+from django.utils.timezone import now
 
 class FormularioRegistroPersonalizado(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -94,3 +95,31 @@ class FormularioCambioContrasenia(PasswordChangeForm):
             "placeholder": "Confirmar nueva contraseña"
         })
     )
+
+class FormularioReserva(forms.ModelForm):
+    class Meta:
+        model = Reserva
+        # usar los campos reales del modelo
+        fields = ["descripcion", "viaje_navio"]
+        widgets = {
+            "descripcion": forms.Textarea(attrs={"rows": 3}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # estilo consistente con el resto de tus forms
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({
+                "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+                "placeholder": field.label
+            })
+
+        # limitar la lista de viajes a los próximos (opcional pero útil)
+        if "viaje_navio" in self.fields:
+            self.fields["viaje_navio"].queryset = (
+                ViajeXNavio.objects.select_related("viaje", "navio")
+                .filter(viaje__fecha_de_salida__gte=now().date())
+                .order_by("viaje__fecha_de_salida")
+            )
+            self.fields["viaje_navio"].label = "Viaje y Navío"

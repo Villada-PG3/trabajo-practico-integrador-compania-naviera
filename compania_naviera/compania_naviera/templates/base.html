@@ -22,8 +22,11 @@
 
     <div class="hidden md:flex items-center gap-6">
 
-        <a href="{% url 'contacto' %}" class="relative hover:text-orange-400 transition">Contáctanos</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'mis_reservas' %}" class="relative hover:text-orange-400 transition">Mis reservas</a>
+      {% endif %}
 
+      <a href="{% url 'contacto' %}" class="relative hover:text-orange-400 transition">Contáctanos</a>
       <a href="{% url 'cruceros' %}" class="relative hover:text-orange-400 transition">Cruceros</a>
       <a href="{% url 'destinos' %}" class="relative hover:text-orange-400 transition">Destinos</a>
       <a href="{% url 'ofertas' %}" class="relative hover:text-orange-400 transition">Ofertas</a>
