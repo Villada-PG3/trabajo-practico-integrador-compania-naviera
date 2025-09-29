@@ -16,17 +16,7 @@ ALLOWED_HOSTS = []
 
 # --- Apps
 INSTALLED_APPS = [
-<<<<<<< HEAD
-          
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    "compania_naviera",
-    
-=======
+
     "unfold",  # Debe ir antes que django.contrib.admin
     # "unfold.contrib.filters",   # opcional
     # "unfold.contrib.forms",     # opcional
@@ -38,7 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "compania_naviera",
->>>>>>> cc1a836 (Admin Unfold: settings, sidebar y fix de reverse; + requirements)
+
 ]
 
 # --- Middleware
