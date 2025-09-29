@@ -129,6 +129,8 @@ class TipoItinerario(models.Model):
     def __str__(self):
         return self.nombre
     
+
+
 class Itinerario(models.Model):
     categoria = models.ForeignKey(TipoItinerario, on_delete=models.PROTECT)
     imagen = models.URLField(blank=True, null=True)

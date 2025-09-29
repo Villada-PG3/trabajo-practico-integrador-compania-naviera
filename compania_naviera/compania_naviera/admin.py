@@ -94,6 +94,11 @@ class CamaroteAdmin(admin.ModelAdmin):
         return "-"
     imagen_miniatura.short_description = "Imagen"
 
+@admin.register(TipoItinerario)
+class TipoItinerario(admin.ModelAdmin):
+    list_display = ("id", "nombre")
+    search_fields = ("nombre",)
+
 # --- ITINERARIO ---
 @admin.register(Itinerario)
 class ItinerarioAdmin(admin.ModelAdmin):
