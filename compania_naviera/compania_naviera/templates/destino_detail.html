@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+
 <h1>{{ puerto.nombre }}</h1>
 <p>Itinerario: {{ puerto.itinerario.categoria.nombre }}</p>
 <p>Orden: {{ puerto.orden }}</p>
@@ -20,4 +22,4 @@
   </ul>
 {% endif %}
 
-<a href="{% url 'destino_detail' %}">Volver a la lista de destinos</a>
+<a href="{% url 'destinos' %}">Volver a la lista de destinos</a>
