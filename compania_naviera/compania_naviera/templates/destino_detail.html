@@ -1,0 +1,23 @@
+<h1>{{ puerto.nombre }}</h1>
+<p>Itinerario: {{ puerto.itinerario.categoria.nombre }}</p>
+<p>Orden: {{ puerto.orden }}</p>
+
+{% if puerto.ubicaciones.all %}
+  <h3>Ubicaciones</h3>
+  <ul>
+    {% for ubicacion in puerto.ubicaciones.all %}
+      <li>{{ ubicacion.nombre }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if puerto.actividades.all %}
+  <h3>Actividades</h3>
+  <ul>
+    {% for act in puerto.actividades.all %}
+      <li>{{ act.actividad.nombre }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<a href="{% url 'destinos_list' %}">Volver a la lista de destinos</a>
