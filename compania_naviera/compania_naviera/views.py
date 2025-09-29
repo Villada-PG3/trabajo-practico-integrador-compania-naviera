@@ -15,6 +15,7 @@ from .forms import (
     FormularioEdicionPerfil,
     FormularioRegistroPersonalizado,
     FormularioReserva,
+    FormularioCliente,
 )
 from .models import (
     ActividadPosible,
@@ -33,7 +34,35 @@ from .models import (
 )
 
 
+# ===========================
+# Públicos / generales
+# ===========================
+
+def main_view(request):
+    """
+    Home público: muestra próximos viajes.
+    """
+    logout(request)  # deja la sesión limpia al entrar al home
+    proximos_viajes = (
+        Viaje.objects.filter(fecha_de_salida__gte=now().date())
+        .order_by("fecha_de_salida")[:6]
+    )
+    return render(request, "inicio.html", {"proximos_viajes": proximos_viajes})
+
+
+def contacto_view(request):
+    return render(request, "contacto.html")
+
+
+def contacto_log_view(request):
+    return render(request, "contacto_log.html")
+
+
 def destinos_view(request):
+    """
+    Lista destinos (Puertos) agrupados por itinerario/categoría,
+    con ubicaciones y actividades prefetchadas.
+    """
     destinos = (
         Puerto.objects.select_related("itinerario__categoria")
         .prefetch_related(
@@ -47,10 +76,107 @@ def destinos_view(request):
     )
     return render(request, "destinos.html", {"destinos": destinos})
 
+
 def destino_detail_view(request, pk):
     puerto = get_object_or_404(Puerto, pk=pk)
     return render(request, "destino_detail.html", {"puerto": puerto})
-    
+
+
+def ofertas_view(request):
+    """
+    Ofertas basadas en ViajeXNavio futuros; calcula noches y categoría del itinerario.
+    """
+    hoy = now().date()
+    ofertas_qs = (
+        ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
+        .select_related("navio", "viaje")
+        .prefetch_related(
+            Prefetch(
+                "viaje__itinerarioviaje_set",
+                queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
+            )
+        )
+        .order_by("viaje__fecha_de_salida")
+    )
+
+    ofertas = list(ofertas_qs)
+    for oferta in ofertas:
+        noches = 0
+        if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
+            noches = max((oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days, 0)
+
+        itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
+        categoria_nombre = ""
+        if itinerarios:
+            itinerario_rel = itinerarios[0]
+            itinerario_obj = getattr(itinerario_rel, "itinerario", None)
+            categoria = getattr(itinerario_obj, "categoria", None)
+            if categoria:
+                categoria_nombre = categoria.nombre
+
+        oferta.noches = noches
+        oferta.categoria_nombre = categoria_nombre or "Otros"
+        oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
+
+    return render(request, "ofertas.html", {"ofertas": ofertas})
+
+
+# ===========================
+# Autenticación / Perfil
+# ===========================
+
+class RegistroUsuario(CreateView):
+    form_class = FormularioRegistroPersonalizado
+    template_name = "registro.html"
+    success_url = reverse_lazy("login")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Usuario registrado correctamente. Inicia sesión.")
+        return response
+
+
+def login_view(request):
+    if request.method == "POST":
+        username_or_email = request.POST.get("username") or request.POST.get("email")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=username_or_email, password=password)
+
+        if user is None:
+            # login por email si el username no coincide
+            try:
+                usuario = UsuarioPersonalizado.objects.get(email=username_or_email)
+                user = authenticate(request, username=usuario.username, password=password)
+            except UsuarioPersonalizado.DoesNotExist:
+                user = None
+
+        if user is not None:
+            login(request, user)
+            return redirect("menu_user")
+        messages.error(request, "Usuario o contraseña incorrectos.")
+
+    return render(request, "inicio_sesion.html")
+
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Has cerrado sesión correctamente.")
+    return redirect("home")
+
+
+@login_required
+def editar_perfil(request):
+    if request.method == "POST":
+        form = FormularioEdicionPerfil(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Perfil actualizado correctamente.")
+            return redirect("menu_user")
+        messages.error(request, "Corrige los errores del formulario.")
+    else:
+        form = FormularioEdicionPerfil(instance=request.user)
+    return render(request, "editar_perfil.html", {"form": form})
 
 
 @login_required
@@ -69,65 +195,21 @@ def cambiar_contrasenia(request):
     return render(request, "cambiar_contrasenia.html", {"form": form})
 
 
-def main_view(request):
-    logout(request)
-    proximos_viajes = (
-        Viaje.objects.filter(fecha_de_salida__gte=now().date())
-        .order_by("fecha_de_salida")[:6]
-    )
-
-    return render(request, "inicio.html", {"proximos_viajes": proximos_viajes})
-
-
-class RegistroUsuario(CreateView):
-    form_class = FormularioRegistroPersonalizado
-    template_name = "registro.html"
-    success_url = reverse_lazy("login")
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(
-            self.request, "Usuario registrado correctamente. Inicia sesión."
-        )
-        return response
-
-
-def login_view(request):
-    if request.method == "POST":
-        username_or_email = request.POST.get("username") or request.POST.get("email")
-        password = request.POST.get("password")
-
-        user = authenticate(request, username=username_or_email, password=password)
-
-        if user is None:
-            try:
-                usuario = UsuarioPersonalizado.objects.get(email=username_or_email)
-                user = authenticate(
-                    request, username=usuario.username, password=password
-                )
-            except UsuarioPersonalizado.DoesNotExist:
-                user = None
-
-        if user is not None:
-            login(request, user)
-            return redirect("menu_user")
-        messages.error(request, "Usuario o contraseña incorrectos.")
-
-    return render(request, "inicio_sesion.html")
-
+# ===========================
+# Panel de Usuario / Reservas
+# ===========================
 
 @login_required
 def menu_user(request):
+    """
+    Dashboard del usuario con KPIs + próximos cruceros a partir de sus reservas.
+    """
     usuario = request.user
     hoy = now().date()
 
     reservas_usuario = (
         Reserva.objects.filter(cliente__usuario=usuario)
-        .select_related(
-            "estado_reserva",
-            "viaje_navio__viaje",
-            "viaje_navio__navio",
-        )
+        .select_related("estado_reserva", "viaje_navio__viaje", "viaje_navio__navio")
         .order_by("viaje_navio__viaje__fecha_de_salida")
     )
 
@@ -135,29 +217,26 @@ def menu_user(request):
     for reserva in reservas_usuario:
         viaje = reserva.viaje_navio.viaje
         if viaje.fecha_de_salida and viaje.fecha_de_salida >= hoy:
+            navio_id = getattr(reserva.viaje_navio, "navio_id", None)
+            navio_nombre = getattr(getattr(reserva.viaje_navio, "navio", None), "nombre", "")
             proximos_cruceros.append(
                 {
                     "nombre": viaje.nombre,
                     "fecha": viaje.fecha_de_salida,
-                    "estado": reserva.estado_reserva.nombre
-                    if reserva.estado_reserva
-                    else "",
-                    "navio_id": reserva.viaje_navio.navio_id,
-                    "navio_nombre": reserva.viaje_navio.navio.nombre,
+                    "estado": reserva.estado_reserva.nombre if reserva.estado_reserva else "",
+                    "navio_id": navio_id,
+                    "navio_nombre": navio_nombre or "(sin asignar)",
                 }
             )
-
     proximos_cruceros = proximos_cruceros[:3]
 
+    # Ofertas y actividades simples para el panel
     ofertas_destacadas = list(
         ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
         .select_related("viaje", "navio")
         .order_by("precio")[:3]
     )
-
-    actividades_destacadas = list(
-        ActividadPosible.objects.order_by("nombre")[:3]
-    )
+    actividades_destacadas = list(ActividadPosible.objects.order_by("nombre")[:3])
 
     contexto = {
         "usuario": usuario,
@@ -167,9 +246,82 @@ def menu_user(request):
         "proximos_cruceros": proximos_cruceros,
         "actividades_destacadas": actividades_destacadas,
     }
-
     return render(request, "menu_user.html", contexto)
 
+
+@login_required
+def mis_reservas_view(request):
+    usuario = request.user
+    reservas = (
+        Reserva.objects.filter(cliente__usuario=usuario)
+        .select_related("viaje_navio__viaje", "viaje_navio__navio", "estado_reserva")
+        .order_by("-created_at")
+    )
+    return render(request, "mis_reservas.html", {"reservas": reservas})
+
+
+@login_required
+def crear_cliente_view(request):
+    """
+    Crea el perfil de Cliente asociado al usuario si no existe.
+    """
+    try:
+        Cliente.objects.get(usuario=request.user)
+        messages.info(request, "Ya tienes un perfil de cliente.")
+        return redirect("crear_reserva")
+    except Cliente.DoesNotExist:
+        pass
+
+    if request.method == "POST":
+        form = FormularioCliente(request.POST)
+        if form.is_valid():
+            cliente = form.save(commit=False)
+            cliente.usuario = request.user
+            cliente.save()
+            messages.success(request, "Perfil de cliente creado correctamente.")
+            return redirect("crear_reserva")
+    else:
+        form = FormularioCliente()
+
+    return render(request, "crear_cliente.html", {"form": form})
+
+
+@login_required
+def crear_reserva_view(request):
+    """
+    Crea una reserva si el usuario tiene su Cliente asociado; si no, lo manda a crear el cliente.
+    Asigna por defecto el estado 'Pendiente' si existe, o lo crea.
+    """
+    try:
+        cliente = Cliente.objects.get(usuario=request.user)
+    except Cliente.DoesNotExist:
+        return redirect("crear_cliente")
+
+    if request.method == "POST":
+        form = FormularioReserva(request.POST)
+        if form.is_valid():
+            reserva = form.save(commit=False)
+            reserva.cliente = cliente
+
+            # Estado por defecto: Pendiente
+            try:
+                estado_pendiente = EstadoReserva.objects.get(nombre="Pendiente")
+            except EstadoReserva.DoesNotExist:
+                estado_pendiente = EstadoReserva.objects.create(nombre="Pendiente")
+            reserva.estado_reserva = estado_pendiente
+
+            reserva.save()
+            messages.success(request, "Reserva creada correctamente.")
+            return redirect("mis_reservas")
+    else:
+        form = FormularioReserva()
+
+    return render(request, "crear_reserva.html", {"form": form})
+
+
+# ===========================
+# Pagos (si lo usás en templates/urls)
+# ===========================
 
 @login_required
 def pagos_view(request):
@@ -228,115 +380,58 @@ def pagos_view(request):
     return render(request, "pagos.html", contexto)
 
 
-def contacto_view(request):
-    return render(request, "contacto.html")
-
+# ===========================
+# Cruceros (listado + detalle)
+# ===========================
 
 def cruceros_view(request):
-    cruceros = Navio.objects.all()
-    return render(request, "cruceros.html", {"cruceros": cruceros})
+    """
+    Lista de cruceros leyendo SIEMPRE desde Viaje.
+    Si existe ViajeXNavio, toma el primer navío asociado; si no, muestra “(sin asignar)”.
+    Esto hace que funcione aunque en el admin no hayan creado la relación ViajeXNavio.
+    """
+    hoy = now().date()
+
+    base_qs = (
+        Viaje.objects
+        .prefetch_related(
+            Prefetch(
+                "viajexnavio_set",
+                queryset=ViajeXNavio.objects.select_related("navio").order_by("id"),
+            )
+        )
+    )
+
+    def map_items(qs):
+        items = []
+        for v in qs:
+            vxn_list = list(v.viajexnavio_set.all())
+            navio = vxn_list[0].navio if vxn_list and vxn_list[0].navio_id else None
+            items.append({"viaje": v, "navio": navio})
+        return items
+
+    futuros_qs = base_qs.filter(fecha_de_salida__gte=hoy).order_by("fecha_de_salida")
+    historicos_qs = base_qs.filter(fecha_de_salida__lt=hoy).order_by("-fecha_de_salida")
+
+    futuros = map_items(futuros_qs)
+    historicos = map_items(historicos_qs)
+
+    return render(request, "cruceros.html", {"futuros": futuros, "historicos": historicos})
 
 
 def navio_detail_view(request, pk):
+    """
+    Detalle de un navío + próximos viajes asociados.
+    """
     navio = get_object_or_404(Navio, pk=pk)
-    return render(request, "navio_detail.html", {"navio": navio})
-
-
-def contacto_log_view(request):
-    return render(request, "contacto_log.html")
-
-
-def ofertas_view(request):
     hoy = now().date()
-    ofertas_qs = (
-        ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
-        .select_related("navio", "viaje")
-        .prefetch_related(
-            Prefetch(
-                "viaje__itinerarioviaje_set",
-                queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
-            )
-        )
+    proximos_viajes = (
+        ViajeXNavio.objects
+        .select_related("viaje", "navio")
+        .filter(navio=navio, viaje__fecha_de_salida__gte=hoy)
         .order_by("viaje__fecha_de_salida")
     )
-
-    ofertas = list(ofertas_qs)
-    for oferta in ofertas:
-        noches = 0
-        if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
-            noches = max(
-                (oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days,
-                0,
-            )
-
-        itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
-        categoria_nombre = ""
-        if itinerarios:
-            itinerario_rel = itinerarios[0]
-            itinerario_obj = getattr(itinerario_rel, "itinerario", None)
-            categoria = getattr(itinerario_obj, "categoria", None)
-            if categoria:
-                categoria_nombre = categoria.nombre
-
-        oferta.noches = noches
-        oferta.categoria_nombre = categoria_nombre or "Otros"
-        oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
-
-    return render(request, "ofertas.html", {"ofertas": ofertas})
-
-
-def logout_view(request):
-    logout(request)
-    messages.success(request, "Has cerrado sesión correctamente.")
-    return redirect("home")
-
-
-def editar_perfil(request):
-    if request.method == "POST":
-        form = FormularioEdicionPerfil(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Perfil actualizado correctamente.")
-            return redirect("menu_user")
-        messages.error(request, "Corrige los errores del formulario.")
-    else:
-        form = FormularioEdicionPerfil(instance=request.user)
-    return render(request, "editar_perfil.html", {"form": form})
-
-
-@login_required
-def mis_reservas_view(request):
-    usuario = request.user
-    reservas = (
-        Reserva.objects.filter(cliente__usuario=usuario)
-        .select_related("viaje_navio__viaje", "viaje_navio__navio", "estado_reserva")
-        .order_by("-created_at")
-    )
-    return render(request, "mis_reservas.html", {"reservas": reservas})
-
-
-@login_required
-def crear_reserva_view(request):
-    # Verificar si el cliente existe
-    try:
-        cliente = Cliente.objects.get(usuario=request.user)
-        # Opcional: verificar si tiene fecha de nacimiento
-        if not cliente.fecha_nacimiento:
-            messages.warning(request, "Completa tu perfil antes de poder crear reservas.")
-            return redirect("editar_perfil")  # o a un formulario de perfil de cliente
-    except Cliente.DoesNotExist:
-        messages.warning(request, "Debes completar tu perfil antes de crear reservas.")
-        return redirect("editar_perfil")  # o a un formulario de perfil de cliente
-
-    if request.method == "POST":
-        form = FormularioReserva(request.POST)
-        if form.is_valid():
-            reserva = form.save(commit=False)
-            reserva.cliente = cliente
-            reserva.save()
-            messages.success(request, "Reserva creada correctamente.")
-            return redirect("mis_reservas")
-    else:
-        form = FormularioReserva()
-
-    return render(request, "crear_reserva.html", {"form": form})
+    return render(request, "navio_detail.html", {
+        "navio": navio,
+        "proximos_viajes": proximos_viajes,
+    })

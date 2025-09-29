@@ -5,3 +5,4 @@ db.sqlite3
 *.py[cod]
 *.pyo
 *.pyd
+*venv/

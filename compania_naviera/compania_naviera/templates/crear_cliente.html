@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex flex-col justify-center items-center min-h-[80vh]">
+    <h2 class="text-2xl font-bold mb-3 text-center">Completa tus datos de cliente</h2>
+    <p class="text-center text-gray-200 mb-6">Antes de crear una reserva, necesitamos que completes tu perfil.</p>
+
+    <!-- Mensajes de Django -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} w-full max-w-md mb-3 p-2 rounded bg-red-500 text-white">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="w-full max-w-md space-y-4" novalidate>
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="flex flex-col">
+                <label for="{{ field.id_for_label }}" class="mb-1">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg font-medium transition">
+            Guardar y continuar
+        </button>
+    </form>
+</div>
+{% endblock %}
