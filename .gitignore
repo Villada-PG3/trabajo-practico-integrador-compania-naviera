@@ -1,1 +1,13 @@
-venv/
+# Python
+_pycache_/
+*.pyc
+*.pyo
+*.pyd
+
+# Base de datos local
+db.sqlite3
+*.sqlite3
+
+# VSCode u otros
+.vscode/
+*.log
