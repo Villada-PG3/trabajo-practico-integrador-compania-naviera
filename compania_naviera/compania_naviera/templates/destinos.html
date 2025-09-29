@@ -5,15 +5,28 @@
   <h1 class="text-3xl font-bold text-center mb-8">Nuestros Destinos</h1>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  {% for Viaje in destinos %}
+  {% for puerto in destinos %}
     <div class="bg-white/10 p-6 rounded-xl shadow-lg backdrop-blur-md">
-      <h2 class="text-2xl font-semibold mb-2">{{ Viaje.puerto.nombre }} - {{ Viaje.puerto.pais }}</h2>
-      <p class="mb-4">{{ Viaje.puerto.descripcion }}</p>
+      <h2 class="text-2xl font-semibold mb-2">
+        <a href="{% url 'destino_detail' puerto.pk %}" class="hover:underline">
+          {{ puerto.nombre }}
+        </a>
+      </h2>
+      <p class="mb-2"><strong>Itinerario:</strong> {{ puerto.itinerario.categoria.nombre }}</p>
+      <p class="mb-2"><strong>Orden:</strong> {{ puerto.orden }}</p>
+
+      {% if puerto.ubicaciones.all %}
+      <p class="mb-2"><strong>Ubicaciones:</strong>
+        {% for ubicacion in puerto.ubicaciones.all %}
+          {{ ubicacion.nombre }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+      {% endif %}
 
       <h3 class="font-semibold mb-2">Actividades disponibles:</h3>
       <ul class="list-disc ml-5 text-sm">
-        {% for actividad in puerto.actividades.all %}
-        <li>{{ actividad.nombre }}: {{ actividad.descripcion }}</li>
+        {% for act in puerto.actividades.all %}
+        <li>{{ act.actividad.nombre }}: {{ act.actividad.descripcion }}</li>
         {% empty %}
         <li>No hay actividades disponibles.</li>
         {% endfor %}

@@ -48,6 +48,11 @@ def destinos_view(request):
     )
     return render(request, "destinos.html", {"destinos": destinos})
 
+def destino_detail_view(request, pk):
+    puerto = get_object_or_404(Puerto, pk=pk)
+    return render(request, "destino_detail.html", {"puerto": puerto})
+    
+
 
 @login_required
 def cambiar_contrasenia(request):

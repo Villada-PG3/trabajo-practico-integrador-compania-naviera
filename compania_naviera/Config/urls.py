@@ -23,6 +23,8 @@ urlpatterns = [
     path('contacto_log/', views.contacto_log_view, name='contacto_log'),
     path('cambiar_contrasenia/', views.cambiar_contrasenia, name='cambiar_contrasenia'),
     path('destinos/', views.destinos_view, name='destinos'),
+    path("destinos/<int:pk>/", views.destino_detail_view, name="destino_detail"),
+
    
     path('cliente/nuevo/', views.crear_cliente_view, name='crear_cliente'),
     path("mis-reservas/", views.mis_reservas_view, name="mis_reservas"),

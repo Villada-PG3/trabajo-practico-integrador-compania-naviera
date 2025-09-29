@@ -1,13 +1,7 @@
-# Python
-_pycache_/
+__pycache__/
 *.pyc
-*.pyo
-*.pyd
-
-# Base de datos local
 db.sqlite3
 *.sqlite3
-
-# VSCode u otros
-.vscode/
-*.log
+*.py[cod]
+*.pyo
+*.pyd
