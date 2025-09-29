@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from .models import UsuarioPersonalizado, Reserva, ViajeXNavio
+from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente
 from django.utils.timezone import now
 
 class FormularioRegistroPersonalizado(UserCreationForm):
@@ -123,3 +123,28 @@ class FormularioReserva(forms.ModelForm):
                 .order_by("viaje__fecha_de_salida")
             )
             self.fields["viaje_navio"].label = "Viaje y Navío"
+
+class FormularioCliente(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        exclude = ['usuario']  # se asigna automáticamente en la vista
+
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'Nombre'}),
+            'apellido': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'Apellido'}),
+            'dni': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'DNI'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'Dirección'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'type': 'date', 'placeholder': 'Fecha de Nacimiento'}),
+            'nacionalidad': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'Nacionalidad'}),
+            'genero': forms.Select(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full'}, choices=[('Masculino','Masculino'), ('Femenino','Femenino'), ('Otro','Otro')]),
+        }
+
+        labels = {
+            'nombre': 'Nombre',
+            'apellido': 'Apellido',
+            'dni': 'DNI',
+            'direccion': 'Dirección',
+            'fecha_nacimiento': 'Fecha de Nacimiento',
+            'nacionalidad': 'Nacionalidad',
+            'genero': 'Género',
+        }

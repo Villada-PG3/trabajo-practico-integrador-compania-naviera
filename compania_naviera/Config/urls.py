@@ -24,7 +24,7 @@ urlpatterns = [
     path('cambiar_contrasenia/', views.cambiar_contrasenia, name='cambiar_contrasenia'),
     path('destinos/', views.destinos_view, name='destinos'),
    
-
+    path('cliente/nuevo/', views.crear_cliente_view, name='crear_cliente'),
     path("mis-reservas/", views.mis_reservas_view, name="mis_reservas"),
     path("reservas/nueva/", views.crear_reserva_view, name="crear_reserva"),
 

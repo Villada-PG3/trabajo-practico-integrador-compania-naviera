@@ -15,6 +15,7 @@ from .forms import (
     FormularioEdicionPerfil,
     FormularioRegistroPersonalizado,
     FormularioReserva,
+    FormularioCliente,
 )
 from .models import (
     ActividadPosible,
@@ -312,22 +313,26 @@ def mis_reservas_view(request):
 
 @login_required
 def crear_reserva_view(request):
-    # Verificar si el cliente existe
+    # Verificar si el usuario ya tiene un cliente
     try:
         cliente = Cliente.objects.get(usuario=request.user)
-        # Opcional: verificar si tiene fecha de nacimiento
-        if not cliente.fecha_nacimiento:
-            messages.warning(request, "Completa tu perfil antes de poder crear reservas.")
-            return redirect("editar_perfil")  # o a un formulario de perfil de cliente
     except Cliente.DoesNotExist:
-        messages.warning(request, "Debes completar tu perfil antes de crear reservas.")
-        return redirect("editar_perfil")  # o a un formulario de perfil de cliente
+        return redirect("crear_cliente")
 
     if request.method == "POST":
         form = FormularioReserva(request.POST)
         if form.is_valid():
             reserva = form.save(commit=False)
             reserva.cliente = cliente
+
+            # Asignar estado por defecto
+            try:
+                estado_pendiente = EstadoReserva.objects.get(nombre="Pendiente")
+            except EstadoReserva.DoesNotExist:
+                # Crear un estado por defecto si no existe
+                estado_pendiente = EstadoReserva.objects.create(nombre="Pendiente")
+            reserva.estado_reserva = estado_pendiente
+
             reserva.save()
             messages.success(request, "Reserva creada correctamente.")
             return redirect("mis_reservas")
@@ -335,3 +340,26 @@ def crear_reserva_view(request):
         form = FormularioReserva()
 
     return render(request, "crear_reserva.html", {"form": form})
+
+@login_required
+def crear_cliente_view(request):
+    # Verificar si el usuario ya tiene un cliente
+    try:
+        Cliente.objects.get(usuario=request.user)
+        messages.info(request, "Ya tienes un perfil de cliente.")
+        return redirect("crear_reserva")  # redirigir a crear reserva
+    except Cliente.DoesNotExist:
+        pass
+
+    if request.method == "POST":
+        form = FormularioCliente(request.POST)
+        if form.is_valid():
+            cliente = form.save(commit=False)
+            cliente.usuario = request.user  # asignamos el usuario automáticamente
+            cliente.save()
+            messages.success(request, "Perfil de cliente creado correctamente.")
+            return redirect("crear_reserva")  # después de crear el cliente, vamos a la reserva
+    else:
+        form = FormularioCliente()
+
+    return render(request, "crear_cliente.html", {"form": form})
