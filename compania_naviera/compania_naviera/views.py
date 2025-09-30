@@ -9,6 +9,8 @@ from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django.views.generic.edit import CreateView
+from django.db.models import Prefetch, Avg
+
 
 from .forms import (
     FormularioCambioContrasenia,
@@ -81,25 +83,36 @@ def destino_detail_view(request, pk):
     puerto = get_object_or_404(Puerto, pk=pk)
     return render(request, "destino_detail.html", {"puerto": puerto})
 
-
 def ofertas_view(request):
-    """
-    Ofertas basadas en ViajeXNavio futuros; calcula noches y categoría del itinerario.
-    """
     hoy = now().date()
-    ofertas_qs = (
+
+    # 🔹 1) Obtener el promedio de precio de los viajes futuros
+    promedio = (
         ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
-        .select_related("navio", "viaje")
-        .prefetch_related(
-            Prefetch(
-                "viaje__itinerarioviaje_set",
-                queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
-            )
-        )
-        .order_by("viaje__fecha_de_salida")
+        .aggregate(Avg("precio"))["precio__avg"]
     )
 
+    # 🔹 2) Consultar todos los viajes futuros con distintos criterios
+    ofertas_qs = ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy).select_related(
+        "navio", "viaje"
+    ).prefetch_related(
+        Prefetch(
+            "viaje__itinerarioviaje_set",
+            queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
+        )
+    )
+
+    # 🔹 3) Filtrar viajes que sean oferta por distintos criterios
+    ofertas_qs = ofertas_qs.filter(
+        precio__lte=1000
+    ) | ofertas_qs.filter(precio__lt=promedio)
+
+    # 🔹 4) Ordenar por precio de menor a mayor y tomar los 5 más baratos
+    ofertas_qs = ofertas_qs.order_by("precio")[:5]
+
     ofertas = list(ofertas_qs)
+
+    # 🔹 5) Agregar atributos extra para el template
     for oferta in ofertas:
         noches = 0
         if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
@@ -108,8 +121,7 @@ def ofertas_view(request):
         itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
         categoria_nombre = ""
         if itinerarios:
-            itinerario_rel = itinerarios[0]
-            itinerario_obj = getattr(itinerario_rel, "itinerario", None)
+            itinerario_obj = getattr(itinerarios[0], "itinerario", None)
             categoria = getattr(itinerario_obj, "categoria", None)
             if categoria:
                 categoria_nombre = categoria.nombre
@@ -119,7 +131,6 @@ def ofertas_view(request):
         oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
 
     return render(request, "ofertas.html", {"ofertas": ofertas})
-
 
 # ===========================
 # Autenticación / Perfil
