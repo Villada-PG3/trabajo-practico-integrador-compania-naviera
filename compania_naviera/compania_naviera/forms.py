@@ -97,25 +97,28 @@ class FormularioCambioContrasenia(PasswordChangeForm):
     )
 
 class FormularioReserva(forms.ModelForm):
+    cliente = forms.ModelChoiceField(
+        queryset=Cliente.objects.none(),
+        label="Selecciona el cliente"
+    )
+
     class Meta:
         model = Reserva
-        # usar los campos reales del modelo
-        fields = ["descripcion", "viaje_navio"]
-        widgets = {
-            "descripcion": forms.Textarea(attrs={"rows": 3}),
-        }
+        fields = ["cliente", "descripcion", "viaje_navio"]
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user", None)  # capturamos el usuario en la vista
         super().__init__(*args, **kwargs)
 
-        # estilo consistente con el resto de tus forms
+        # estilos consistentes
         for field_name, field in self.fields.items():
             field.widget.attrs.update({
-                "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+                "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 "
+                         "focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
                 "placeholder": field.label
             })
 
-        # limitar la lista de viajes a los próximos (opcional pero útil)
+        # limitar viajes a futuros
         if "viaje_navio" in self.fields:
             self.fields["viaje_navio"].queryset = (
                 ViajeXNavio.objects.select_related("viaje", "navio")
@@ -123,6 +126,11 @@ class FormularioReserva(forms.ModelForm):
                 .order_by("viaje__fecha_de_salida")
             )
             self.fields["viaje_navio"].label = "Viaje y Navío"
+
+        # limitar clientes al usuario actual
+        if user:
+            self.fields["cliente"].queryset = Cliente.objects.filter(usuario=user)
+
 
 class FormularioCliente(forms.ModelForm):
     class Meta:

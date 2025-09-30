@@ -11,6 +11,7 @@
         <ul class="space-y-4">
           {% for reserva in reservas %}
             <li class="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow">
+              <p><strong>👤 Cliente:</strong> {{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}</p>
               <p><strong>🚢 Crucero:</strong> {{ reserva.viaje_navio.navio.nombre }}</p>
               <p><strong>📅 Viaje:</strong> {{ reserva.viaje_navio.viaje.nombre }}</p>
               <p><strong>⏰ Salida:</strong> {{ reserva.viaje_navio.viaje.fecha_de_salida|date:"d/m/Y" }}</p>

@@ -273,23 +273,13 @@ def mis_reservas_view(request):
 
 @login_required
 def crear_cliente_view(request):
-    """
-    Crea el perfil de Cliente asociado al usuario si no existe.
-    """
-    try:
-        Cliente.objects.get(usuario=request.user)
-        messages.info(request, "Ya tienes un perfil de cliente.")
-        return redirect("crear_reserva")
-    except Cliente.DoesNotExist:
-        pass
-
     if request.method == "POST":
         form = FormularioCliente(request.POST)
         if form.is_valid():
             cliente = form.save(commit=False)
             cliente.usuario = request.user
             cliente.save()
-            messages.success(request, "Perfil de cliente creado correctamente.")
+            messages.success(request, "Cliente creado correctamente.")
             return redirect("crear_reserva")
     else:
         form = FormularioCliente()
@@ -299,40 +289,23 @@ def crear_cliente_view(request):
 
 @login_required
 def crear_reserva_view(request):
-    """
-    Crea una reserva si el usuario tiene su Cliente asociado; si no, lo manda a crear el cliente.
-    Asigna por defecto el estado 'Pendiente' si existe, o lo crea.
-    """
-    try:
-        cliente = Cliente.objects.get(usuario=request.user)
-    except Cliente.DoesNotExist:
-        return redirect("crear_cliente")
+    if not Cliente.objects.filter(usuario=request.user).exists():
+        messages.info(request, "Primero crea un cliente para poder hacer la reserva.")
+        return redirect("crear_cliente")  # manda a crear cliente
 
     if request.method == "POST":
-        form = FormularioReserva(request.POST)
+        form = FormularioReserva(request.POST, user=request.user)
         if form.is_valid():
             reserva = form.save(commit=False)
-            reserva.cliente = cliente
-
-            # Estado por defecto: Pendiente
-            try:
-                estado_pendiente = EstadoReserva.objects.get(nombre="Pendiente")
-            except EstadoReserva.DoesNotExist:
-                estado_pendiente = EstadoReserva.objects.create(nombre="Pendiente")
-            reserva.estado_reserva = estado_pendiente
-
+            reserva.estado_reserva, _ = EstadoReserva.objects.get_or_create(nombre="Pendiente")
             reserva.save()
             messages.success(request, "Reserva creada correctamente.")
             return redirect("mis_reservas")
     else:
-        form = FormularioReserva()
+        form = FormularioReserva(user=request.user)
 
     return render(request, "crear_reserva.html", {"form": form})
 
-
-# ===========================
-# Pagos (si lo usás en templates/urls)
-# ===========================
 
 @login_required
 def pagos_view(request):

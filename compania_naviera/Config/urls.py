@@ -29,6 +29,8 @@ urlpatterns = [
     # Cruceros + detalle
     path('cruceros/', views.cruceros_view, name='cruceros'),
     path('cruceros/<int:pk>/', views.navio_detail_view, name='navio_detail'),
+    path("cliente/nuevo/", views.crear_cliente_view, name="crear_cliente"),
+
 
     # Ofertas (usada por base.html)
     path('ofertas/', views.ofertas_view, name='ofertas'),

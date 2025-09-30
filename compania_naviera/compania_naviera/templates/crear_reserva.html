@@ -9,6 +9,21 @@
       {% csrf_token %}
       {{ form.non_field_errors }}
 
+      <!-- Botón Crear nuevo cliente -->
+      <div class="mb-4 text-center">
+        <a href="{% url 'crear_cliente' %}" 
+           class="inline-block text-orange-400 hover:text-orange-300 font-medium">
+          ➕ Crear nuevo cliente
+        </a>
+      </div>
+
+      <!-- Seleccionar cliente -->
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ form.cliente.label }}</label>
+        {{ form.cliente }}
+        {{ form.cliente.errors }}
+      </div>
+
       <!-- Descripción -->
       <div>
         <label class="block text-sm font-medium mb-1">{{ form.descripcion.label }}</label>
@@ -30,7 +45,7 @@
       </button>
     </form>
 
-    <!-- Volver -->
+    <!-- Volver a mis reservas -->
     <div class="text-center mt-6">
       <a href="{% url 'mis_reservas' %}" 
          class="inline-block text-orange-400 hover:text-orange-300 transition font-medium">
