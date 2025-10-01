@@ -1,24 +1,24 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente
+from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente, Rol
 from django.utils.timezone import now
+from django_countries.widgets import CountrySelectWidget
+
 
 class FormularioRegistroPersonalizado(UserCreationForm):
     email = forms.EmailField(required=True)
 
     class Meta:
         model = UsuarioPersonalizado
-        fields = [
-            'username', 'nombre', 'apellido', 'email', 'telefono',
-            'pais', 'password1', 'password2'
-        ]
+        fields = ['username', 'email', 'password1', 'password2']  # SOLO los campos del modelo
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Asignar clase y placeholder a todos los campos
         for field_name, field in self.fields.items():
             field.widget.attrs.update({
-                "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+                "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 "
+                         "focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
                 "placeholder": field.label
             })
 
@@ -33,17 +33,24 @@ class FormularioRegistroPersonalizado(UserCreationForm):
         if UsuarioPersonalizado.objects.filter(username=username).exists():
             raise forms.ValidationError("Ya existe un usuario con ese nombre de usuario.")
         return username
-    def clean_telefono(self):
-        telefono = self.cleaned_data.get('telefono')
-        if UsuarioPersonalizado.objects.filter(telefono=telefono).exists():
-            raise forms.ValidationError("Ya existe un usuario con ese número de teléfono.")
-        return telefono
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        # Asignar automáticamente el rol "cliente"
+        try:
+            rol_cliente = Rol.objects.get(nombre="cliente")
+        except Rol.DoesNotExist:
+            rol_cliente = None  # o podrías crearlo automáticamente
+        user.rol = rol_cliente
+        if commit:
+            user.save()
+        return user
     
 
 class FormularioEdicionPerfil(forms.ModelForm):
     class Meta:
         model = UsuarioPersonalizado
-        fields = ['username', 'nombre', 'apellido', 'email', 'telefono', 'pais']
+        fields = ['username', 'email', 'rol']  # SOLO campos del modelo
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,11 +72,6 @@ class FormularioEdicionPerfil(forms.ModelForm):
             raise forms.ValidationError("Ya existe un usuario con ese nombre de usuario.")
         return username
 
-    def clean_telefono(self):
-        telefono = self.cleaned_data.get('telefono')
-        if UsuarioPersonalizado.objects.filter(telefono=telefono).exclude(pk=self.instance.pk).exists():
-            raise forms.ValidationError("Ya existe un usuario con ese número de teléfono.")
-        return telefono
     
 
 
@@ -131,20 +133,38 @@ class FormularioReserva(forms.ModelForm):
         if user:
             self.fields["cliente"].queryset = Cliente.objects.filter(usuario=user)
 
-
 class FormularioCliente(forms.ModelForm):
     class Meta:
         model = Cliente
         exclude = ['usuario']  # se asigna automáticamente en la vista
 
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'Nombre'}),
-            'apellido': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'Apellido'}),
-            'dni': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'DNI'}),
-            'direccion': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'Dirección'}),
-            'fecha_nacimiento': forms.DateInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'type': 'date', 'placeholder': 'Fecha de Nacimiento'}),
-            'nacionalidad': forms.TextInput(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full', 'placeholder': 'Nacionalidad'}),
-            'genero': forms.Select(attrs={'class': 'form-control p-2 rounded-lg bg-white text-dark border border-gray-300 w-full'}, choices=[('Masculino','Masculino'), ('Femenino','Femenino'), ('Otro','Otro')]),
+            'nombre': forms.TextInput(attrs={
+                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'placeholder': 'Nombre'
+            }),
+            'apellido': forms.TextInput(attrs={
+                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'placeholder': 'Apellido'
+            }),
+            'dni': forms.TextInput(attrs={
+                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'placeholder': 'DNI'
+            }),
+            'direccion': forms.TextInput(attrs={
+                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'placeholder': 'Dirección'
+            }),
+            'fecha_nacimiento': forms.DateInput(attrs={
+                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'type': 'date'
+            }),
+            'nacionalidad': CountrySelectWidget(attrs={
+                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full'
+            }),
+            'genero': forms.Select(attrs={
+                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full'
+            }),
         }
 
         labels = {

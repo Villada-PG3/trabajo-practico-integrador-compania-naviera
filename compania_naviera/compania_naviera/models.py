@@ -1,6 +1,7 @@
 # models.py
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django_countries.fields import CountryField
 
 class Rol(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
@@ -10,15 +11,10 @@ class Rol(models.Model):
         return self.nombre
 
 class UsuarioPersonalizado(AbstractUser):
-    nombre = models.CharField(max_length=50)
-    apellido = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
-    telefono = models.CharField(max_length=20, blank=True)
-    pais = models.CharField(max_length=50, blank=True)
     rol = models.ForeignKey(Rol, on_delete=models.PROTECT, related_name='usuarios', null=True, blank=True)
 
-
-    # Evitar conflicto con auth.User
     groups = models.ManyToManyField(
         Group,
         related_name="usuario_personalizado_set",
@@ -35,13 +31,19 @@ class UsuarioPersonalizado(AbstractUser):
 
 
 class Cliente(models.Model):
+    GENERO_CHOICES = [
+        ('M', 'Masculino'),
+        ('F', 'Femenino'),
+        ('O', 'Otro'),
+    ]
+
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     dni = models.CharField(max_length=20)
     direccion = models.CharField(max_length=200)
     fecha_nacimiento = models.DateField()
-    nacionalidad = models.CharField(max_length=50)
-    genero = models.CharField(max_length=20)
+    nacionalidad = CountryField(blank_label='Selecciona un país', blank=True)
+    genero = models.CharField(max_length=1, choices=GENERO_CHOICES)
     usuario = models.ForeignKey(UsuarioPersonalizado, on_delete=models.PROTECT, related_name='clientes')
 
     def __str__(self):

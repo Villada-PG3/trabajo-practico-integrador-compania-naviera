@@ -16,11 +16,11 @@ ALLOWED_HOSTS = []
 
 # --- Apps
 INSTALLED_APPS = [
-
     "unfold",  # Debe ir antes que django.contrib.admin
     # "unfold.contrib.filters",   # opcional
     # "unfold.contrib.forms",     # opcional
     # "unfold.contrib.inlines",   # opcional
+    'django_countries',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

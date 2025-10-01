@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from unfold.admin import ModelAdmin  # <- Unfold
+from unfold.admin import ModelAdmin
 
 from .models import *
 
@@ -31,9 +31,9 @@ class RolAdmin(ModelAdmin):
 # --- USUARIO PERSONALIZADO ---
 @admin.register(UsuarioPersonalizado)
 class UsuarioPersonalizadoAdmin(ModelAdmin):
-    list_display = ('username', 'nombre', 'apellido', 'email', 'rol', 'is_staff', 'is_active')
+    list_display = ('username', 'email', 'rol', 'is_staff', 'is_active')
     list_filter = ('rol', 'is_staff', 'is_active')
-    search_fields = ('username', 'nombre', 'apellido', 'email')
+    search_fields = ('username', 'email')
     ordering = ('username',)
 
 # --- CLIENTE ---
