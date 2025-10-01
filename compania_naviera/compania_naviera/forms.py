@@ -50,7 +50,7 @@ class FormularioRegistroPersonalizado(UserCreationForm):
 class FormularioEdicionPerfil(forms.ModelForm):
     class Meta:
         model = UsuarioPersonalizado
-        fields = ['username', 'email', 'rol']  # SOLO campos del modelo
+        fields = ['username', 'email']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -71,8 +71,6 @@ class FormularioEdicionPerfil(forms.ModelForm):
         if UsuarioPersonalizado.objects.filter(username=username).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("Ya existe un usuario con ese nombre de usuario.")
         return username
-
-    
 
 
 class FormularioCambioContrasenia(PasswordChangeForm):
