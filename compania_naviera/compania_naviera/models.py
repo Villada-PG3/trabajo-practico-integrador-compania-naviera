@@ -187,7 +187,7 @@ class Viaje(models.Model):
     fecha_fin = models.DateField()
     hora_salida = models.TimeField()
     hora_llegada = models.TimeField()
-    lugar_destino = models.CharField(max_length=100)
+    lugar_destino = CountryField(blank_label='Selecciona un país', blank=True)
     fecha_actual = models.DateField()
     imagen = models.URLField(blank=True, null=True)
 
@@ -210,13 +210,19 @@ class ItinerarioViaje(models.Model):
     itinerario = models.ForeignKey(Itinerario, on_delete=models.CASCADE)
 
 class Tripulante(models.Model):
+    GENERO_CHOICES = [
+        ('M', 'Masculino'),
+        ('F', 'Femenino'),
+        ('O', 'Otro'),
+    ]
+
     nombre = models.CharField(max_length=100)
     legajo = models.CharField(max_length=50)
     dni = models.CharField(max_length=20)
     direccion = models.CharField(max_length=200)
     fecha_nacimiento = models.DateField()
-    nacionalidad = models.CharField(max_length=50)
-    genero = models.CharField(max_length=20)
+    nacionalidad = CountryField(blank_label='Selecciona un país', blank=True)
+    genero = models.CharField(max_length=1, choices=GENERO_CHOICES)
 
     def __str__(self):
         return self.nombre
