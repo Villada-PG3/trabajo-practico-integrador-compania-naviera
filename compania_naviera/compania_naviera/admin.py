@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin
-
+from django import forms
 from .models import *
 
 # ---------- Helpers ----------
@@ -117,9 +117,18 @@ class CamaroteAdmin(ModelAdmin):
     imagen_miniatura.short_description = "Imagen"
 
 @admin.register(TipoItinerario)
-class TipoItinerario(admin.ModelAdmin):
+class TipoItinerarioAdmin(admin.ModelAdmin):
     list_display = ("id", "nombre")
     search_fields = ("nombre",)
+
+    fieldsets = (
+        ("Información del Itinerario", {
+            "fields": ("nombre", "descripcion"),
+            "classes": ("wide",),  # esto agranda los inputs
+        }),
+    )
+    
+
 
 # --- ITINERARIO ---
 @admin.register(Itinerario)
