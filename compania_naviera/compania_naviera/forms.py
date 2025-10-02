@@ -113,7 +113,7 @@ class FormularioReserva(forms.ModelForm):
         # estilos consistentes
         for field_name, field in self.fields.items():
             field.widget.attrs.update({
-                "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 "
+                "class": "form-control p-2 rounded-lg bg-white/10 text-black border border-white/30 "
                          "focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
                 "placeholder": field.label
             })
