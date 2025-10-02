@@ -142,9 +142,10 @@ class OrdenAdmin(ModelAdmin):
 # --- PUERTO ---
 @admin.register(Puerto)
 class PuertoAdmin(ModelAdmin):
-    list_display = ('nombre', 'itinerario', 'orden')
-    search_fields = ('nombre', 'itinerario__id')
-    list_filter = ('itinerario',)
+    list_display = ('nombre', 'orden')
+    search_fields = ('nombre', 'orden__nombre', 'orden__itinerario__id')
+    list_filter = ('orden__itinerario',)
+
 
 # --- UBICACION PUERTO ---
 @admin.register(UbicacionPuerto)

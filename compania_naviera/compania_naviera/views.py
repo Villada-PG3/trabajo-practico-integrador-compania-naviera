@@ -66,15 +66,15 @@ def destinos_view(request):
     con ubicaciones y actividades prefetchadas.
     """
     destinos = (
-        Puerto.objects.select_related("itinerario__categoria")
-        .prefetch_related(
-            "ubicaciones",
-            Prefetch(
-                "actividades",
-                queryset=PuertoxActividad.objects.select_related("actividad"),
-            ),
-        )
-        .order_by("itinerario__categoria__nombre", "orden", "nombre")
+    Puerto.objects.select_related("orden__itinerario__categoria")
+    .prefetch_related(
+        "ubicaciones",
+        Prefetch(
+            "actividades",
+            queryset=PuertoxActividad.objects.select_related("actividad"),
+        ),
+    )
+    .order_by("orden__itinerario__categoria__nombre", "orden__orden", "nombre")
     )
     return render(request, "destinos.html", {"destinos": destinos})
 
