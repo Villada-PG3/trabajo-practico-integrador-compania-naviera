@@ -3,185 +3,119 @@
 {% block title %}Panel de Usuario - SEA STAR{% endblock %}
 
 {% block content %}
-<main class="max-w-6xl mx-auto px-4 py-8">
-
-  <!-- Breadcrumb muy simple -->
-  <nav aria-label="breadcrumb" class="text-sm text-white/60 mb-4">
-    <ol class="flex items-center gap-2">
-      <li><a href="{% url 'home' %}" class="hover:underline focusable">Inicio</a></li>
-      <li aria-hidden="true">/</li>
-      <li class="text-white">Panel de Usuario</li>
-    </ol>
-  </nav>
-
-  <!-- Mensajes de Django -->
-  {% if messages %}
-  <section aria-live="polite" class="mb-4 space-y-2">
-    {% for message in messages %}
-      <div class="rounded-xl px-4 py-3 border
-                  {% if 'success' in message.tags %} bg-green-500/15 text-green-100 border-green-400/30
-                  {% elif 'warning' in message.tags %} bg-amber-500/15 text-amber-100 border-amber-400/30
-                  {% elif 'error' in message.tags %} bg-red-500/15 text-red-100 border-red-400/30
-                  {% else %} bg-white/10 text-white border-white/20 {% endif %}">
-        {{ message }}
-      </div>
-    {% endfor %}
-  </section>
-  {% endif %}
+<main class="max-w-7xl mx-auto px-4 md:px-6 py-10 space-y-10">
 
   <!-- Encabezado -->
-  <section class="rounded-2xl border border-white/10 bg-white/10 p-6 md:p-8 mb-10">
-    <h1 class="text-2xl md:text-3xl font-semibold mb-2">
-      Hola, {{ request.user.first_name|default:request.user.username }} 👋
-    </h1>
-    <p class="text-white/70">Gestioná tus reservas, pagos, perfil y actividades a bordo.</p>
+  <header class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+    <div>
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">¡Hola, {{ user.first_name|default:user.username }}!</h1>
+      <p class="text-white/80">Bienvenido a tu panel. Revisá tus reservas y próximas experiencias.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <a href="{% url 'editar_perfil' %}" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">
+        <i class="fa fa-user mr-2"></i> Editar perfil
+      </a>
+      <a href="{% url 'cambiar_contrasenia' %}" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">
+        <i class="fa fa-key mr-2"></i> Cambiar contraseña
+      </a>
+      <a href="{% url 'crear_reserva' %}" class="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 transition font-semibold">
+        <i class="fa fa-plus mr-2"></i> Nueva reserva
+      </a>
+    </div>
+  </header>
+
+  <!-- KPI Cards (3 columnas) -->
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+    <article class="bg-white/10 backdrop-blur rounded-2xl p-6 shadow-lg">
+      <div class="text-sm text-white/60">Reservas totales</div>
+      <div class="mt-2 text-3xl font-bold">{{ reservas_total|default:0 }}</div>
+      <a href="{% url 'mis_reservas' %}" class="text-sm mt-3 inline-flex items-center gap-1 hover:underline text-orange-300">
+        Ver reservas <i class="fa fa-arrow-right text-xs"></i>
+      </a>
+    </article>
+
+    <article class="bg-white/10 backdrop-blur rounded-2xl p-6 shadow-lg">
+      <div class="text-sm text-white/60">Reservas activas</div>
+      <div class="mt-2 text-3xl font-bold">{{ reservas_activas|default:0 }}</div>
+      <a href="{% url 'mis_reservas' %}" class="text-sm mt-3 inline-flex items-center gap-1 hover:underline text-orange-300">
+        Administrar <i class="fa fa-arrow-right text-xs"></i>
+      </a>
+    </article>
+
+    <article class="bg-white/10 backdrop-blur rounded-2xl p-6 shadow-lg">
+      <div class="text-sm text-white/60">Ofertas</div>
+      <div class="mt-2 text-3xl font-bold">
+        {{ ofertas_destacadas|length|default:0 }}
+      </div>
+      <a href="{% url 'ofertas' %}" class="text-sm mt-3 inline-flex items-center gap-1 hover:underline text-orange-300">
+        Ver ofertas <i class="fa fa-arrow-right text-xs"></i>
+      </a>
+    </article>
   </section>
 
   <!-- Accesos rápidos -->
-  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    <a href="{% url 'mis_reservas' %}" class="card">
+  <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <a href="{% url 'mis_reservas' %}" class="group bg-white/10 hover:bg-white/20 rounded-2xl p-6 shadow-lg transition">
       <div class="text-4xl mb-3">📅</div>
-      <h2 class="text-lg font-semibold mb-1">Mis Reservas</h2>
-      <p class="card-sub">Revisá y administrá tus reservas.</p>
+      <h3 class="text-lg font-semibold mb-1">Mis Reservas</h3>
+      <p class="text-white/70">Revisá y administrá tus reservas de crucero.</p>
     </a>
 
-    <a href="{% url 'editar_perfil' %}" class="card">
-      <div class="text-4xl mb-3">👤</div>
-      <h2 class="text-lg font-semibold mb-1">Mi Perfil</h2>
-      <p class="card-sub">Consultá y editá tus datos personales.</p>
+    <a href="{% url 'cruceros' %}" class="group bg-white/10 hover:bg-white/20 rounded-2xl p-6 shadow-lg transition">
+      <div class="text-4xl mb-3">🛳</div>
+      <h3 class="text-lg font-semibold mb-1">Cruceros</h3>
+      <p class="text-white/70">Explorá próximos viajes y reservá tu lugar.</p>
     </a>
 
-    <a href="{% url 'pagos' %}" class="card">
-      <div class="text-4xl mb-3">💳</div>
-      <h2 class="text-lg font-semibold mb-1">Pagos</h2>
-      <p class="card-sub">Métodos de pago y abonos.</p>
+    <a href="{% url 'destinos' %}" class="group bg-white/10 hover:bg-white/20 rounded-2xl p-6 shadow-lg transition">
+      <div class="text-4xl mb-3">📍</div>
+      <h3 class="text-lg font-semibold mb-1">Destinos</h3>
+      <p class="text-white/70">Conocé nuestros puertos y experiencias.</p>
     </a>
 
-    <a href="{% url 'cambiar_contrasenia' %}" class="card">
-      <div class="text-4xl mb-3">⚙️</div>
-      <h2 class="text-lg font-semibold mb-1">Configuración</h2>
-      <p class="card-sub">Preferencias y seguridad.</p>
+    <a href="{% url 'ofertas' %}" class="group bg-white/10 hover:bg-white/20 rounded-2xl p-6 shadow-lg transition">
+      <div class="text-4xl mb-3">🔥</div>
+      <h3 class="text-lg font-semibold mb-1">Ofertas</h3>
+      <p class="text-white/70">Promos vigentes y descuentos.</p>
     </a>
   </section>
 
-  <!-- Novedades -->
-  <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-    <!-- Ofertas -->
-    <div class="panel">
-      <h3 class="panel-title">🎁 Ofertas Exclusivas</h3>
-      {% with ofertas_list=ofertas|default:None %}
-      {% if ofertas_list %}
-        <ul class="space-y-3">
-          {% for o in ofertas_list %}
-          <li class="row">
-            <span>{{ o.titulo }}</span>
-            <a href="{% url 'ofertas' %}" class="link">Ver</a>
-          </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p class="empty">No hay ofertas activas por el momento.</p>
-        <a href="{% url 'ofertas' %}" class="link mt-2 inline-block">Ver todas</a>
-      {% endif %}
-      {% endwith %}
+  <!-- Próximos cruceros -->
+  <section>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold">Próximos cruceros</h2>
+      <a href="{% url 'cruceros' %}" class="text-sm text-orange-300 hover:underline">Ver todos</a>
     </div>
 
-    <!-- Próximos cruceros -->
-    <div class="panel">
-      <h3 class="panel-title">🛳️ Próximos Cruceros</h3>
-      {% with cruceros_list=cruceros|default:None %}
-      {% if cruceros_list %}
-        <ul class="space-y-3">
-          {% for c in cruceros_list %}
-          <li class="row">
-            <span>{{ c.nombre }} – {{ c.fecha|date:"d/m/Y" }}</span>
-            <a href="{% url 'cruceros' %}" class="link">Detalles</a>
-          </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <ul class="space-y-3">
-          <li class="row">
-            <span>Mediterráneo – 15/09/25</span>
-            <a href="{% url 'cruceros' %}" class="link">Detalles</a>
-          </li>
-          <li class="row">
-            <span>Caribe – 01/11/25</span>
-            <a href="{% url 'cruceros' %}" class="link">Detalles</a>
-          </li>
-          <li class="row">
-            <span>Fiordos – 20/12/25</span>
-            <a href="{% url 'cruceros' %}" class="link">Detalles</a>
-          </li>
-        </ul>
-      {% endif %}
-      {% endwith %}
-    </div>
+    {% if proximos_cruceros %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for px in proximos_cruceros %}
+          <article class="bg-white/10 rounded-2xl overflow-hidden shadow-lg">
+            <div class="aspect-[16/9] bg-white/5 flex items-center justify-center text-5xl">🛳</div>
+            <div class="p-5 space-y-2">
+              <h3 class="font-semibold text-lg">{{ px.nombre }}</h3>
+              <p class="text-white/70">{{ px.fecha }}</p>
+              <p class="text-white/80">Navío: {{ px.navio_nombre|default:"(sin asignar)" }}</p>
 
-    <!-- Actividades -->
-    <div class="panel">
-      <h3 class="panel-title">🎉 Actividades a Bordo</h3>
-      {% with acts_list=actividades|default:None %}
-      {% if acts_list %}
-        <ul class="space-y-3">
-          {% for a in acts_list %}
-          <li class="row">
-            <span>{{ a.nombre }}</span>
-            {% if a.incluido %}
-              <span class="badge">Incluido</span>
-            {% else %}
-              <a href="{% url 'crear_reserva' %}" class="link">Reservar</a>
-            {% endif %}
-          </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <ul class="space-y-3">
-          <li class="row">
-            <span>Show en vivo cada noche</span>
-            <span class="badge">Incluido</span>
-          </li>
-          <li class="row">
-            <span>Clases de cocina marina</span>
-            <a href="{% url 'crear_reserva' %}" class="link">Reservar</a>
-          </li>
-          <li class="row">
-            <span>Spa y masajes premium</span>
-            <a href="{% url 'contacto' %}" class="link">Desde $25</a>
-          </li>
-        </ul>
-      {% endif %}
-      {% endwith %}
-    </div>
+              {% if px.navio_id %}
+                <a href="{% url 'navio_detail' px.navio_id %}" class="inline-flex items-center gap-2 text-orange-300 hover:underline">
+                  Ver detalles <i class="fa fa-arrow-right text-xs"></i>
+                </a>
+              {% else %}
+                <span class="text-white/50 text-sm">Sin navío asignado</span>
+              {% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-white/70">No tenés cruceros próximos por ahora.</p>
+    {% endif %}
   </section>
 
-  <p class="text-center text-sm text-white/60 mt-12">&copy; 2025 SEA STAR</p>
 </main>
 
-<!-- Estilos mínimos para focus y micro-animaciones -->
-<style>
-  .card{
-    display:block;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.1);
-    padding:1.5rem;border-radius:1rem;transition:transform .15s ease, background .15s ease, border-color .15s ease
-  }
-  .card:hover{ transform:translateY(-2px); background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.2) }
-  .card-sub{ color:rgba(255,255,255,.7); font-size:.9rem }
-
-  .panel{ border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.1); border-radius:1rem; padding:1.5rem }
-  .panel-title{ font-size:1.125rem; font-weight:600; margin-bottom:1rem }
-
-  .row{
-    display:flex; justify-content:space-between; align-items:center;
-    border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05);
-    border-radius:.75rem; padding:.75rem 1rem
-  }
-  .link{ color:#ffb073; text-decoration:none; font-weight:600 }
-  .link:hover{ text-decoration:underline }
-  .badge{ background:rgba(16,185,129,.2); color:#b8f3dc; font-weight:700; padding:.2rem .6rem; border-radius:999px; font-size:.75rem }
-  .empty{ color:rgba(255,255,255,.7) }
-
-  .focusable{ outline:none }
-  .focusable:focus{ outline:3px solid #ffb073; outline-offset:2px; border-radius:.5rem }
-</style>
-{% endblock %}
+<footer class="text-center text-sm text-white/60 mt-16 mb-6">
+  &copy; {{ now|date:"Y" }} SEA STAR. Todos los derechos reservados.
+</footer>
+{% endblock %}
