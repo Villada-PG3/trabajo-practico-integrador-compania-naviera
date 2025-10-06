@@ -103,9 +103,14 @@ def ofertas_view(request):
     )
 
     # 🔹 3) Filtrar viajes que sean oferta por distintos criterios
-    ofertas_qs = ofertas_qs.filter(
-        precio__lte=1000
-    ) | ofertas_qs.filter(precio__lt=promedio)
+    ofertas_qs = ofertas_qs.filter(precio__lte=1000)
+
+    if promedio is not None:
+        ofertas_qs = ofertas_qs | ViajeXNavio.objects.filter(
+            viaje__fecha_de_salida__gte=hoy,
+            precio__lt=promedio
+        )
+
 
     # 🔹 4) Ordenar por precio de menor a mayor y tomar los 5 más baratos
     ofertas_qs = ofertas_qs.order_by("precio")[:5]
