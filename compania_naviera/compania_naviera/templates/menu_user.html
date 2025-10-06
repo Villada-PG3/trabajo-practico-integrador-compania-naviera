@@ -5,100 +5,183 @@
 {% block content %}
 <main class="max-w-6xl mx-auto px-4 py-8">
 
+  <!-- Breadcrumb muy simple -->
+  <nav aria-label="breadcrumb" class="text-sm text-white/60 mb-4">
+    <ol class="flex items-center gap-2">
+      <li><a href="{% url 'home' %}" class="hover:underline focusable">Inicio</a></li>
+      <li aria-hidden="true">/</li>
+      <li class="text-white">Panel de Usuario</li>
+    </ol>
+  </nav>
+
+  <!-- Mensajes de Django -->
+  {% if messages %}
+  <section aria-live="polite" class="mb-4 space-y-2">
+    {% for message in messages %}
+      <div class="rounded-xl px-4 py-3 border
+                  {% if 'success' in message.tags %} bg-green-500/15 text-green-100 border-green-400/30
+                  {% elif 'warning' in message.tags %} bg-amber-500/15 text-amber-100 border-amber-400/30
+                  {% elif 'error' in message.tags %} bg-red-500/15 text-red-100 border-red-400/30
+                  {% else %} bg-white/10 text-white border-white/20 {% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
   <!-- Encabezado -->
   <section class="rounded-2xl border border-white/10 bg-white/10 p-6 md:p-8 mb-10">
-    <h1 class="text-2xl md:text-3xl font-semibold mb-2">Panel de Usuario</h1>
+    <h1 class="text-2xl md:text-3xl font-semibold mb-2">
+      Hola, {{ request.user.first_name|default:request.user.username }} 👋
+    </h1>
     <p class="text-white/70">Gestioná tus reservas, pagos, perfil y actividades a bordo.</p>
   </section>
 
   <!-- Accesos rápidos -->
   <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    <a href="{% url 'mis_reservas' %}" class="block rounded-2xl border border-white/10 bg-white/10 p-6 hover:bg-white/15 hover:border-white/20 transition">
+    <a href="{% url 'mis_reservas' %}" class="card">
       <div class="text-4xl mb-3">📅</div>
       <h2 class="text-lg font-semibold mb-1">Mis Reservas</h2>
-      <p class="text-white/70 text-sm">Revisá y administrá tus reservas.</p>
+      <p class="card-sub">Revisá y administrá tus reservas.</p>
     </a>
 
-    <a href="{% url 'editar_perfil' %}" class="block rounded-2xl border border-white/10 bg-white/10 p-6 hover:bg-white/15 hover:border-white/20 transition">
+    <a href="{% url 'editar_perfil' %}" class="card">
       <div class="text-4xl mb-3">👤</div>
       <h2 class="text-lg font-semibold mb-1">Mi Perfil</h2>
-      <p class="text-white/70 text-sm">Consultá y editá tus datos personales.</p>
+      <p class="card-sub">Consultá y editá tus datos personales.</p>
     </a>
 
-    <!-- NUEVA SECCIÓN DE PAGOS -->
-    <a href="{% url 'pagos' %}" class="block rounded-2xl border border-white/10 bg-white/10 p-6 hover:bg-white/15 hover:border-white/20 transition">
+    <a href="{% url 'pagos' %}" class="card">
       <div class="text-4xl mb-3">💳</div>
       <h2 class="text-lg font-semibold mb-1">Pagos</h2>
-      <p class="text-white/70 text-sm">Métodos de pago y abonos.</p>
+      <p class="card-sub">Métodos de pago y abonos.</p>
     </a>
 
-    <a href="{% url 'cambiar_contrasenia' %}" class="block rounded-2xl border border-white/10 bg-white/10 p-6 hover:bg-white/15 hover:border-white/20 transition">
+    <a href="{% url 'cambiar_contrasenia' %}" class="card">
       <div class="text-4xl mb-3">⚙️</div>
       <h2 class="text-lg font-semibold mb-1">Configuración</h2>
-      <p class="text-white/70 text-sm">Preferencias y seguridad.</p>
+      <p class="card-sub">Preferencias y seguridad.</p>
     </a>
   </section>
 
   <!-- Novedades -->
   <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
     <!-- Ofertas -->
-    <div class="rounded-2xl border border-white/10 bg-white/10 p-6">
-      <h3 class="text-lg font-semibold mb-4">🎁 Ofertas Exclusivas</h3>
-      <ul class="space-y-3">
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>2x1 en Cruceros Caribe</span>
-          <a href="{% url 'ofertas' %}" class="text-orange-300 hover:underline">Ver</a>
-        </li>
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>Upgrade de cabina gratis</span>
-          <a href="{% url 'ofertas' %}" class="text-orange-300 hover:underline">Ver</a>
-        </li>
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>Niños gratis (hasta 12)</span>
-          <a href="{% url 'ofertas' %}" class="text-orange-300 hover:underline">Ver</a>
-        </li>
-      </ul>
+    <div class="panel">
+      <h3 class="panel-title">🎁 Ofertas Exclusivas</h3>
+      {% with ofertas_list=ofertas|default:None %}
+      {% if ofertas_list %}
+        <ul class="space-y-3">
+          {% for o in ofertas_list %}
+          <li class="row">
+            <span>{{ o.titulo }}</span>
+            <a href="{% url 'ofertas' %}" class="link">Ver</a>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty">No hay ofertas activas por el momento.</p>
+        <a href="{% url 'ofertas' %}" class="link mt-2 inline-block">Ver todas</a>
+      {% endif %}
+      {% endwith %}
     </div>
 
     <!-- Próximos cruceros -->
-    <div class="rounded-2xl border border-white/10 bg-white/10 p-6">
-      <h3 class="text-lg font-semibold mb-4">🛳️ Próximos Cruceros</h3>
-      <ul class="space-y-3">
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>Mediterráneo – 15/09/25</span>
-          <a href="{% url 'cruceros' %}" class="text-orange-300 hover:underline">Detalles</a>
-        </li>
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>Caribe – 01/11/25</span>
-          <a href="{% url 'cruceros' %}" class="text-orange-300 hover:underline">Detalles</a>
-        </li>
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>Fiordos – 20/12/25</span>
-          <a href="{% url 'cruceros' %}" class="text-orange-300 hover:underline">Detalles</a>
-        </li>
-      </ul>
+    <div class="panel">
+      <h3 class="panel-title">🛳️ Próximos Cruceros</h3>
+      {% with cruceros_list=cruceros|default:None %}
+      {% if cruceros_list %}
+        <ul class="space-y-3">
+          {% for c in cruceros_list %}
+          <li class="row">
+            <span>{{ c.nombre }} – {{ c.fecha|date:"d/m/Y" }}</span>
+            <a href="{% url 'cruceros' %}" class="link">Detalles</a>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <ul class="space-y-3">
+          <li class="row">
+            <span>Mediterráneo – 15/09/25</span>
+            <a href="{% url 'cruceros' %}" class="link">Detalles</a>
+          </li>
+          <li class="row">
+            <span>Caribe – 01/11/25</span>
+            <a href="{% url 'cruceros' %}" class="link">Detalles</a>
+          </li>
+          <li class="row">
+            <span>Fiordos – 20/12/25</span>
+            <a href="{% url 'cruceros' %}" class="link">Detalles</a>
+          </li>
+        </ul>
+      {% endif %}
+      {% endwith %}
     </div>
 
     <!-- Actividades -->
-    <div class="rounded-2xl border border-white/10 bg-white/10 p-6">
-      <h3 class="text-lg font-semibold mb-4">🎉 Actividades a Bordo</h3>
-      <ul class="space-y-3">
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>Show en vivo cada noche</span>
-          <span class="text-green-200 font-semibold">Incluido</span>
-        </li>
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>Clases de cocina marina</span>
-          <a href="{% url 'crear_reserva' %}" class="text-orange-300 hover:underline">Reservar</a>
-        </li>
-        <li class="flex justify-between items-center rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <span>Spa y masajes premium</span>
-          <a href="{% url 'contacto' %}" class="text-orange-300 hover:underline">Desde $25</a>
-        </li>
-      </ul>
+    <div class="panel">
+      <h3 class="panel-title">🎉 Actividades a Bordo</h3>
+      {% with acts_list=actividades|default:None %}
+      {% if acts_list %}
+        <ul class="space-y-3">
+          {% for a in acts_list %}
+          <li class="row">
+            <span>{{ a.nombre }}</span>
+            {% if a.incluido %}
+              <span class="badge">Incluido</span>
+            {% else %}
+              <a href="{% url 'crear_reserva' %}" class="link">Reservar</a>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <ul class="space-y-3">
+          <li class="row">
+            <span>Show en vivo cada noche</span>
+            <span class="badge">Incluido</span>
+          </li>
+          <li class="row">
+            <span>Clases de cocina marina</span>
+            <a href="{% url 'crear_reserva' %}" class="link">Reservar</a>
+          </li>
+          <li class="row">
+            <span>Spa y masajes premium</span>
+            <a href="{% url 'contacto' %}" class="link">Desde $25</a>
+          </li>
+        </ul>
+      {% endif %}
+      {% endwith %}
     </div>
   </section>
 
   <p class="text-center text-sm text-white/60 mt-12">&copy; 2025 SEA STAR</p>
 </main>
+
+<!-- Estilos mínimos para focus y micro-animaciones -->
+<style>
+  .card{
+    display:block;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.1);
+    padding:1.5rem;border-radius:1rem;transition:transform .15s ease, background .15s ease, border-color .15s ease
+  }
+  .card:hover{ transform:translateY(-2px); background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.2) }
+  .card-sub{ color:rgba(255,255,255,.7); font-size:.9rem }
+
+  .panel{ border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.1); border-radius:1rem; padding:1.5rem }
+  .panel-title{ font-size:1.125rem; font-weight:600; margin-bottom:1rem }
+
+  .row{
+    display:flex; justify-content:space-between; align-items:center;
+    border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.05);
+    border-radius:.75rem; padding:.75rem 1rem
+  }
+  .link{ color:#ffb073; text-decoration:none; font-weight:600 }
+  .link:hover{ text-decoration:underline }
+  .badge{ background:rgba(16,185,129,.2); color:#b8f3dc; font-weight:700; padding:.2rem .6rem; border-radius:999px; font-size:.75rem }
+  .empty{ color:rgba(255,255,255,.7) }
+
+  .focusable{ outline:none }
+  .focusable:focus{ outline:3px solid #ffb073; outline-offset:2px; border-radius:.5rem }
+</style>
 {% endblock %}
