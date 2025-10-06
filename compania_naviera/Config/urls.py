@@ -14,6 +14,7 @@ urlpatterns = [
     path('registro/', views.RegistroUsuario.as_view(), name='registro'),
 
     path('menu/', views.menu_user, name='menu_user'),
+    path("pagos/", views.pagos_view, name="pagos"),
 
     path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
     path('cambiar_contrasenia/', views.cambiar_contrasenia, name='cambiar_contrasenia'),

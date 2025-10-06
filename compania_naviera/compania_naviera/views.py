@@ -39,7 +39,9 @@ from .models import (
 # ===========================
 # Públicos / generales
 # ===========================
-
+def pagos_view(request):
+    return render(request, "pagos.html")
+    
 def main_view(request):
     """
     Home público: muestra próximos viajes.
