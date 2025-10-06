@@ -1,39 +1,26 @@
 {% extends "base.html" %}
-{% load static %}
-
-{% block title %}{{ navio.nombre }} – Detalle{% endblock %}
-
 {% block content %}
-<section class="mx-auto max-w-5xl px-6 lg:px-10 py-10">
-  <div class="rounded-2xl bg-gradient-to-br from-blue-900/70 to-blue-700/40 border border-white/20 p-8 md:p-10 backdrop-blur-xl">
-    <div class="grid md:grid-cols-2 gap-8">
-      
-      <!-- Imagen -->
-      <div>
-        {% if navio.imagen %}
-          <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="rounded-xl w-full h-80 object-cover shadow-lg">
-        {% else %}
-          <img src="{% static 'placeholder.jpg' %}" alt="{{ navio.nombre }}" class="rounded-xl w-full h-80 object-cover shadow-lg">
-        {% endif %}
-      </div>
+<div class="container mx-auto px-4 py-8">
+  <div class="flex flex-col md:flex-row gap-8">
+    <!-- Información del navío -->
+    <div class="md:w-1/2">
+  {% if navio.imagen %}
+    <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-64 object-cover rounded-lg mb-4">
+  {% endif %}
+  <h1 class="text-3xl font-bold mb-4">{{ navio.nombre }}</h1>
+  <p class="mb-2">Tipo: {{ navio.tipo_navio.nombre }}</p>
+  <p class="mb-2">Eslora: {{ navio.eslora }} m | Manga: {{ navio.manga }} m | Altura: {{ navio.altura }} m</p>
+  <p class="mb-2">Capacidad máxima: {{ navio.cantidad_maxima_de_pasajeros }} pasajeros</p>
+  <p class="mb-2">Cantidad de motores: {{ navio.cantidad_de_motores }}</p>
+  <p class="mb-2">Autonomía de viaje: {{ navio.autonomia_de_viaje }} días</p>
 
-      <!-- Información -->
-      <div class="space-y-4">
-        <h1 class="text-3xl font-extrabold">{{ navio.nombre }}</h1>
-        <p class="text-white/80">Tipo: {{ navio.tipo_navio.nombre }}</p>
-        <ul class="space-y-1 text-sm text-white/70">
-          <li><strong>Altura:</strong> {{ navio.altura }} m</li>
-          <li><strong>Eslora:</strong> {{ navio.eslora }} m</li>
-          <li><strong>Manga:</strong> {{ navio.manga }} m</li>
-          <li><strong>Desplazamiento:</strong> {{ navio.desplazamiento }} t</li>
-          <li><strong>Autonomía:</strong> {{ navio.autonomia_de_viaje }} días</li>
-          <li><strong>Capacidad de pasajeros:</strong> {{ navio.cantidad_maxima_de_pasajeros }}</li>
-          <li><strong>Motores:</strong> {{ navio.cantidad_de_motores }}</li>
-        </ul>
-
-        <a href="{% url 'cruceros' %}" class="inline-block mt-4 px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Volver a la lista</a>
-      </div>
-    </div>
+  <!-- Botón dentro de la columna -->
+  <div class="mt-4">
+    <a href="{% url 'ofertas' %}" style="display: inline-block; text-decoration: none; background-color: #ff6600; color: white; padding: 10px 20px; border-radius: 8px; font-weight: bold;">
+      Ver ofertas →
+    </a>
   </div>
-</section>
+</div>
+  </div>
+</div>
 {% endblock %}

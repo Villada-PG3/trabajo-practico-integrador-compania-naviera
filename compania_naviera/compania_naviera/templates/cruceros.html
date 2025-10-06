@@ -1,61 +1,38 @@
 {% extends "base.html" %}
 {% block title %}Cruceros{% endblock %}
 {% block content %}
+
 <main class="max-w-6xl mx-auto px-4 md:px-6 py-10 space-y-10">
 
   <header>
     <h1 class="text-3xl font-extrabold">Cruceros</h1>
-    <p class="text-white/70">Próximos viajes y operativas.</p>
+    <p class="text-white/70">Nuestros navíos disponibles.</p>
   </header>
 
   <section>
-    <h2 class="text-2xl font-bold mb-4">Próximos</h2>
-    {% if futuros %}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for fx in futuros %}
-          <article class="bg-white/10 rounded-2xl overflow-hidden shadow">
-            <div class="aspect-[16/9] bg-white/5 flex items-center justify-center text-5xl">🛳️</div>
-            <div class="p-5 space-y-2">
-              <h3 class="font-semibold text-lg">{{ fx.viaje.nombre }}</h3>
-              <p class="text-white/70">{{ fx.viaje.fecha_de_salida }} → {{ fx.viaje.fecha_fin }}</p>
-              <p class="text-white/80">Navío: {{ fx.navio.nombre|default:"(sin asignar)" }}</p>
-
-              {% if fx.navio and fx.navio.pk %}
-                <a href="{% url 'navio_detail' fx.navio.pk %}" class="inline-flex items-center gap-2 text-orange-300 hover:underline">
-                  Ver navío <i class="fa fa-arrow-right text-xs"></i>
-                </a>
-              {% else %}
-                <span class="text-white/50 text-sm">Sin navío asignado</span>
-              {% endif %}
-            </div>
-          </article>
-        {% endfor %}
-      </div>
-    {% else %}
-      <p class="text-white/70">Sin próximos viajes.</p>
-    {% endif %}
-  </section>
-
-  <section>
-    <h2 class="text-2xl font-bold mb-4">Históricos</h2>
-    {% if historicos %}
-      <ul class="space-y-2">
-        {% for hx in historicos %}
-          <li class="bg-white/5 rounded-xl p-4 flex items-center justify-between">
-            <span>{{ hx.viaje.nombre }} — {{ hx.viaje.fecha_de_salida }} → {{ hx.viaje.fecha_fin }} ({{ hx.navio.nombre|default:"(sin asignar)" }})</span>
-
-            {% if hx.navio and hx.navio.pk %}
-              <a href="{% url 'navio_detail' hx.navio.pk %}" class="text-orange-300 hover:underline">Ver navío</a>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for navio in navios %}
+        <article class="bg-white/10 rounded-2xl overflow-hidden shadow">
+          <div class="aspect-[16/9] overflow-hidden rounded-t-2xl">
+            {% if navio.imagen %}
+              <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-full object-cover">
             {% else %}
-              <span class="text-white/50 text-sm">Sin navío asignado</span>
+              <div class="flex items-center justify-center text-5xl bg-white/5">🛳️</div>
             {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="text-white/70">Sin históricos aún.</p>
-    {% endif %}
+          </div>
+          <div class="p-5 space-y-2">
+            <h3 class="font-semibold text-lg">{{ navio.nombre }}</h3>
+            <p class="text-white/80">Tipo: {{ navio.tipo_navio.nombre }}</p>
+            <p class="text-white/80">Capacidad: {{ navio.cantidad_maxima_de_pasajeros }} pasajeros</p>
+            <a href="{% url 'navio_detail' navio.pk %}" class="inline-flex items-center gap-2 text-orange-300 hover:underline">
+              Ver detalles <i class="fa fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
   </section>
 
 </main>
+
 {% endblock %}

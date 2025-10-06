@@ -369,58 +369,25 @@ def pagos_view(request):
     return render(request, "pagos.html", contexto)
 
 
-# ===========================
-# Cruceros (listado + detalle)
-# ===========================
-
 def cruceros_view(request):
     """
-    Lista de cruceros leyendo SIEMPRE desde Viaje.
-    Si existe ViajeXNavio, toma el primer navío asociado; si no, muestra “(sin asignar)”.
-    Esto hace que funcione aunque en el admin no hayan creado la relación ViajeXNavio.
+    Muestra todos los navíos disponibles de la empresa.
+    Ya no se listan los viajes futuros o históricos, solo los 3 navíos existentes.
     """
-    hoy = now().date()
+    # Obtiene todos los navíos registrados en la base de datos
+    navios = Navio.objects.all().order_by("nombre")
 
-    base_qs = (
-        Viaje.objects
-        .prefetch_related(
-            Prefetch(
-                "viajexnavio_set",
-                queryset=ViajeXNavio.objects.select_related("navio").order_by("id"),
-            )
-        )
-    )
-
-    def map_items(qs):
-        items = []
-        for v in qs:
-            vxn_list = list(v.viajexnavio_set.all())
-            navio = vxn_list[0].navio if vxn_list and vxn_list[0].navio_id else None
-            items.append({"viaje": v, "navio": navio})
-        return items
-
-    futuros_qs = base_qs.filter(fecha_de_salida__gte=hoy).order_by("fecha_de_salida")
-    historicos_qs = base_qs.filter(fecha_de_salida__lt=hoy).order_by("-fecha_de_salida")
-
-    futuros = map_items(futuros_qs)
-    historicos = map_items(historicos_qs)
-
-    return render(request, "cruceros.html", {"futuros": futuros, "historicos": historicos})
+    # Renderiza el template con la lista de navíos
+    return render(request, "cruceros.html", {"navios": navios})
 
 
 def navio_detail_view(request, pk):
     """
-    Detalle de un navío + próximos viajes asociados.
+    Muestra el detalle de un navío.
+    Redirige al login si el usuario no está autenticado.
     """
     navio = get_object_or_404(Navio, pk=pk)
-    hoy = now().date()
-    proximos_viajes = (
-        ViajeXNavio.objects
-        .select_related("viaje", "navio")
-        .filter(navio=navio, viaje__fecha_de_salida__gte=hoy)
-        .order_by("viaje__fecha_de_salida")
-    )
+
     return render(request, "navio_detail.html", {
         "navio": navio,
-        "proximos_viajes": proximos_viajes,
     })
