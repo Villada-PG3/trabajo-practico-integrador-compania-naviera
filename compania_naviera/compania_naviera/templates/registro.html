@@ -1,44 +1,79 @@
 {% extends "base.html" %}
-{% load static %}
 
-{% block title %}Registro - SEA STAR{% endblock %}
+{% block title %}Pagos - SEA STAR{% endblock %}
 
 {% block content %}
-  <!-- MAIN CONTENT -->
-  <div class="flex justify-center items-center min-h-screen px-4 py-8 text-white">
-    <div class="bg-white/20 p-8 rounded-xl shadow-xl backdrop-blur-md max-w-md w-full">
-      <a href="{% url 'home' %}" class="text-sm text-slate-300 hover:text-orange-400 mb-6 block">← Volver al inicio</a>
-      <h1 class="text-3xl font-semibold text-center mb-6">Regístrate</h1>
+<main class="max-w-5xl mx-auto px-4 py-10">
+  <section class="rounded-2xl border border-white/10 bg-white/10 p-8 mb-8">
+    <h1 class="text-2xl md:text-3xl font-semibold mb-3">💳 Pagos y Facturación</h1>
+    <p class="text-white/70">Revisá tus métodos de pago, historial de facturas y estados de cuenta.</p>
+  </section>
 
-      {% if messages %}
-      <div class="mb-4">
-        {% for message in messages %}
-        <div class="p-3 mb-2 rounded text-sm {% if message.tags == 'success' %}bg-green-500/80{% elif message.tags == 'error' %}bg-red-500/80{% endif %}">
-          {{ message }}
+  <!-- Métodos de pago -->
+  <section class="rounded-2xl border border-white/10 bg-white/10 p-6 mb-8">
+    <h2 class="text-lg font-semibold mb-4">Métodos de pago guardados</h2>
+
+    <div class="space-y-4">
+      <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+        <div>
+          <p class="font-medium">Visa terminada en 4582</p>
+          <p class="text-white/60 text-sm">Vence 12/27 - Titular: Juan Pérez</p>
         </div>
-        {% endfor %}
+        <button class="text-orange-300 hover:underline">Eliminar</button>
       </div>
-      {% endif %}
 
-      <form method="POST">
-        {% csrf_token %}
-        {% for field in form %}
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-white">{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}
-              <p class="text-red-300 text-xs mt-1">{{ field.errors|striptags }}</p>
-            {% endif %}
-          </div>
-        {% endfor %}
-        <button type="submit" class="w-full py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-semibold rounded-lg hover:shadow-lg focus:outline-none transition">
-          Crear cuenta
-        </button>
-      </form>
-
-      <div class="text-center mt-6 text-sm text-white">
-        ¿Ya tienes una cuenta? <a href="{% url 'login' %}" class="text-orange-400 hover:underline">Inicia sesión</a>
+      <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3">
+        <div>
+          <p class="font-medium">Mastercard terminada en 8730</p>
+          <p class="text-white/60 text-sm">Vence 03/26 - Titular: María López</p>
+        </div>
+        <button class="text-orange-300 hover:underline">Eliminar</button>
       </div>
     </div>
-  </div>
+
+    <div class="mt-6">
+      <button class="bg-orange-400 text-black font-semibold px-5 py-2 rounded-xl hover:bg-orange-500">
+        + Agregar nuevo método
+      </button>
+    </div>
+  </section>
+
+  <!-- Historial de pagos -->
+  <section class="rounded-2xl border border-white/10 bg-white/10 p-6">
+    <h2 class="text-lg font-semibold mb-4">Historial de transacciones</h2>
+
+    <table class="w-full text-sm text-left border-separate border-spacing-y-2">
+      <thead class="text-white/80">
+        <tr>
+          <th class="px-4 py-2">Fecha</th>
+          <th class="px-4 py-2">Descripción</th>
+          <th class="px-4 py-2">Monto</th>
+          <th class="px-4 py-2">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bg-white/5 rounded-xl">
+          <td class="px-4 py-3">02/09/2025</td>
+          <td class="px-4 py-3">Reserva Caribe</td>
+          <td class="px-4 py-3">$250.000</td>
+          <td class="px-4 py-3 text-green-300 font-semibold">Pagado</td>
+        </tr>
+        <tr class="bg-white/5 rounded-xl">
+          <td class="px-4 py-3">14/07/2025</td>
+          <td class="px-4 py-3">Crucero Mediterráneo</td>
+          <td class="px-4 py-3">$420.000</td>
+          <td class="px-4 py-3 text-green-300 font-semibold">Pagado</td>
+        </tr>
+        <tr class="bg-white/5 rounded-xl">
+          <td class="px-4 py-3">10/05/2025</td>
+          <td class="px-4 py-3">Reserva Fiordos</td>
+          <td class="px-4 py-3">$320.000</td>
+          <td class="px-4 py-3 text-yellow-300 font-semibold">Pendiente</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <p class="text-center text-sm text-white/60 mt-10">&copy; 2025 SEA STAR</p>
+</main>
 {% endblock %}

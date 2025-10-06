@@ -62,7 +62,7 @@
     </a>
 
     <a href="{% url 'cruceros' %}" class="group bg-white/10 hover:bg-white/20 rounded-2xl p-6 shadow-lg transition">
-      <div class="text-4xl mb-3">🛳️</div>
+      <div class="text-4xl mb-3">🛳</div>
       <h3 class="text-lg font-semibold mb-1">Cruceros</h3>
       <p class="text-white/70">Explorá próximos viajes y reservá tu lugar.</p>
     </a>
@@ -91,7 +91,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for px in proximos_cruceros %}
           <article class="bg-white/10 rounded-2xl overflow-hidden shadow-lg">
-            <div class="aspect-[16/9] bg-white/5 flex items-center justify-center text-5xl">🛳️</div>
+            <div class="aspect-[16/9] bg-white/5 flex items-center justify-center text-5xl">🛳</div>
             <div class="p-5 space-y-2">
               <h3 class="font-semibold text-lg">{{ px.nombre }}</h3>
               <p class="text-white/70">{{ px.fecha }}</p>
@@ -118,4 +118,4 @@
 <footer class="text-center text-sm text-white/60 mt-16 mb-6">
   &copy; {{ now|date:"Y" }} SEA STAR. Todos los derechos reservados.
 </footer>
-{% endblock %}
+{% endblock %}
