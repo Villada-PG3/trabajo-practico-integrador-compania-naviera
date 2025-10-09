@@ -1,79 +1,111 @@
 {% extends "base.html" %}
 
-{% block title %}Pagos - SEA STAR{% endblock %}
+{% block title %}Registro - SEA STAR{% endblock %}
 
 {% block content %}
-<main class="max-w-5xl mx-auto px-4 py-10">
-  <section class="rounded-2xl border border-white/10 bg-white/10 p-8 mb-8">
-    <h1 class="text-2xl md:text-3xl font-semibold mb-3">💳 Pagos y Facturación</h1>
-    <p class="text-white/70">Revisá tus métodos de pago, historial de facturas y estados de cuenta.</p>
-  </section>
+<div class="min-h-[calc(100vh-80px)] flex items-center py-12 px-4">
+  <div class="mx-auto w-full max-w-5xl">
+    <div class="grid gap-6 lg:grid-cols-[1.15fr,1fr]">
+      <!-- Panel informativo -->
+      <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-blue-600/80 via-blue-500/70 to-purple-500/70 p-10 shadow-2xl">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.25),transparent_55%)] pointer-events-none"></div>
+        <div class="relative z-10 space-y-6">
+          <div>
+            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white/80">
+              <i class="fa-solid fa-anchor text-orange-300"></i>
+              Bienvenido a bordo
+            </span>
+            <h1 class="mt-6 text-3xl lg:text-4xl font-black leading-tight">
+              Viví la experiencia SEA STAR desde tu primer acceso.
+            </h1>
+            <p class="mt-3 text-white/80 text-sm lg:text-base">
+              Creá tu cuenta y aprovechá beneficios exclusivos, recordatorios de viaje y asistencia personalizada para cada destino.
+            </p>
+          </div>
 
-  <!-- Métodos de pago -->
-  <section class="rounded-2xl border border-white/10 bg-white/10 p-6 mb-8">
-    <h2 class="text-lg font-semibold mb-4">Métodos de pago guardados</h2>
-
-    <div class="space-y-4">
-      <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-        <div>
-          <p class="font-medium">Visa terminada en 4582</p>
-          <p class="text-white/60 text-sm">Vence 12/27 - Titular: Juan Pérez</p>
+          <ul class="space-y-4 text-sm lg:text-base">
+            <li class="flex items-start gap-3">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-orange-200">
+                <i class="fa-solid fa-gift"></i>
+              </div>
+              <div>
+                <p class="font-semibold">Ofertas personalizadas</p>
+                <p class="text-white/70">Reservá antes que nadie y enterate de upgrades exclusivos para miembros.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-orange-200">
+                <i class="fa-solid fa-passport"></i>
+              </div>
+              <div>
+                <p class="font-semibold">Seguimiento de reservas</p>
+                <p class="text-white/70">Gestioná pasajeros, pagos y trámites previos a cada embarque.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-orange-200">
+                <i class="fa-solid fa-headset"></i>
+              </div>
+              <div>
+                <p class="font-semibold">Asistencia 24/7</p>
+                <p class="text-white/70">Nuestro equipo está disponible para ayudarte antes y durante tu travesía.</p>
+              </div>
+            </li>
+          </ul>
         </div>
-        <button class="text-orange-300 hover:underline">Eliminar</button>
       </div>
 
-      <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-        <div>
-          <p class="font-medium">Mastercard terminada en 8730</p>
-          <p class="text-white/60 text-sm">Vence 03/26 - Titular: María López</p>
+      <!-- Formulario de registro -->
+      <div class="rounded-3xl border border-white/10 bg-white/10 p-8 lg:p-10 shadow-xl backdrop-blur-xl">
+        {% if messages %}
+        <div class="mb-5 space-y-2">
+          {% for message in messages %}
+          <div class="rounded-lg px-3 py-2 text-sm {% if message.tags == 'success' %}bg-green-500/80{% elif message.tags == 'error' %}bg-red-500/80{% else %}bg-white/20{% endif %}">
+            {{ message }}
+          </div>
+          {% endfor %}
         </div>
-        <button class="text-orange-300 hover:underline">Eliminar</button>
+        {% endif %}
+
+        <h2 class="text-2xl font-semibold text-white">Crear cuenta</h2>
+        <p class="mt-1 text-sm text-white/70">Ingresá tus datos tal como figuran en tus documentos.</p>
+
+        <form method="POST" novalidate class="mt-6 space-y-5">
+          {% csrf_token %}
+          {% if form.non_field_errors %}
+          <div class="rounded-lg border border-red-400/40 bg-red-500/30 px-3 py-2 text-sm">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% for field in form %}
+          <div>
+            <label for="{{ field.id_for_label }}" class="mb-1 block text-sm font-medium text-white">
+              {{ field.label }}
+            </label>
+            {{ field }}
+            {% if field.help_text %}
+            <p class="mt-1 text-xs text-white/60">{{ field.help_text }}</p>
+            {% endif %}
+            {% for error in field.errors %}
+            <p class="mt-1 text-sm text-red-300">{{ error }}</p>
+            {% endfor %}
+          </div>
+          {% endfor %}
+
+          <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 py-3 font-semibold text-white shadow-lg transition hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-200/70">
+            Registrarme
+          </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm text-white/80">
+          ¿Ya tenés cuenta?
+          <a href="{% url 'login' %}" class="font-medium text-orange-300 hover:text-orange-200 hover:underline">Iniciá sesión acá</a>
+        </div>
       </div>
     </div>
-
-    <div class="mt-6">
-      <button class="bg-orange-400 text-black font-semibold px-5 py-2 rounded-xl hover:bg-orange-500">
-        + Agregar nuevo método
-      </button>
-    </div>
-  </section>
-
-  <!-- Historial de pagos -->
-  <section class="rounded-2xl border border-white/10 bg-white/10 p-6">
-    <h2 class="text-lg font-semibold mb-4">Historial de transacciones</h2>
-
-    <table class="w-full text-sm text-left border-separate border-spacing-y-2">
-      <thead class="text-white/80">
-        <tr>
-          <th class="px-4 py-2">Fecha</th>
-          <th class="px-4 py-2">Descripción</th>
-          <th class="px-4 py-2">Monto</th>
-          <th class="px-4 py-2">Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="bg-white/5 rounded-xl">
-          <td class="px-4 py-3">02/09/2025</td>
-          <td class="px-4 py-3">Reserva Caribe</td>
-          <td class="px-4 py-3">$250.000</td>
-          <td class="px-4 py-3 text-green-300 font-semibold">Pagado</td>
-        </tr>
-        <tr class="bg-white/5 rounded-xl">
-          <td class="px-4 py-3">14/07/2025</td>
-          <td class="px-4 py-3">Crucero Mediterráneo</td>
-          <td class="px-4 py-3">$420.000</td>
-          <td class="px-4 py-3 text-green-300 font-semibold">Pagado</td>
-        </tr>
-        <tr class="bg-white/5 rounded-xl">
-          <td class="px-4 py-3">10/05/2025</td>
-          <td class="px-4 py-3">Reserva Fiordos</td>
-          <td class="px-4 py-3">$320.000</td>
-          <td class="px-4 py-3 text-yellow-300 font-semibold">Pendiente</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <p class="text-center text-sm text-white/60 mt-10">&copy; 2025 SEA STAR</p>
-</main>
+  </div>
+</div>
 {% endblock %}

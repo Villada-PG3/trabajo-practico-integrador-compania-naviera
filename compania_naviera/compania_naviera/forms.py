@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente, Rol
 from django.utils.timezone import now
 from django_countries.widgets import CountrySelectWidget
+
+from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente, Rol
 
 
 class FormularioRegistroPersonalizado(UserCreationForm):
@@ -14,13 +15,33 @@ class FormularioRegistroPersonalizado(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Asignar clase y placeholder a todos los campos
-        for field_name, field in self.fields.items():
+
+        # Asignar clase base a todos los campos
+        for field in self.fields.values():
             field.widget.attrs.update({
                 "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 "
                          "focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
-                "placeholder": field.label
             })
+
+        # Etiquetas
+        self.fields['username'].label = "Nombre de usuario"
+        self.fields['email'].label = "Correo electrónico"
+        self.fields['password1'].label = "Contraseña"
+        self.fields['password2'].label = "Confirmar contraseña"
+
+        # Placeholders
+        placeholders = {
+            'username': "Nombre de usuario",
+            'email': "Correo electrónico",
+            'password1': "Contraseña",
+            'password2': "Confirmar contraseña",
+        }
+        for field_name, placeholder in placeholders.items():
+            self.fields[field_name].widget.attrs["placeholder"] = placeholder
+
+        # Eliminar textos de ayuda largos en contraseñas
+        self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
