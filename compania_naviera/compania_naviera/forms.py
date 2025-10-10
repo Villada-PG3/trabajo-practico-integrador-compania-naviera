@@ -153,6 +153,14 @@ class FormularioReserva(forms.ModelForm):
             self.fields["cliente"].queryset = Cliente.objects.filter(usuario=user)
 
 class FormularioCliente(forms.ModelForm):
+    nacionalidad = forms.ChoiceField(
+        choices=Cliente._meta.get_field('nacionalidad').get_choices(),
+        widget=forms.Select(attrs={
+            'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+        }),
+        label='Nacionalidad',
+    )
+
     class Meta:
         model = Cliente
         exclude = ['usuario']  # se asigna automáticamente en la vista
@@ -178,9 +186,6 @@ class FormularioCliente(forms.ModelForm):
                 'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
                 'type': 'date'
             }),
-            'nacionalidad': CountrySelectWidget(attrs={
-                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full'
-            }),
             'genero': forms.Select(attrs={
                 'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full'
             }),
@@ -192,6 +197,5 @@ class FormularioCliente(forms.ModelForm):
             'dni': 'DNI',
             'direccion': 'Dirección',
             'fecha_nacimiento': 'Fecha de Nacimiento',
-            'nacionalidad': 'Nacionalidad',
             'genero': 'Género',
         }
