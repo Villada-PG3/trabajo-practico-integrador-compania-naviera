@@ -39,7 +39,7 @@
                       transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
             <div class="relative">
               {% if oferta.navio.imagen %}
-                <img src="{{ oferta.navio.imagen.url }}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
+                <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
               {% else %}
                 <img src="{% static 'placeholder.jpg' %}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
               {% endif %}
