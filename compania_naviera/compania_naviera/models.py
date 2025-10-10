@@ -13,8 +13,6 @@ class Rol(models.Model):
 class UsuarioPersonalizado(AbstractUser):
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True)
-    telefono = models.CharField(max_length=20, blank=True)
-    pais = CountryField(blank_label='Selecciona un país', blank=True)
     rol = models.ForeignKey(Rol, on_delete=models.PROTECT, related_name='usuarios', null=True, blank=True)
 
     groups = models.ManyToManyField(
