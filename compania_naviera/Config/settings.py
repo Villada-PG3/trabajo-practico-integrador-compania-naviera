@@ -104,6 +104,13 @@ LOGOUT_REDIRECT_URL = "home"
 _app_label, _user_model_name = AUTH_USER_MODEL.split(".")
 USER_CHANGE_LIST_NAME = f"admin:{_app_label}_{_user_model_name.lower()}_changelist"
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'gasleones@gmail.com'
+EMAIL_HOST_PASSWORD = 'qprp jtpb iuit dulr'
+
 UNFOLD = {
     "SITE_TITLE": "Compañía Naviera – Admin",
     "SITE_HEADER": "Panel Naviera",

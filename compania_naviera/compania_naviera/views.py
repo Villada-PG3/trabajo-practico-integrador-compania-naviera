@@ -10,6 +10,8 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 from django.views.generic.edit import CreateView
 from django.db.models import Prefetch, Avg
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 from .forms import (
@@ -55,12 +57,32 @@ def main_view(request):
 
 
 def contacto_view(request):
+    """
+    Vista para el formulario de contacto.
+    Envía un email a gasleones@gmail.com usando Gmail.
+    """
+    if request.method == "POST":
+        nombre = request.POST.get("nombre")
+        email = request.POST.get("email")
+        mensaje = request.POST.get("mensaje")
+
+        if nombre and email and mensaje:
+            try:
+                send_mail(
+                    subject=f"Mensaje de {nombre}",
+                    message=mensaje,
+                    from_email=email,
+                    recipient_list=[settings.EMAIL_HOST_USER],
+                    fail_silently=False,
+                )
+                messages.success(request, "¡Tu mensaje fue enviado correctamente!")
+                return redirect("contacto")
+            except Exception as e:
+                messages.error(request, f"Error al enviar el mensaje: {e}")
+        else:
+            messages.error(request, "Por favor completá todos los campos.")
+
     return render(request, "contacto.html")
-
-
-def contacto_log_view(request):
-    return render(request, "contacto_log.html")
-
 
 def destinos_view(request):
     """

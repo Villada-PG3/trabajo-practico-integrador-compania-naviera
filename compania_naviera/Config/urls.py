@@ -20,7 +20,6 @@ urlpatterns = [
     path('cambiar_contrasenia/', views.cambiar_contrasenia, name='cambiar_contrasenia'),
 
     path('contacto/', views.contacto_view, name='contacto'),
-    path('contacto_log/', views.contacto_log_view, name='contacto_log'),
     path('destinos/', views.destinos_view, name='destinos'),
     path("destinos/<int:pk>/", views.destino_detail_view, name="destino_detail"),
 
