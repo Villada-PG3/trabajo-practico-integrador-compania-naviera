@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -35,6 +35,11 @@ from .models import (
     ViajeXNavio,
     Cliente,
     EstadoReserva,
+    EstadoPasajero,
+    Camarote,
+    Pasajero,
+    OcupacionCamarote
+
 )
 
 
@@ -316,25 +321,97 @@ def crear_cliente_view(request):
     return render(request, "crear_cliente.html", {"form": form})
 
 
+
 @login_required
 def crear_reserva_view(request):
-    if not Cliente.objects.filter(usuario=request.user).exists():
+    user = request.user
+    clientes = Cliente.objects.filter(usuario=user)
+
+    if not clientes.exists():
         messages.info(request, "Primero crea un cliente para poder hacer la reserva.")
-        return redirect("crear_cliente")  # manda a crear cliente
+        return redirect("crear_cliente")
+
+    # ✅ Lógica AJAX para cargar camarotes según viaje seleccionado
+    viaje_navio_id = request.GET.get("viaje_navio_id")
+    camarote_id = request.GET.get("camarote_id")
+
+    if viaje_navio_id:
+        camarotes = Camarote.objects.filter(cubierta__navio__viajexnavio__id=viaje_navio_id)
+        data = [
+            {
+                "id": c.id,
+                "numero_de_camarote": c.numero_de_camarote,
+                "tipo_camarote__nombre": c.tipo_camarote.nombre,
+                "capacidad": c.capacidad
+            } for c in camarotes
+        ]
+        return JsonResponse(data, safe=False)
+
+    if camarote_id:
+        camarote = Camarote.objects.get(id=camarote_id)
+        data = {"capacidad": camarote.capacidad}
+        return JsonResponse(data)
 
     if request.method == "POST":
-        form = FormularioReserva(request.POST, user=request.user)
-        if form.is_valid():
-            reserva = form.save(commit=False)
-            reserva.estado_reserva, _ = EstadoReserva.objects.get_or_create(nombre="Pendiente")
-            reserva.save()
-            messages.success(request, "Reserva creada correctamente.")
-            return redirect("mis_reservas")
-    else:
-        form = FormularioReserva(user=request.user)
+        viaje_id = request.POST.get("viaje_navio")
+        camarote_id = request.POST.get("camarote")
+        pasajeros_ids = request.POST.getlist("pasajeros")  # lista de IDs
 
-    return render(request, "crear_reserva.html", {"form": form})
+        # Validación básica
+        if not viaje_id or not camarote_id or not pasajeros_ids:
+            messages.error(request, "Debes seleccionar viaje, camarote y pasajeros.")
+            return redirect("crear_reserva")
 
+        # Obtener objetos
+        try:
+            camarote_obj = Camarote.objects.get(id=camarote_id)
+            viaje_obj = ViajeXNavio.objects.get(id=viaje_id)
+        except Camarote.DoesNotExist or ViajeXNavio.DoesNotExist:
+            messages.error(request, "Viaje o camarote no válidos.")
+            return redirect("crear_reserva")
+
+        # Validaciones de capacidad y ocupación
+        ocupaciones = OcupacionCamarote.objects.filter(camarote=camarote_obj)
+        if ocupaciones.exists():
+            messages.error(request, "Este camarote ya está ocupado. Seleccione otro.")
+            return redirect("crear_reserva")
+
+        if len(pasajeros_ids) > camarote_obj.capacidad:
+            messages.error(
+                request,
+                f"Seleccionaste {len(pasajeros_ids)} pasajeros, pero el camarote solo admite {camarote_obj.capacidad}."
+            )
+            return redirect("crear_reserva")
+
+        # Crear reserva (cliente principal = primer pasajero)
+        reserva = Reserva.objects.create(
+            cliente=clientes.get(id=pasajeros_ids[0]),
+            viaje_navio=viaje_obj,
+            estado_reserva=EstadoReserva.objects.get_or_create(nombre="Pendiente")[0],
+            descripcion="Reserva realizada por sistema"
+        )
+
+        # Crear ocupaciones de todos los pasajeros
+        for pid in pasajeros_ids:
+            pasajero = clientes.get(id=pid)
+            OcupacionCamarote.objects.create(
+                reserva=reserva,
+                camarote=camarote_obj,
+                pasajero=pasajero
+            )
+
+        messages.success(request, "Reserva creada correctamente.")
+        return redirect("mis_reservas")
+
+    # GET normal → mostrar formulario
+    viajes = ViajeXNavio.objects.select_related("viaje", "navio").filter(
+        viaje__fecha_de_salida__gte=now().date()
+    ).order_by("viaje__fecha_de_salida")
+
+    return render(request, "crear_reserva.html", {
+        "clientes": clientes,
+        "viajes": viajes
+    })
 
 @login_required
 def pagos_view(request):

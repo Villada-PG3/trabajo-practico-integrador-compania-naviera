@@ -116,41 +116,44 @@ class FormularioCambioContrasenia(PasswordChangeForm):
             "placeholder": "Confirmar nueva contraseña"
         })
     )
-
 class FormularioReserva(forms.ModelForm):
-    cliente = forms.ModelChoiceField(
-        queryset=Cliente.objects.none(),
-        label="Selecciona el cliente"
-    )
-
     class Meta:
         model = Reserva
-        fields = ["cliente", "descripcion", "viaje_navio"]
+        fields = ["viaje_navio", "cliente"]  # descripción la generamos sola
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop("user", None)  # capturamos el usuario en la vista
+        user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
 
         # estilos consistentes
-        for field_name, field in self.fields.items():
+        for field in self.fields.values():
             field.widget.attrs.update({
-                "class": "form-control p-2 rounded-lg bg-white/10 text-black border border-white/30 "
-                         "focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
-                "placeholder": field.label
+                "class": "form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full",
             })
 
         # limitar viajes a futuros
-        if "viaje_navio" in self.fields:
-            self.fields["viaje_navio"].queryset = (
-                ViajeXNavio.objects.select_related("viaje", "navio")
-                .filter(viaje__fecha_de_salida__gte=now().date())
-                .order_by("viaje__fecha_de_salida")
-            )
-            self.fields["viaje_navio"].label = "Viaje y Navío"
+        self.fields["viaje_navio"].queryset = (
+            ViajeXNavio.objects.select_related("viaje", "navio")
+            .filter(viaje__fecha_de_salida__gte=now().date())
+            .order_by("viaje__fecha_de_salida")
+        )
+        self.fields["viaje_navio"].label = "Viaje"
 
         # limitar clientes al usuario actual
         if user:
             self.fields["cliente"].queryset = Cliente.objects.filter(usuario=user)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        viaje_navio = cleaned_data.get("viaje_navio")
+        cliente = cleaned_data.get("cliente")
+
+        if not viaje_navio:
+            raise forms.ValidationError("Debes seleccionar un viaje.")
+        if not cliente:
+            raise forms.ValidationError("Debes seleccionar un cliente.")
+
+        return cleaned_data
 
 class FormularioCliente(forms.ModelForm):
     nacionalidad = forms.ChoiceField(

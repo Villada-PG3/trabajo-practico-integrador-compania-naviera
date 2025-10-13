@@ -120,9 +120,9 @@ class Camarote(models.Model):
     estado_camarote = models.ForeignKey(EstadoCamarote, on_delete=models.PROTECT)
     tipo_camarote = models.ForeignKey(TipoCamarote, on_delete=models.PROTECT)
     imagen = models.URLField(blank=True, null=True)
-
+    capacidad = models.PositiveIntegerField(default=4)  # nueva columna para limitar personas 
     def __str__(self):
-        return f"Camarote {self.numero_de_camarote} - {self.cubierta.navio.nombre}"
+        return f"Camarote {self.numero_de_camarote} - {self.cubierta.navio.nombre} ({self.capacidad} personas)"
     
 class TipoItinerario(models.Model):
     nombre = models.CharField(max_length=100)
@@ -240,7 +240,11 @@ class OcupacionCamarote(models.Model):
     viaje_navio = models.ForeignKey(ViajeXNavio, on_delete=models.CASCADE)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
+     
 
+    def __str__(self):
+        return f"{self.camarote} ({self.cantidad_personas} personas)"
+    
 class EstadoReserva(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.TextField()
