@@ -46,8 +46,7 @@ from .models import (
 # ===========================
 # Públicos / generales
 # ===========================
-def pagos_view(request):
-    return render(request, "pagos.html")
+
     
 def main_view(request):
     """
@@ -366,7 +365,7 @@ def crear_reserva_view(request):
         try:
             camarote_obj = Camarote.objects.get(id=camarote_id)
             viaje_obj = ViajeXNavio.objects.get(id=viaje_id)
-        except Camarote.DoesNotExist or ViajeXNavio.DoesNotExist:
+        except (Camarote.DoesNotExist, ViajeXNavio.DoesNotExist):
             messages.error(request, "Viaje o camarote no válidos.")
             return redirect("crear_reserva")
 
