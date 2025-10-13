@@ -1,40 +1,135 @@
 {% extends "base.html" %}
 
+{% block title %}Mis reservas - SEA STAR{% endblock %}
+
 {% block content %}
-  <div class="flex flex-col md:flex-row gap-6">
-    
-    <!-- Sección de reservas -->
-    <div class="flex-1">
-      <h2 class="text-2xl font-bold mb-4">Mis Reservas</h2>
+<section class="mx-auto max-w-7xl px-6 lg:px-10 py-10">
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)] items-start">
+    <div class="space-y-6">
+      <header class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8">
+        <div class="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.2em] text-white/60">Gestioná tus viajes</p>
+            <h1 class="text-3xl font-black">Mis reservas</h1>
+            <p class="mt-2 text-sm text-white/70">Revisá el estado de tus travesías y asegurate de tener toda la documentación lista.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-[220px]">
+            <div class="rounded-2xl bg-blue-500/20 border border-blue-400/30 px-4 py-3">
+              <p class="text-xs uppercase tracking-wide text-white/60">Reservas activas</p>
+              <p class="mt-1 text-2xl font-bold">{{ reservas|length }}</p>
+            </div>
+            <div class="rounded-2xl bg-orange-500/20 border border-orange-400/40 px-4 py-3">
+              <p class="text-xs uppercase tracking-wide text-white/60">Próximo embarque</p>
+              <p class="mt-1 text-sm font-semibold">
+                {% if reservas %}
+                  {{ reservas.0.viaje_navio.viaje.fecha_de_salida|date:"d/m/Y" }}
+                {% else %}
+                  —
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-orange-400/30 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-12 left-10 h-24 w-24 rounded-full bg-blue-500/30 blur-3xl"></div>
+      </header>
 
       {% if reservas %}
-        <ul class="space-y-4">
+        <div class="space-y-6">
           {% for reserva in reservas %}
-            <li class="bg-white/10 backdrop-blur-md p-4 rounded-lg shadow">
-              <p><strong>👤 Cliente:</strong> {{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}</p>
-              <p><strong>🚢 Crucero:</strong> {{ reserva.viaje_navio.navio.nombre }}</p>
-              <p><strong>📅 Viaje:</strong> {{ reserva.viaje_navio.viaje.nombre }}</p>
-              <p><strong>⏰ Salida:</strong> {{ reserva.viaje_navio.viaje.fecha_de_salida|date:"d/m/Y" }}</p>
-              <p><strong>📌 Estado:</strong> {{ reserva.estado_reserva.nombre }}</p>
-              <p><strong>📝 Descripción:</strong> {{ reserva.descripcion|default:"-" }}</p>
-            </li>
+            <article class="relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 p-6 shadow-2xl backdrop-blur-md transition duration-300 hover:border-orange-400/40 hover:bg-white/10">
+              <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <div class="flex items-center gap-3">
+                    <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-sm font-semibold text-orange-200">
+                      #{{ forloop.counter }}
+                    </span>
+                    <h2 class="text-xl font-semibold">{{ reserva.viaje_navio.viaje.nombre }}</h2>
+                  </div>
+                  <p class="mt-2 text-white/70 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-ship text-orange-300"></i>
+                    {{ reserva.viaje_navio.navio.nombre }}
+                  </p>
+                  <p class="text-white/60 text-sm flex items-center gap-2">
+                    <i class="fa-regular fa-calendar text-orange-300"></i>
+                    Salida {{ reserva.viaje_navio.viaje.fecha_de_salida|date:"d/m/Y" }}
+                  </p>
+                  <p class="text-white/60 text-sm flex items-center gap-2">
+                    <i class="fa-regular fa-id-card text-orange-300"></i>
+                    {{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}
+                  </p>
+                </div>
+
+                <span class="self-start rounded-full bg-orange-500/20 px-4 py-1 text-sm font-semibold text-orange-200 ring-1 ring-orange-400/40">
+                  {{ reserva.estado_reserva.nombre }}
+                </span>
+              </div>
+
+              <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p class="text-xs uppercase tracking-wide text-white/50">Crucero</p>
+                  <p class="mt-1 font-semibold">{{ reserva.viaje_navio.navio.nombre }}</p>
+                  <p class="text-white/60">{{ reserva.viaje_navio.navio.tipo_navio.nombre }}</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p class="text-xs uppercase tracking-wide text-white/50">Reserva</p>
+                  <p class="mt-1 font-semibold">#{{ reserva.id }}</p>
+                  <p class="text-white/60">Estado: {{ reserva.estado_reserva.nombre }}</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <p class="text-xs uppercase tracking-wide text-white/50">Descripción</p>
+                  <p class="mt-1 text-white/70">{{ reserva.descripcion|default:"-" }}</p>
+                </div>
+              </div>
+            </article>
           {% endfor %}
-        </ul>
+        </div>
       {% else %}
-        <p class="text-gray-300">No tenés reservas todavía.</p>
+        <div class="rounded-3xl border border-dashed border-white/30 bg-white/5 p-10 text-center text-sm text-white/80">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-2xl text-orange-300">
+            <i class="fa-solid fa-compass"></i>
+          </div>
+          <h2 class="mt-4 text-2xl font-semibold text-white">Todavía no tenés reservas</h2>
+          <p class="mt-2 text-white/70">Explorá nuestros cruceros y asegura tu lugar en la próxima travesía.</p>
+          <a href="{% url 'crear_reserva' %}" class="mt-5 inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3 font-semibold text-white shadow-lg transition hover:bg-orange-600">
+            <i class="fa-solid fa-plus"></i> Crear nueva reserva
+          </a>
+        </div>
       {% endif %}
     </div>
 
-    <!-- Pestaña de acción -->
-    <div class="w-full md:w-1/3">
-      <div class="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-2xl shadow-lg sticky top-20">
-        <h3 class="text-xl font-bold mb-2">¿Tienes todo preparado?</h3>
-        <p class="mb-4">Haz tu reserva ahora y asegura tu lugar en nuestro próximo crucero.</p>
-        <a href="{% url 'crear_reserva' %}"
-           class="block text-center bg-white text-orange-600 font-semibold px-4 py-2 rounded-lg shadow hover:bg-gray-100 transition">
-          ➕ Crear nueva reserva
-        </a>
+    <aside class="lg:sticky lg:top-24">
+      <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-orange-500/80 via-orange-600/70 to-pink-500/60 p-8 shadow-2xl text-white">
+        <div class="relative z-10 space-y-5">
+          <h3 class="text-2xl font-bold">Checklist pre-embarque</h3>
+          <p class="text-white/80 text-sm">Confirmá tus datos, cargá documentación y seleccioná actividades extra antes de subir a bordo.</p>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-center gap-3">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-orange-100">
+                <i class="fa-solid fa-passport"></i>
+              </span>
+              Documentación actualizada
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-orange-100">
+                <i class="fa-solid fa-suitcase-rolling"></i>
+              </span>
+              Equipaje permitido y excursiones reservadas
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-orange-100">
+                <i class="fa-solid fa-headset"></i>
+              </span>
+              Contactanos si necesitás asistencia personalizada
+            </li>
+          </ul>
+          <a href="{% url 'crear_reserva' %}" class="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-orange-600 transition hover:bg-white">
+            <i class="fa-solid fa-pen-to-square"></i> Gestionar reserva
+          </a>
+        </div>
+        <div class="pointer-events-none absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-white/30 blur-3xl"></div>
       </div>
-    </div>
+    </aside>
   </div>
+</section>
 {% endblock %}
