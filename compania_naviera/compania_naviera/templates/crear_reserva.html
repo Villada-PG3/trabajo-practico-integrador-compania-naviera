@@ -7,6 +7,18 @@
     <form method="post" id="reservaForm" class="space-y-4">
       {% csrf_token %}
 
+      <!-- Paso 0: Seleccionar cliente -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Selecciona un cliente</label>
+        <select name="cliente" id="cliente" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
+          <option value="">-- Selecciona un cliente --</option>
+          {% for c in clientes %}
+            <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellido }}</option>
+          {% endfor %}
+        </select>
+        <a href="{% url 'crear_cliente' %}" class="text-blue-500 hover:underline text-sm">Crear nuevo cliente</a>
+      </div>
+
       <!-- Paso 1: Seleccionar viaje -->
       <div>
         <label class="block text-sm font-medium mb-1">Selecciona un viaje</label>
@@ -20,7 +32,23 @@
         </select>
       </div>
 
-      <!-- Paso 2: Seleccionar camarote (rellenado por AJAX) -->
+      <!-- Paso 2: Seleccionar tipo de camarote -->
+      <div id="tipoDiv" style="display:none;">
+        <label class="block text-sm font-medium mb-1">Selecciona tipo de camarote</label>
+        <select name="tipo_camarote" id="tipo_camarote" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
+          <option value="">-- Selecciona tipo --</option>
+        </select>
+      </div>
+
+      <!-- Paso 3: Seleccionar capacidad -->
+      <div id="capacidadDiv" style="display:none;">
+        <label class="block text-sm font-medium mb-1">Selecciona capacidad</label>
+        <select name="capacidad" id="capacidad" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
+          <option value="">-- Selecciona capacidad --</option>
+        </select>
+      </div>
+
+      <!-- Paso 4: Seleccionar camarote -->
       <div id="camaroteDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Selecciona un camarote</label>
         <select name="camarote" id="camarote" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
@@ -28,19 +56,11 @@
         </select>
       </div>
 
-      <!-- Paso 3: Seleccionar pasajeros -->
+      <!-- Paso 5: Agregar pasajeros dinámicamente -->
       <div id="pasajerosDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Selecciona los pasajeros</label>
-        <small class="text-gray-400" id="capacidadText"></small>
-        <div class="space-y-2 mt-2">
-          {% for c in clientes %}
-            <label class="flex items-center space-x-2">
-              <input type="checkbox" name="pasajeros" value="{{ c.id }}" class="form-checkbox pasajeroCheckbox">
-              <span>{{ c.nombre }} {{ c.apellido }}</span>
-            </label>
-          {% endfor %}
-        </div>
-        <small class="text-red-500 mt-1" id="excesoText" style="display:none;">Excediste la capacidad del camarote</small>
+        <label class="block text-sm font-medium mb-1">Agregar pasajeros</label>
+        <div id="pasajerosContainer" class="space-y-2 mt-2"></div>
+        <button type="button" id="agregarPasajeroBtn" class="bg-blue-500 text-white px-3 py-1 rounded mt-2">+ Agregar pasajero</button>
       </div>
 
       <!-- Botón final -->
@@ -53,68 +73,133 @@
 </div>
 
 <script>
-const viajeSelect = document.getElementById('viaje_navio');
-const camaroteSelect = document.getElementById('camarote');
-const camaroteDiv = document.getElementById('camaroteDiv');
-const pasajerosDiv = document.getElementById('pasajerosDiv');
-const submitBtn = document.getElementById('submitBtn');
-const capacidadText = document.getElementById('capacidadText');
-const excesoText = document.getElementById('excesoText');
-let capacidadMax = 0;
+document.addEventListener("DOMContentLoaded", function() {
+  const viajeSelect = document.getElementById('viaje_navio');
+  const tipoSelect = document.getElementById('tipo_camarote');
+  const capacidadSelect = document.getElementById('capacidad');
+  const camaroteSelect = document.getElementById('camarote');
+  const tipoDiv = document.getElementById('tipoDiv');
+  const capacidadDiv = document.getElementById('capacidadDiv');
+  const camaroteDiv = document.getElementById('camaroteDiv');
+  const pasajerosDiv = document.getElementById('pasajerosDiv');
+  const pasajerosContainer = document.getElementById("pasajerosContainer");
+  const agregarPasajeroBtn = document.getElementById("agregarPasajeroBtn");
+  const submitBtn = document.getElementById('submitBtn');
 
-// 1️⃣ Cuando seleccionás viaje → carga camarotes
-viajeSelect.addEventListener('change', async () => {
-  const viajeId = viajeSelect.value;
-  if (!viajeId) return;
+  let capacidadMax = 0;
+  let contadorPasajeros = 0;
 
-  const res = await fetch(`?viaje_navio_id=${viajeId}`);
-  const data = await res.json();
-
-  camaroteSelect.innerHTML = `<option value="">-- Selecciona un camarote --</option>`;
-  data.forEach(c => {
-    camaroteSelect.innerHTML += `<option value="${c.id}">
-      Camarote ${c.numero_de_camarote} (${c.tipo_camarote__nombre}) — Capacidad ${c.capacidad}
-    </option>`;
-  });
-
-  camaroteDiv.style.display = "block";
-  pasajerosDiv.style.display = "none";
-  submitBtn.classList.add("hidden");
-  capacidadMax = 0;
-  excesoText.style.display = "none";
-  document.querySelectorAll('.pasajeroCheckbox').forEach(cb => cb.checked = false);
-});
-
-// 2️⃣ Cuando seleccionás camarote → mostrar pasajeros y capacidad
-camaroteSelect.addEventListener('change', async () => {
-  const camaroteId = camaroteSelect.value;
-  if (!camaroteId) return;
-
-  const res = await fetch(`?camarote_id=${camaroteId}`);
-  const data = await res.json();
-  capacidadMax = data.capacidad;
-  capacidadText.innerText = `Capacidad máxima: ${capacidadMax} personas`;
-
-  pasajerosDiv.style.display = "block";
-  submitBtn.classList.remove("hidden");
-  excesoText.style.display = "none";
-
-  // Desmarcar todos los checkboxes al cambiar camarote
-  document.querySelectorAll('.pasajeroCheckbox').forEach(cb => cb.checked = false);
-});
-
-// 3️⃣ Validar capacidad al seleccionar pasajeros
-document.querySelectorAll('.pasajeroCheckbox').forEach(cb => {
-  cb.addEventListener('change', () => {
-    const seleccionados = document.querySelectorAll('.pasajeroCheckbox:checked').length;
-    if (seleccionados > capacidadMax) {
-      excesoText.style.display = "block";
-      submitBtn.disabled = true;
-    } else {
-      excesoText.style.display = "none";
-      submitBtn.disabled = false;
+  // Función para crear inputs de pasajero
+  function agregarPasajero(){
+    if(contadorPasajeros >= capacidadMax){
+      alert("Ya alcanzaste la capacidad máxima del camarote");
+      return;
     }
+    const div = document.createElement("div");
+    div.classList.add("p-2", "border", "border-gray-300", "rounded", "bg-gray-800");
+    div.innerHTML = `
+      <h4 class="font-semibold mb-1 text-white">Pasajero ${contadorPasajeros + 1}</h4>
+      <input type="text" name="pasajero_nombre_${contadorPasajeros}" placeholder="Nombre" class="w-full p-2 rounded mb-1 text-black">
+      <input type="text" name="pasajero_apellido_${contadorPasajeros}" placeholder="Apellido" class="w-full p-2 rounded mb-1 text-black">
+      <input type="text" name="pasajero_dni_${contadorPasajeros}" placeholder="DNI" class="w-full p-2 rounded mb-1 text-black">
+      <input type="date" name="pasajero_fecha_nacimiento_${contadorPasajeros}" class="w-full p-2 rounded mb-1 text-black">
+    `;
+    pasajerosContainer.appendChild(div);
+    contadorPasajeros++;
+  }
+
+  agregarPasajeroBtn.addEventListener("click", agregarPasajero);
+
+  // Eventos para cargar tipos, capacidades y camarotes (igual que antes)
+  viajeSelect.addEventListener('change', async () => {
+    const viajeId = viajeSelect.value;
+    if (!viajeId) {
+      tipoDiv.style.display = "none";
+      capacidadDiv.style.display = "none";
+      camaroteDiv.style.display = "none";
+      pasajerosDiv.style.display = "none";
+      submitBtn.classList.add("hidden");
+      capacidadMax = 0;
+      contadorPasajeros = 0;
+      pasajerosContainer.innerHTML = "";
+      return;
+    }
+    const res = await fetch(`/ajax/tipos-camarote/?viaje_navio_id=${viajeId}`);
+    const data = await res.json();
+    tipoSelect.innerHTML = `<option value="">-- Selecciona tipo --</option>`;
+    data.forEach(t => tipoSelect.innerHTML += `<option value="${t.id}">${t.nombre}</option>`);
+    tipoDiv.style.display = "block";
+    capacidadDiv.style.display = "none";
+    camaroteDiv.style.display = "none";
+    pasajerosDiv.style.display = "none";
+    submitBtn.classList.add("hidden");
+    capacidadMax = 0;
+    contadorPasajeros = 0;
+    pasajerosContainer.innerHTML = "";
   });
+
+  tipoSelect.addEventListener('change', async () => {
+    const viajeId = viajeSelect.value;
+    const tipoId = tipoSelect.value;
+    if (!tipoId) {
+      capacidadDiv.style.display = "none";
+      camaroteDiv.style.display = "none";
+      pasajerosDiv.style.display = "none";
+      submitBtn.classList.add("hidden");
+      return;
+    }
+    const res = await fetch(`/ajax/capacidades/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}`);
+    const data = await res.json();
+    capacidadSelect.innerHTML = `<option value="">-- Selecciona capacidad --</option>`;
+    data.forEach(c => capacidadSelect.innerHTML += `<option value="${c.capacidad}">${c.capacidad}</option>`);
+    capacidadDiv.style.display = "block";
+    camaroteDiv.style.display = "none";
+    pasajerosDiv.style.display = "none";
+    submitBtn.classList.add("hidden");
+    capacidadMax = 0;
+    contadorPasajeros = 0;
+    pasajerosContainer.innerHTML = "";
+  });
+
+  capacidadSelect.addEventListener('change', async () => {
+    const viajeId = viajeSelect.value;
+    const tipoId = tipoSelect.value;
+    const capacidad = capacidadSelect.value;
+    if (!capacidad) {
+      camaroteDiv.style.display = "none";
+      pasajerosDiv.style.display = "none";
+      submitBtn.classList.add("hidden");
+      return;
+    }
+    const res = await fetch(`/ajax/camarotes/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}&capacidad=${capacidad}`);
+    const data = await res.json();
+    camaroteSelect.innerHTML = `<option value="">-- Selecciona un camarote --</option>`;
+    data.forEach(c => camaroteSelect.innerHTML += `<option value="${c.id}">N° ${c.numero_de_camarote} (${c.capacidad} pers.) - ${c.tipo}</option>`);
+    camaroteDiv.style.display = "block";
+    pasajerosDiv.style.display = "none";
+    submitBtn.classList.add("hidden");
+    capacidadMax = 0;
+    contadorPasajeros = 0;
+    pasajerosContainer.innerHTML = "";
+  });
+
+  camaroteSelect.addEventListener('change', () => {
+    const camaroteId = camaroteSelect.value;
+    if(!camaroteId){
+      pasajerosDiv.style.display = "none";
+      submitBtn.classList.add("hidden");
+      capacidadMax = 0;
+      contadorPasajeros = 0;
+      pasajerosContainer.innerHTML = "";
+      return;
+    }
+    capacidadMax = parseInt(camaroteSelect.options[camaroteSelect.selectedIndex].text.match(/\((\d+) pers\.\)/)[1]);
+    pasajerosDiv.style.display = "block";
+    submitBtn.classList.remove("hidden");
+    contadorPasajeros = 0;
+    pasajerosContainer.innerHTML = "";
+  });
+
 });
 </script>
 {% endblock %}

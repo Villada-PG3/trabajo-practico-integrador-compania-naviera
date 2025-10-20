@@ -5,6 +5,8 @@
 {% block content %}
 <section class="mx-auto max-w-7xl px-6 lg:px-10 py-10">
   <div class="grid gap-8 lg:grid-cols-[minmax(0,2fr),minmax(0,1fr)] items-start">
+    
+    <!-- PRINCIPAL: Lista de reservas -->
     <div class="space-y-6">
       <header class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8">
         <div class="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -40,11 +42,15 @@
             <article class="relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 p-6 shadow-2xl backdrop-blur-md transition duration-300 hover:border-orange-400/40 hover:bg-white/10">
               <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
-                  <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-3 flex-wrap">
                     <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-sm font-semibold text-orange-200">
                       #{{ forloop.counter }}
                     </span>
                     <h2 class="text-xl font-semibold">{{ reserva.viaje_navio.viaje.nombre }}</h2>
+                    <span class="flex items-center gap-1 text-xs text-white/70 bg-white/10 px-3 py-1 rounded-full">
+                      <i class="fa-solid fa-user-group text-orange-300"></i>
+                      {{ reserva.pasajeros.all|length }} pasajero{% if reserva.pasajeros.all|length != 1 %}s{% endif %}
+                    </span>
                   </div>
                   <p class="mt-2 text-white/70 text-sm flex items-center gap-2">
                     <i class="fa-solid fa-ship text-orange-300"></i>
@@ -59,10 +65,6 @@
                     {{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}
                   </p>
                 </div>
-
-                <span class="self-start rounded-full bg-orange-500/20 px-4 py-1 text-sm font-semibold text-orange-200 ring-1 ring-orange-400/40">
-                  {{ reserva.estado_reserva.nombre }}
-                </span>
               </div>
 
               <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
@@ -74,12 +76,39 @@
                 <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <p class="text-xs uppercase tracking-wide text-white/50">Reserva</p>
                   <p class="mt-1 font-semibold">#{{ reserva.id }}</p>
-                  <p class="text-white/60">Estado: {{ reserva.estado_reserva.nombre }}</p>
+                  <p class="text-white/60">Camarote #{{ reserva.camarote.numero_de_camarote }} • {{ reserva.camarote.tipo_camarote.nombre }}</p>
                 </div>
                 <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <p class="text-xs uppercase tracking-wide text-white/50">Descripción</p>
-                  <p class="mt-1 text-white/70">{{ reserva.descripcion|default:"-" }}</p>
+                  <p class="text-xs uppercase tracking-wide text-white/50">Viaje</p>
+                  <p class="mt-1 font-semibold">{{ reserva.viaje_navio.viaje.nombre }}</p>
+                  <p class="text-white/60">Salida: {{ reserva.viaje_navio.viaje.fecha_de_salida|date:"d/m/Y" }}</p>
                 </div>
+              </div>
+
+              <!-- PASAJEROS -->
+              <div class="mt-4">
+                <p class="text-xs uppercase tracking-wide text-white/50">Pasajeros</p>
+                <ul class="mt-1 text-white/70 text-sm space-y-1">
+                  {% for pasajero in reserva.pasajeros.all %}
+                    <li class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-white/5 rounded-xl px-3 py-2">
+                      <div>
+                        <span class="font-semibold">{{ pasajero.nombre }} {{ pasajero.apellido }}</span>
+                        {% if pasajero.fecha_nacimiento %}
+                          <span class="text-white/60 text-xs"> ({{ pasajero.fecha_nacimiento|date:"d/m/Y" }})</span>
+                        {% endif %}
+                      </div>
+                    </li>
+                  {% empty %}
+                    <li>No hay pasajeros registrados</li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <!-- BOTÓN CANCELAR -->
+              <div class="mt-4">
+                <a href="{% url 'cancelar_reserva' reserva.id %}" class="inline-flex items-center gap-2 rounded-full bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600 transition">
+                  <i class="fa-solid fa-trash"></i> Cancelar reserva
+                </a>
               </div>
             </article>
           {% endfor %}
@@ -98,6 +127,7 @@
       {% endif %}
     </div>
 
+    <!-- ASIDE: Checklist -->
     <aside class="lg:sticky lg:top-24">
       <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-orange-500/80 via-orange-600/70 to-pink-500/60 p-8 shadow-2xl text-white">
         <div class="relative z-10 space-y-5">
@@ -130,6 +160,7 @@
         <div class="pointer-events-none absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-white/30 blur-3xl"></div>
       </div>
     </aside>
+
   </div>
 </section>
 {% endblock %}

@@ -57,9 +57,12 @@ class EstadoPasajero(models.Model):
         return self.nombre
 
 class Pasajero(models.Model):
-    reserva = models.ForeignKey('Reserva', on_delete=models.CASCADE, related_name='pasajeros')
+    reserva = models.ForeignKey('Reserva', on_delete=models.CASCADE, related_name="pasajeros")
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
+    fecha_nacimiento = models.DateField(null=True, blank=True)
+    dni = models.CharField(max_length=20, blank=True, null=True)
+    
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     estado_pasajero = models.ForeignKey(EstadoPasajero, on_delete=models.PROTECT)
@@ -234,6 +237,7 @@ class AsignacionTripulanteViaje(models.Model):
     fecha_fin = models.DateField()
 
 class OcupacionCamarote(models.Model):
+    reserva = models.ForeignKey('Reserva', on_delete=models.CASCADE, null=True, blank=True, related_name='ocupaciones')
     camarote = models.ForeignKey(Camarote, on_delete=models.CASCADE)
     tripulante = models.ForeignKey(Tripulante, on_delete=models.SET_NULL, null=True, blank=True)
     pasajero = models.ForeignKey(Pasajero, on_delete=models.SET_NULL, null=True, blank=True)
@@ -243,7 +247,7 @@ class OcupacionCamarote(models.Model):
      
 
     def __str__(self):
-        return f"{self.camarote} ({self.cantidad_personas} personas)"
+        return f"{self.camarote} - {self.viaje_navio}"
     
 class EstadoReserva(models.Model):
     nombre = models.CharField(max_length=50)
@@ -257,8 +261,12 @@ class Reserva(models.Model):
     viaje_navio = models.ForeignKey(ViajeXNavio, on_delete=models.CASCADE)
     estado_reserva = models.ForeignKey(EstadoReserva, on_delete=models.PROTECT)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    camarote = models.ForeignKey(Camarote, on_delete=models.PROTECT, null=True, blank=True, related_name='reservas')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Reserva {self.id} - {self.cliente} - {self.viaje_navio}"
 
 class HistorialReserva(models.Model):
     reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)

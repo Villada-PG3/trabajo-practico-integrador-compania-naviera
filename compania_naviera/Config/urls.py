@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from compania_naviera import views
 from django.contrib.auth import views as auth_views
-
+from compania_naviera import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
@@ -24,7 +24,15 @@ urlpatterns = [
     path("destinos/<int:pk>/", views.destino_detail_view, name="destino_detail"),
 
     path('mis-reservas/', views.mis_reservas_view, name='mis_reservas'),
-    path('reservas/nueva/', views.crear_reserva_view, name='crear_reserva'),
+    
+     path("reserva/<int:reserva_id>/cancelar/", views.cancelar_reserva_view, name="cancelar_reserva"),
+
+    path('reservas/nueva/', views.ReservaCreateView.as_view(), name='crear_reserva'),
+
+    # URLs AJAX
+    path('ajax/tipos-camarote/', views.ajax_tipos_camarote, name='ajax_tipos_camarote'),
+    path('ajax/capacidades/', views.ajax_capacidades, name='ajax_capacidades'),
+    path('ajax/camarotes/', views.ajax_camarotes, name='ajax_camarotes'),
 
     # Cruceros + detalle
     path('cruceros/', views.cruceros_view, name='cruceros'),

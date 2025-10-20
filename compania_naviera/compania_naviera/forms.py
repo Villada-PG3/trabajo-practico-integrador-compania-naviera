@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.utils.timezone import now
 from django_countries.widgets import CountrySelectWidget
 
-from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente, Rol
+from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente, Rol, TipoCamarote, Camarote
 
 
 class FormularioRegistroPersonalizado(UserCreationForm):
@@ -117,19 +117,44 @@ class FormularioCambioContrasenia(PasswordChangeForm):
         })
     )
 class FormularioReserva(forms.ModelForm):
+    tipo_camarote = forms.ModelChoiceField(
+        queryset=TipoCamarote.objects.none(),
+        required=False,
+        label="Tipo de camarote"
+    )
+    capacidad = forms.ChoiceField(
+        choices=[],
+        required=False,
+        label="Capacidad"
+    )
+    camarote = forms.ModelChoiceField(
+        queryset=Camarote.objects.none(),
+        required=False,
+        label="Número de camarote"
+    )
+    pasajeros = forms.ModelMultipleChoiceField(
+        queryset=Cliente.objects.none(),
+        required=True,
+        label="Pasajeros (seleccioná hasta la capacidad)",
+        widget=forms.CheckboxSelectMultiple
+    )
+
     class Meta:
         model = Reserva
-        fields = ["viaje_navio", "cliente"]  # descripción la generamos sola
-
+        fields = ["viaje_navio", "cliente","camarote"]  # camarote lo seteamos en form_valid
+        
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
 
-        # estilos consistentes
+        # estilos consistentes (si querés podés copiar el estilo que ya tenías)
         for field in self.fields.values():
-            field.widget.attrs.update({
-                "class": "form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full",
-            })
+            try:
+                field.widget.attrs.update({
+                    "class": "form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full",
+                })
+            except Exception:
+                pass
 
         # limitar viajes a futuros
         self.fields["viaje_navio"].queryset = (
@@ -139,21 +164,31 @@ class FormularioReserva(forms.ModelForm):
         )
         self.fields["viaje_navio"].label = "Viaje"
 
-        # limitar clientes al usuario actual
+        # clientes del usuario
         if user:
             self.fields["cliente"].queryset = Cliente.objects.filter(usuario=user)
+            self.fields["pasajeros"].queryset = Cliente.objects.filter(usuario=user)
+
+        # dejar campos vacíos para que JS los cargue
+        self.fields["tipo_camarote"].queryset = TipoCamarote.objects.all()
+        self.fields["capacidad"].choices = [(1,"1"), (2,"2"), (4,"4")]
+        # camarote queryset se llenará por JS según filtros
 
     def clean(self):
-        cleaned_data = super().clean()
-        viaje_navio = cleaned_data.get("viaje_navio")
-        cliente = cleaned_data.get("cliente")
-
+        cleaned = super().clean()
+        viaje_navio = cleaned.get("viaje_navio")
+        camarote = cleaned.get("camarote")
+        pasajeros = cleaned.get("pasajeros")
         if not viaje_navio:
-            raise forms.ValidationError("Debes seleccionar un viaje.")
-        if not cliente:
-            raise forms.ValidationError("Debes seleccionar un cliente.")
-
-        return cleaned_data
+            raise forms.ValidationError("Seleccioná un viaje.")
+        if camarote:
+            # verificar que camarote pertenezca al navío del viaje
+            if camarote.cubierta.navio != viaje_navio.navio:
+                raise forms.ValidationError("El camarote seleccionado no pertenece al navío de ese viaje.")
+            # capacidad
+            if pasajeros and len(pasajeros) > camarote.capacidad:
+                raise forms.ValidationError(f"Seleccionaste {len(pasajeros)} pasajeros; el camarote admite {camarote.capacidad}.")
+        return cleaned
 
 class FormularioCliente(forms.ModelForm):
     nacionalidad = forms.ChoiceField(
