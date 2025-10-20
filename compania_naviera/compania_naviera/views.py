@@ -1,4 +1,6 @@
-# Librerías estándar
+# ==========================================================
+# 📦 Librerías estándar
+# ==========================================================
 from collections import defaultdict
 
 # Django - HTTP y utilidades
@@ -13,15 +15,17 @@ from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.utils.timezone import now
 
-# Django - Autenticación
+# ==========================================================
+# 🔐 Django - Autenticación y mensajes
+# ==========================================================
 from django.contrib import messages
-from django.contrib.auth import (
-    authenticate, login, logout, update_session_auth_hash
-)
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Django - Modelos y consultas
+# ==========================================================
+# 🧩 Django - Modelos y consultas ORM
+# ==========================================================
 from django.db.models import Avg, Prefetch
 
 # Django - Vistas genéricas (basadas en clases)
@@ -39,32 +43,33 @@ from django.conf import settings
 
 from .forms import (
     FormularioCambioContrasenia,
+    FormularioCliente,
     FormularioEdicionPerfil,
     FormularioRegistroPersonalizado,
     FormularioReserva,
-    FormularioCliente,
 )
+
 from .models import (
     ActividadPosible,
+    Camarote,
+    Cliente,
+    EstadoPasajero,
+    EstadoReserva,
     HistorialPago,
     ItinerarioViaje,
     Navio,
+    OcupacionCamarote,
     Pago,
+    Pasajero,
     Puerto,
     PuertoxActividad,
     Reserva,
+    TipoCamarote,
     UsuarioPersonalizado,
     Viaje,
     ViajeXNavio,
-    Cliente,
-    EstadoReserva,
-    EstadoPasajero,
-    Camarote,
-    Pasajero,
-    OcupacionCamarote,
-    TipoCamarote
-
 )
+
 
 
 # ===========================
@@ -259,97 +264,96 @@ class CambiarContraseniaView(LoginRequiredMixin, FormView):
 # ===========================
 # Panel de Usuario / Reservas
 # ===========================
+class MenuUserView(LoginRequiredMixin, TemplateView):
+    template_name = "menu_user.html"
 
-@login_required
-def menu_user(request):
-    """
-    Dashboard del usuario con KPIs + próximos cruceros a partir de sus reservas.
-    """
-    usuario = request.user
-    hoy = now().date()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        hoy = now().date()
 
-    reservas_usuario = (
-        Reserva.objects.filter(cliente__usuario=usuario)
-        .select_related("estado_reserva", "viaje_navio__viaje", "viaje_navio__navio")
-        .order_by("viaje_navio__viaje__fecha_de_salida")
-    )
-
-    proximos_cruceros = []
-    for reserva in reservas_usuario:
-        viaje = reserva.viaje_navio.viaje
-        if viaje.fecha_de_salida and viaje.fecha_de_salida >= hoy:
-            navio_id = getattr(reserva.viaje_navio, "navio_id", None)
-            navio_nombre = getattr(getattr(reserva.viaje_navio, "navio", None), "nombre", "")
-            proximos_cruceros.append(
-                {
-                    "nombre": viaje.nombre,
-                    "fecha": viaje.fecha_de_salida,
-                    "estado": reserva.estado_reserva.nombre if reserva.estado_reserva else "",
-                    "navio_id": navio_id,
-                    "navio_nombre": navio_nombre or "(sin asignar)",
-                }
-            )
-    proximos_cruceros = proximos_cruceros[:3]
-
-    # Ofertas y actividades simples para el panel
-    ofertas_destacadas = list(
-        ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
-        .select_related("viaje", "navio")
-        .order_by("precio")[:3]
-    )
-    actividades_destacadas = list(ActividadPosible.objects.order_by("nombre")[:3])
-
-    contexto = {
-        "usuario": usuario,
-        "reservas_total": reservas_usuario.count(),
-        "reservas_activas": len(proximos_cruceros),
-        "ofertas_destacadas": ofertas_destacadas,
-        "proximos_cruceros": proximos_cruceros,
-        "actividades_destacadas": actividades_destacadas,
-    }
-    return render(request, "menu_user.html", contexto)
-
-
-
-@login_required
-def mis_reservas_view(request):
-    usuario = request.user
-    reservas = (
-        Reserva.objects.filter(cliente__usuario=usuario)
-        .select_related(
-            "viaje_navio__viaje",
-            "viaje_navio__navio",
-            "camarote__tipo_camarote",
+        reservas_usuario = (
+            Reserva.objects.filter(cliente__usuario=usuario)
+            .select_related("estado_reserva", "viaje_navio__viaje", "viaje_navio__navio")
+            .order_by("viaje_navio__viaje__fecha_de_salida")
         )
-        .prefetch_related("pasajeros")
-        .order_by("-created_at")
-    )
-    return render(request, "mis_reservas.html", {"reservas": reservas})
+
+        proximos_cruceros = []
+        for reserva in reservas_usuario:
+            viaje = reserva.viaje_navio.viaje
+            if viaje.fecha_de_salida and viaje.fecha_de_salida >= hoy:
+                navio_id = getattr(reserva.viaje_navio, "navio_id", None)
+                navio_nombre = getattr(getattr(reserva.viaje_navio, "navio", None), "nombre", "")
+                proximos_cruceros.append(
+                    {
+                        "nombre": viaje.nombre,
+                        "fecha": viaje.fecha_de_salida,
+                        "estado": reserva.estado_reserva.nombre if reserva.estado_reserva else "",
+                        "navio_id": navio_id,
+                        "navio_nombre": navio_nombre or "(sin asignar)",
+                    }
+                )
+        proximos_cruceros = proximos_cruceros[:3]
+
+        ofertas_destacadas = list(
+            ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
+            .select_related("viaje", "navio")
+            .order_by("precio")[:3]
+        )
+        actividades_destacadas = list(ActividadPosible.objects.order_by("nombre")[:3])
+
+        context.update({
+            "usuario": usuario,
+            "reservas_total": reservas_usuario.count(),
+            "reservas_activas": len(proximos_cruceros),
+            "ofertas_destacadas": ofertas_destacadas,
+            "proximos_cruceros": proximos_cruceros,
+            "actividades_destacadas": actividades_destacadas,
+        })
+        return context
 
 
-@login_required
-def cancelar_reserva_view(request, reserva_id):
-    reserva = get_object_or_404(Reserva, id=reserva_id, cliente__usuario=request.user)
+class MisReservasView(LoginRequiredMixin, ListView):
+    model = Reserva
+    template_name = "mis_reservas.html"
+    context_object_name = "reservas"
 
-    reserva.delete()
-    messages.success(request, f"La reserva #{reserva_id} se ha eliminado correctamente.")
-    return redirect(reverse_lazy("mis_reservas"))
+    def get_queryset(self):
+        return (
+            Reserva.objects.filter(cliente__usuario=self.request.user)
+            .select_related(
+                "viaje_navio__viaje",
+                "viaje_navio__navio",
+                "camarote__tipo_camarote",
+            )
+            .prefetch_related("pasajeros")
+            .order_by("-created_at")
+        )
 
-@login_required
-def crear_cliente_view(request):
-    if request.method == "POST":
-        form = FormularioCliente(request.POST)
-        if form.is_valid():
-            cliente = form.save(commit=False)
-            cliente.usuario = request.user
-            cliente.save()
-            messages.success(request, "Cliente creado correctamente.")
-            return redirect("crear_reserva")
-    else:
-        form = FormularioCliente()
 
-    return render(request, "crear_cliente.html", {"form": form})
+class CancelarReservaView(LoginRequiredMixin, DeleteView):
+    model = Reserva
+    success_url = reverse_lazy("mis_reservas")
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(Reserva, id=self.kwargs["reserva_id"], cliente__usuario=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, f"La reserva #{self.kwargs['reserva_id']} se ha eliminado correctamente.")
+        return super().delete(request, *args, **kwargs)
+
+
+class CrearClienteView(LoginRequiredMixin, CreateView):
+    form_class = FormularioCliente
+    template_name = "crear_cliente.html"
+    success_url = reverse_lazy("crear_reserva")
+
+    def form_valid(self, form):
+        cliente = form.save(commit=False)
+        cliente.usuario = self.request.user
+        cliente.save()
+        messages.success(self.request, "Cliente creado correctamente.")
+        return redirect(self.success_url)
 
 
 # Crear reserva
@@ -509,82 +513,18 @@ def ajax_camarotes(request):
     ]
     return JsonResponse(data, safe=False)
 
-@login_required
-def pagos_view(request):
-    usuario = request.user
-
-    pagos_qs = (
-        Pago.objects.filter(reserva__cliente__usuario=usuario)
-        .select_related(
-            "reserva__viaje_navio__viaje",
-            "reserva__viaje_navio__navio",
-            "metodo_pago",
-            "estado_pago",
-        )
-        .prefetch_related(
-            Prefetch(
-                "historialpago_set",
-                queryset=HistorialPago.objects.select_related(
-                    "estado_pago", "usuario_responsable"
-                ).order_by("-fecha_cambio"),
-            )
-        )
-        .order_by("-fecha_pago", "-created_at")
-    )
-
-    pagos = list(pagos_qs)
-    resumen_por_estado = defaultdict(lambda: {"monto": 0, "cantidad": 0})
-    resumen_por_metodo = defaultdict(lambda: {"monto": 0, "cantidad": 0})
-    total_monto = 0
-
-    for pago in pagos:
-        resumen_por_estado[pago.estado_pago.nombre]["monto"] += pago.monto
-        resumen_por_estado[pago.estado_pago.nombre]["cantidad"] += 1
-
-        resumen_por_metodo[pago.metodo_pago.nombre]["monto"] += pago.monto
-        resumen_por_metodo[pago.metodo_pago.nombre]["cantidad"] += 1
-
-        total_monto += pago.monto
-
-    resumen_estados = [
-        {"nombre": nombre, **datos}
-        for nombre, datos in resumen_por_estado.items()
-    ]
-    resumen_metodos = [
-        {"nombre": nombre, **datos}
-        for nombre, datos in resumen_por_metodo.items()
-    ]
-
-    contexto = {
-        "pagos": pagos,
-        "total_pagos": len(pagos),
-        "total_monto": total_monto,
-        "resumen_estados": resumen_estados,
-        "resumen_metodos": resumen_metodos,
-    }
-
-    return render(request, "pagos.html", contexto)
 
 
-def cruceros_view(request):
-    """
-    Muestra todos los navíos disponibles de la empresa.
-    Ya no se listan los viajes futuros o históricos, solo los 3 navíos existentes.
-    """
-    # Obtiene todos los navíos registrados en la base de datos
-    navios = Navio.objects.all().order_by("nombre")
-
-    # Renderiza el template con la lista de navíos
-    return render(request, "cruceros.html", {"navios": navios})
 
 
-def navio_detail_view(request, pk):
-    """
-    Muestra el detalle de un navío.
-    Redirige al login si el usuario no está autenticado.
-    """
-    navio = get_object_or_404(Navio, pk=pk)
+class CrucerosView(ListView):
+    model = Navio
+    template_name = "cruceros.html"
+    context_object_name = "navios"
+    queryset = Navio.objects.all().order_by("nombre")
 
-    return render(request, "navio_detail.html", {
-        "navio": navio,
-    })
+
+class NavioDetailView(DetailView):
+    model = Navio
+    template_name = "navio_detail.html"
+    context_object_name = "navio"
