@@ -52,7 +52,4 @@ urlpatterns = [
     # Cruceros + detalle
     path('cruceros/', views.CrucerosView.as_view(), name='cruceros'),
     path('cruceros/<int:pk>/', views.NavioDetailView.as_view(), name='navio_detail'),
-
-    # Pagos (pendiente de definir)
-    # path("pagos/", views.pagos_view, name="pagos"),
 ]
