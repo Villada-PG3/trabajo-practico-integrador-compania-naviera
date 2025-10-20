@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django.views.generic.edit import CreateView
-from django.db.models import Prefetch, Avg
+from django.db.models import Avg
 from django.core.mail import send_mail
 from django.conf import settings
 
