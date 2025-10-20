@@ -1,4 +1,7 @@
+# Librerías estándar
 from collections import defaultdict
+
+# Django - HTTP y utilidades
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -9,9 +12,29 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.utils.timezone import now
+
+# Django - Autenticación
+from django.contrib import messages
+from django.contrib.auth import (
+    authenticate, login, logout, update_session_auth_hash
+)
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+# Django - Modelos y consultas
+from django.db.models import Avg, Prefetch
+
+# Django - Vistas genéricas (basadas en clases)
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView, DeleteView
+)
+
+# Django - Configuración y correo
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView
 from django.core.mail import send_mail
 from django.conf import settings
+
+
 
 
 from .forms import (
@@ -430,14 +453,6 @@ class ReservaCreateView(LoginRequiredMixin, CreateView):
         messages.success(request, "Reserva creada correctamente.")
         return redirect(self.success_url)
 
-# Cancelar reserva
-def cancelar_reserva_view(request, reserva_id):
-    reserva = get_object_or_404(Reserva, id=reserva_id)
-    OcupacionCamarote.objects.filter(reserva=reserva).delete()
-    Pasajero.objects.filter(reserva=reserva).delete()
-    reserva.delete()
-    messages.success(request, "Reserva cancelada correctamente.")
-    return redirect('mis_reservas')
 
 # AJAX
 def ajax_tipos_camarote(request):
