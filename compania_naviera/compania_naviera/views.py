@@ -438,14 +438,6 @@ class ReservaCreateView(LoginRequiredMixin, CreateView):
         messages.success(request, "Reserva creada correctamente.")
         return redirect(self.success_url)
 
-# Cancelar reserva
-def cancelar_reserva_view(request, reserva_id):
-    reserva = get_object_or_404(Reserva, id=reserva_id)
-    OcupacionCamarote.objects.filter(reserva=reserva).delete()
-    Pasajero.objects.filter(reserva=reserva).delete()
-    reserva.delete()
-    messages.success(request, "Reserva cancelada correctamente.")
-    return redirect('mis_reservas')
 
 # AJAX
 def ajax_tipos_camarote(request):
