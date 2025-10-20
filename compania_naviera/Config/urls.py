@@ -3,25 +3,37 @@ from django.urls import path, include
 from compania_naviera import views
 from django.contrib.auth import views as auth_views
 from compania_naviera import views
+from compania_naviera.views import (
+    CambiarContraseniaView, 
+    EditarPerfilView,
+    ContactoView,
+    DestinosView,
+    DestinoDetailView,
+    OfertasView,
+
+    )
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
 
     path('', views.main_view, name='home'),
 
+    path("contacto/", ContactoView.as_view(), name="contacto"),
+    path("destinos/", DestinosView.as_view(), name="destinos"),
+    path("destino/<int:pk>/", DestinoDetailView.as_view(), name="destino_detail"),
+    path("ofertas/", OfertasView.as_view(), name="ofertas"),
+
     path('login/', views.login_view, name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
+
     path('registro/', views.RegistroUsuario.as_view(), name='registro'),
 
     path('menu/', views.menu_user, name='menu_user'),
     path("pagos/", views.pagos_view, name="pagos"),
 
-    path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
-    path('cambiar_contrasenia/', views.cambiar_contrasenia, name='cambiar_contrasenia'),
+    path("perfil/editar/", EditarPerfilView.as_view(), name="editar_perfil"),
+    path("perfil/cambiar-contrasenia/", CambiarContraseniaView.as_view(), name="cambiar_contrasenia"),
 
-    path('contacto/', views.contacto_view, name='contacto'),
-    path('destinos/', views.destinos_view, name='destinos'),
-    path("destinos/<int:pk>/", views.destino_detail_view, name="destino_detail"),
 
     path('mis-reservas/', views.mis_reservas_view, name='mis_reservas'),
     
@@ -40,6 +52,4 @@ urlpatterns = [
     path("cliente/nuevo/", views.crear_cliente_view, name="crear_cliente"),
 
 
-    # Ofertas (usada por base.html)
-    path('ofertas/', views.ofertas_view, name='ofertas'),
 ]

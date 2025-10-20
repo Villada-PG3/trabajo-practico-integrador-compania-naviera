@@ -2,15 +2,14 @@ from collections import defaultdict
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required   
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Avg
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.utils.timezone import now
-from django.views.generic.edit import CreateView
-from django.db.models import Prefetch, Avg
+from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -60,14 +59,10 @@ def main_view(request):
         .order_by("fecha_de_salida")[:6]
     )
     return render(request, "inicio.html", {"proximos_viajes": proximos_viajes})
+class ContactoView(TemplateView):
+    template_name = "contacto.html"
 
-
-def contacto_view(request):
-    """
-    Vista para el formulario de contacto.
-    Envía un email a gasleones@gmail.com usando Gmail.
-    """
-    if request.method == "POST":
+    def post(self, request, *args, **kwargs):
         nombre = request.POST.get("nombre")
         email = request.POST.get("email")
         mensaje = request.POST.get("mensaje")
@@ -88,85 +83,75 @@ def contacto_view(request):
         else:
             messages.error(request, "Por favor completá todos los campos.")
 
-    return render(request, "contacto.html")
+        return self.get(request, *args, **kwargs)
 
-def destinos_view(request):
-    """
-    Lista destinos (Puertos) agrupados por itinerario/categoría,
-    con ubicaciones y actividades prefetchadas.
-    """
-    destinos = (
-    Puerto.objects.select_related("orden__itinerario__categoria")
-    .prefetch_related(
-        "ubicaciones",
-        Prefetch(
-            "actividades",
-            queryset=PuertoxActividad.objects.select_related("actividad"),
-        ),
-    )
-    .order_by("orden__itinerario__categoria__nombre", "orden__orden", "nombre")
-    )
-    return render(request, "destinos.html", {"destinos": destinos})
+class DestinosView(ListView):
+    model = Puerto
+    template_name = "destinos.html"
+    context_object_name = "destinos"
+
+    def get_queryset(self):
+        return Puerto.objects.select_related("orden__itinerario__categoria").prefetch_related(
+            "ubicaciones",
+            Prefetch(
+                "actividades",
+                queryset=PuertoxActividad.objects.select_related("actividad"),
+            ),
+        ).order_by("orden__itinerario__categoria__nombre", "orden__orden", "nombre")
 
 
-def destino_detail_view(request, pk):
-    puerto = get_object_or_404(Puerto, pk=pk)
-    return render(request, "destino_detail.html", {"puerto": puerto})
+class DestinoDetailView(DetailView):
+    model = Puerto
+    template_name = "destino_detail.html"
+    context_object_name = "puerto"
 
-def ofertas_view(request):
-    hoy = now().date()
+class OfertasView(TemplateView):
+    template_name = "ofertas.html"
 
-    # 🔹 1) Obtener el promedio de precio de los viajes futuros
-    promedio = (
-        ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
-        .aggregate(Avg("precio"))["precio__avg"]
-    )
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        hoy = now().date()
 
-    # 🔹 2) Consultar todos los viajes futuros con distintos criterios
-    ofertas_qs = ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy).select_related(
-        "navio", "viaje"
-    ).prefetch_related(
-        Prefetch(
-            "viaje__itinerarioviaje_set",
-            queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
-        )
-    )
+        promedio = ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy).aggregate(
+            Avg("precio")
+        )["precio__avg"]
 
-    # 🔹 3) Filtrar viajes que sean oferta por distintos criterios
-    ofertas_qs = ofertas_qs.filter(precio__lte=1000)
+        ofertas_qs = ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy).select_related(
+            "navio", "viaje"
+        ).prefetch_related(
+            Prefetch(
+                "viaje__itinerarioviaje_set",
+                queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
+            )
+        ).filter(precio__lte=1000)
 
-    if promedio is not None:
-        ofertas_qs = ofertas_qs | ViajeXNavio.objects.filter(
-            viaje__fecha_de_salida__gte=hoy,
-            precio__lt=promedio
-        )
+        if promedio is not None:
+            ofertas_qs = ofertas_qs | ViajeXNavio.objects.filter(
+                viaje__fecha_de_salida__gte=hoy, precio__lt=promedio
+            )
 
+        ofertas_qs = ofertas_qs.order_by("precio")[:5]
+        ofertas = list(ofertas_qs)
 
-    # 🔹 4) Ordenar por precio de menor a mayor y tomar los 5 más baratos
-    ofertas_qs = ofertas_qs.order_by("precio")[:5]
+        for oferta in ofertas:
+            noches = 0
+            if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
+                noches = max((oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days, 0)
 
-    ofertas = list(ofertas_qs)
+            itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
+            categoria_nombre = ""
+            if itinerarios:
+                itinerario_obj = getattr(itinerarios[0], "itinerario", None)
+                categoria = getattr(itinerario_obj, "categoria", None)
+                if categoria:
+                    categoria_nombre = categoria.nombre
 
-    # 🔹 5) Agregar atributos extra para el template
-    for oferta in ofertas:
-        noches = 0
-        if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
-            noches = max((oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days, 0)
+            oferta.noches = noches
+            oferta.categoria_nombre = categoria_nombre or "Otros"
+            oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
 
-        itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
-        categoria_nombre = ""
-        if itinerarios:
-            itinerario_obj = getattr(itinerarios[0], "itinerario", None)
-            categoria = getattr(itinerario_obj, "categoria", None)
-            if categoria:
-                categoria_nombre = categoria.nombre
-
-        oferta.noches = noches
-        oferta.categoria_nombre = categoria_nombre or "Otros"
-        oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
-
-    return render(request, "ofertas.html", {"ofertas": ofertas})
-
+        contexto["ofertas"] = ofertas
+        return contexto
 # ===========================
 # Autenticación / Perfil
 # ===========================
@@ -211,35 +196,42 @@ def logout_view(request):
     return redirect("home")
 
 
-@login_required
-def editar_perfil(request):
-    if request.method == "POST":
-        form = FormularioEdicionPerfil(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Perfil actualizado correctamente.")
-            return redirect("menu_user")
-        messages.error(request, "Corrige los errores del formulario.")
-    else:
-        form = FormularioEdicionPerfil(instance=request.user)
-    return render(request, "editar_perfil.html", {"form": form})
+class EditarPerfilView(LoginRequiredMixin, UpdateView):
+    form_class = FormularioEdicionPerfil
+    template_name = "editar_perfil.html"
+    success_url = reverse_lazy("menu_user")
+
+    def get_object(self):
+        # Siempre editar el usuario logueado
+        return self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, "Perfil actualizado correctamente.")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Corrige los errores del formulario.")
+        return super().form_invalid(form)
 
 
-@login_required
-def cambiar_contrasenia(request):
-    if request.method == "POST":
-        form = FormularioCambioContrasenia(user=request.user, data=request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, "Contraseña actualizada correctamente.")
-            return redirect("menu_user")
-        messages.error(request, "Por favor corrige los errores.")
-    else:
-        form = FormularioCambioContrasenia(user=request.user)
+class CambiarContraseniaView(LoginRequiredMixin, FormView):
+    form_class = FormularioCambioContrasenia
+    template_name = "cambiar_contrasenia.html"
+    success_url = reverse_lazy("menu_user")
 
-    return render(request, "cambiar_contrasenia.html", {"form": form})
+    def get_form(self, form_class=None):
+        # Pasar el usuario al form
+        return self.form_class(user=self.request.user, **self.get_form_kwargs())
 
+    def form_valid(self, form):
+        user = form.save()
+        update_session_auth_hash(self.request, user)
+        messages.success(self.request, "Contraseña actualizada correctamente.")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Por favor corrige los errores.")
+        return super().form_invalid(form)
 
 # ===========================
 # Panel de Usuario / Reservas
