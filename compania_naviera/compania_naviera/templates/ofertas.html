@@ -7,14 +7,14 @@
 
 <!-- ======= HERO ======= -->
 <section class="mx-auto max-w-7xl px-6 lg:px-10 pt-8">
-  <div class="rounded-2xl bg-gradient-to-br from-blue-900/70 to-blue-700/40 border border-white/20 p-8 md:p-10 backdrop-blur-xl">
+  <div class="rounded-3xl bg-gradient-to-br from-primary/20 via-secondary/15 to-surface/95 border border-secondary/25 p-8 md:p-10 backdrop-blur-xl shadow-neon text-text">
     <div class="space-y-3">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs tracking-wider">
-        <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-white text-blue-900 font-bold">★</span>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-bg/40 border border-secondary/25 text-xs tracking-wider">
+        <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-primary text-white font-bold">★</span>
         Sea Star · Ofertas
       </div>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white">🌊 Ofertas Exclusivas</h1>
-      <p class="text-white/90 max-w-3xl">
+      <h1 class="text-3xl md:text-4xl font-extrabold">🌊 Ofertas Exclusivas</h1>
+      <p class="text-text/85 max-w-3xl">
         ¡Descubrí escapadas marítimas con precios inigualables! Lujo, confort y paisajes de ensueño.
         Reservá hoy mismo tu crucero ideal.
       </p>
@@ -24,7 +24,7 @@
 
 <!-- ======= GRID DE OFERTAS (DINÁMICO) ======= -->
 <section class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
-  <div id="oCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-white">
+  <div id="oCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-text">
 
     {% for oferta in ofertas %}
       <article data-card
@@ -34,8 +34,8 @@
                data-nights="{{ oferta.noches }}"
                data-dest="{{ oferta.viaje.destino }}"
                class="group relative">
-        <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-          <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
+        <div class="rounded-2xl p-[1px] bg-gradient-to-br from-secondary/40 via-secondary/10 to-transparent shadow-neon">
+          <div class="flex h-full flex-col rounded-2xl card-surface border border-secondary/20 backdrop-blur-sm shadow-lg
                       transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
             <div class="relative">
               {% if oferta.navio.imagen %}
@@ -43,29 +43,29 @@
               {% else %}
                 <img src="{% static 'placeholder.jpg' %}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
               {% endif %}
-              <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
-              <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">
+              <div class="absolute inset-0 bg-gradient-to-t from-surface/85 via-transparent to-transparent"></div>
+              <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-bg/60 text-text/80">
                 {{ oferta.categoria_nombre }}
               </span>
-              <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">
+              <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-primary text-white font-bold shadow-[0_10px_22px_rgba(5,24,36,0.12)]">
                 USD {{ oferta.precio }}
               </span>
             </div>
             <div class="p-6 flex flex-col gap-3">
               <h3 class="text-xl font-semibold flex items-center gap-2">
-                <i class="fa-solid fa-ship text-orange-400"></i> {{ oferta.viaje.destino }}
+                <i class="fa-solid fa-ship text-secondary"></i> {{ oferta.viaje.destino }}
               </h3>
-              <p class="text-white/80 text-sm">
+              <p class="text-text/75 text-sm">
                 {{ oferta.noches }} noches desde {{ oferta.viaje.origen }}. {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
               </p>
               <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-                <div class="text-xs text-white/70 flex items-center gap-2">
+                <div class="text-xs text-text/70 flex items-center gap-2">
                   <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> {{ oferta.noches }} noches</span>
                   <span class="opacity-50">•</span>
                   <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.destino }}</span>
                 </div>
                 <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                   class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
+                   class="px-4 py-2 rounded-lg btn-primary font-medium shadow hover:scale-[1.02]">
                   {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
                 </a>
               </div>
@@ -74,7 +74,7 @@
         </div>
       </article>
     {% empty %}
-      <p class="col-span-3 text-center text-white/80">No hay ofertas disponibles en este momento.</p>
+      <p class="col-span-3 text-center text-text/75">No hay ofertas disponibles en este momento.</p>
     {% endfor %}
 
   </div>

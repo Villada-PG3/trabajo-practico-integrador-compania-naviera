@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="flex items-center justify-center min-h-[80vh]">
-  <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-xl p-8 w-full max-w-xl">
-    <h2 class="text-2xl font-bold text-center mb-6">Crear Reserva</h2>
+<div class="flex items-center justify-center min-h-[80vh] px-4 py-12">
+  <div class="card-surface backdrop-blur-xl rounded-3xl shadow-neon p-8 w-full max-w-2xl space-y-6">
+    <div class="text-center space-y-2">
+      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-[0_12px_30px_rgba(5,24,36,0.15)]">
+        <i class="fa-solid fa-clipboard-list"></i>
+      </span>
+      <h2 class="text-2xl font-bold">Crear reserva</h2>
+      <p class="text-sm text-text/75">Completá los pasos para asignar pasajeros a tu próximo crucero.</p>
+    </div>
 
     <form method="post" id="reservaForm" class="space-y-4">
       {% csrf_token %}
@@ -10,19 +16,21 @@
       <!-- Paso 0: Seleccionar cliente -->
       <div>
         <label class="block text-sm font-medium mb-1">Selecciona un cliente</label>
-        <select name="cliente" id="cliente" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
+        <select name="cliente" id="cliente" class="form-control">
           <option value="">-- Selecciona un cliente --</option>
           {% for c in clientes %}
             <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellido }}</option>
           {% endfor %}
         </select>
-        <a href="{% url 'crear_cliente' %}" class="text-blue-500 hover:underline text-sm">Crear nuevo cliente</a>
+        <a href="{% url 'crear_cliente' %}" class="text-sm link-secondary inline-flex items-center gap-2">
+          <i class="fa-solid fa-user-plus"></i> Crear nuevo cliente
+        </a>
       </div>
 
       <!-- Paso 1: Seleccionar viaje -->
       <div>
         <label class="block text-sm font-medium mb-1">Selecciona un viaje</label>
-        <select name="viaje_navio" id="viaje_navio" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
+        <select name="viaje_navio" id="viaje_navio" class="form-control">
           <option value="">-- Selecciona un viaje --</option>
           {% for v in viajes %}
             <option value="{{ v.id }}">
@@ -35,7 +43,7 @@
       <!-- Paso 2: Seleccionar tipo de camarote -->
       <div id="tipoDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Selecciona tipo de camarote</label>
-        <select name="tipo_camarote" id="tipo_camarote" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
+        <select name="tipo_camarote" id="tipo_camarote" class="form-control">
           <option value="">-- Selecciona tipo --</option>
         </select>
       </div>
@@ -43,7 +51,7 @@
       <!-- Paso 3: Seleccionar capacidad -->
       <div id="capacidadDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Selecciona capacidad</label>
-        <select name="capacidad" id="capacidad" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
+        <select name="capacidad" id="capacidad" class="form-control">
           <option value="">-- Selecciona capacidad --</option>
         </select>
       </div>
@@ -51,7 +59,7 @@
       <!-- Paso 4: Seleccionar camarote -->
       <div id="camaroteDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Selecciona un camarote</label>
-        <select name="camarote" id="camarote" class="form-control w-full p-2 rounded-lg bg-white text-black border border-gray-300">
+        <select name="camarote" id="camarote" class="form-control">
           <option value="">-- Selecciona un camarote --</option>
         </select>
       </div>
@@ -60,12 +68,14 @@
       <div id="pasajerosDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Agregar pasajeros</label>
         <div id="pasajerosContainer" class="space-y-2 mt-2"></div>
-        <button type="button" id="agregarPasajeroBtn" class="bg-blue-500 text-white px-3 py-1 rounded mt-2">+ Agregar pasajero</button>
+        <button type="button" id="agregarPasajeroBtn" class="btn-secondary inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium">
+          <i class="fa-solid fa-user-plus"></i> Agregar pasajero
+        </button>
       </div>
 
       <!-- Botón final -->
       <button type="submit" id="submitBtn"
-              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-lg shadow-lg transition mt-4 hidden">
+              class="w-full btn-primary font-semibold py-3 rounded-xl shadow-lg transition mt-4 hidden">
         Confirmar Reserva
       </button>
     </form>
@@ -88,6 +98,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   let capacidadMax = 0;
   let contadorPasajeros = 0;
+  const applyFieldStyles = (element) => {
+    element.classList.add(
+      'w-full','rounded-lg','border','border-secondary/25','bg-bg/40','px-4','py-3','text-text',
+      'placeholder-text/50','focus:outline-none','focus:ring-2','focus:ring-primary/60'
+    );
+  };
+
+  document.querySelectorAll('.form-control').forEach(applyFieldStyles);
 
   // Función para crear inputs de pasajero
   function agregarPasajero(){
@@ -96,15 +114,16 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
     const div = document.createElement("div");
-    div.classList.add("p-2", "border", "border-gray-300", "rounded", "bg-gray-800");
+    div.classList.add("p-4", "rounded-xl", "border", "border-secondary/25", "bg-bg/35", "space-y-2");
     div.innerHTML = `
-      <h4 class="font-semibold mb-1 text-white">Pasajero ${contadorPasajeros + 1}</h4>
-      <input type="text" name="pasajero_nombre_${contadorPasajeros}" placeholder="Nombre" class="w-full p-2 rounded mb-1 text-black">
-      <input type="text" name="pasajero_apellido_${contadorPasajeros}" placeholder="Apellido" class="w-full p-2 rounded mb-1 text-black">
-      <input type="text" name="pasajero_dni_${contadorPasajeros}" placeholder="DNI" class="w-full p-2 rounded mb-1 text-black">
-      <input type="date" name="pasajero_fecha_nacimiento_${contadorPasajeros}" class="w-full p-2 rounded mb-1 text-black">
+      <h4 class="font-semibold text-text">Pasajero ${contadorPasajeros + 1}</h4>
+      <input type="text" name="pasajero_nombre_${contadorPasajeros}" placeholder="Nombre" class="pasajero-input" autocomplete="off">
+      <input type="text" name="pasajero_apellido_${contadorPasajeros}" placeholder="Apellido" class="pasajero-input" autocomplete="off">
+      <input type="text" name="pasajero_dni_${contadorPasajeros}" placeholder="DNI" class="pasajero-input" autocomplete="off">
+      <input type="date" name="pasajero_fecha_nacimiento_${contadorPasajeros}" class="pasajero-input">
     `;
     pasajerosContainer.appendChild(div);
+    div.querySelectorAll('.pasajero-input').forEach(applyFieldStyles);
     contadorPasajeros++;
   }
 

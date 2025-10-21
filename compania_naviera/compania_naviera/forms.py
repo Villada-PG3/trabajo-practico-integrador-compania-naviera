@@ -6,6 +6,13 @@ from django_countries.widgets import CountrySelectWidget
 from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente, Rol, TipoCamarote, Camarote
 
 
+INPUT_BASE_CLASSES = (
+    "form-control p-2 rounded-lg bg-surface/60 text-text border border-primary/40 "
+    "focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary "
+    "placeholder:text-text/60 w-full"
+)
+
+
 class FormularioRegistroPersonalizado(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -19,8 +26,7 @@ class FormularioRegistroPersonalizado(UserCreationForm):
         # Asignar clase base a todos los campos
         for field in self.fields.values():
             field.widget.attrs.update({
-                "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 "
-                         "focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+                "class": INPUT_BASE_CLASSES,
             })
 
         # Etiquetas
@@ -77,7 +83,7 @@ class FormularioEdicionPerfil(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs.update({
-                "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+                "class": INPUT_BASE_CLASSES,
                 "placeholder": field.label
             })
 
@@ -98,21 +104,21 @@ class FormularioCambioContrasenia(PasswordChangeForm):
     old_password = forms.CharField(
         label="Contraseña actual",
         widget=forms.PasswordInput(attrs={
-            "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+            "class": INPUT_BASE_CLASSES,
             "placeholder": "Contraseña actual"
         })
     )
     new_password1 = forms.CharField(
         label="Nueva contraseña",
         widget=forms.PasswordInput(attrs={
-            "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+            "class": INPUT_BASE_CLASSES,
             "placeholder": "Nueva contraseña"
         })
     )
     new_password2 = forms.CharField(
         label="Confirmar nueva contraseña",
         widget=forms.PasswordInput(attrs={
-            "class": "form-control p-2 rounded-lg bg-white/10 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 w-full",
+            "class": INPUT_BASE_CLASSES,
             "placeholder": "Confirmar nueva contraseña"
         })
     )
@@ -151,7 +157,7 @@ class FormularioReserva(forms.ModelForm):
         for field in self.fields.values():
             try:
                 field.widget.attrs.update({
-                    "class": "form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full",
+                    "class": INPUT_BASE_CLASSES,
                 })
             except Exception:
                 pass
@@ -194,7 +200,7 @@ class FormularioCliente(forms.ModelForm):
     nacionalidad = forms.ChoiceField(
         choices=Cliente._meta.get_field('nacionalidad').get_choices(),
         widget=forms.Select(attrs={
-            'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+            'class': INPUT_BASE_CLASSES,
         }),
         label='Nacionalidad',
     )
@@ -205,27 +211,27 @@ class FormularioCliente(forms.ModelForm):
 
         widgets = {
             'nombre': forms.TextInput(attrs={
-                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'class': INPUT_BASE_CLASSES,
                 'placeholder': 'Nombre'
             }),
             'apellido': forms.TextInput(attrs={
-                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'class': INPUT_BASE_CLASSES,
                 'placeholder': 'Apellido'
             }),
             'dni': forms.TextInput(attrs={
-                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'class': INPUT_BASE_CLASSES,
                 'placeholder': 'DNI'
             }),
             'direccion': forms.TextInput(attrs={
-                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'class': INPUT_BASE_CLASSES,
                 'placeholder': 'Dirección'
             }),
             'fecha_nacimiento': forms.DateInput(attrs={
-                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full',
+                'class': INPUT_BASE_CLASSES,
                 'type': 'date'
             }),
             'genero': forms.Select(attrs={
-                'class': 'form-control p-2 rounded-lg bg-white text-black border border-gray-300 w-full'
+                'class': INPUT_BASE_CLASSES
             }),
         }
 

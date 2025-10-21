@@ -1,194 +1,984 @@
 [
-{
+  {
+    "model": "compania_naviera.rol",
+    "pk": 1,
+    "fields": {
+      "nombre": "Administrador",
+      "descripcion": "Gestiona la plataforma, define políticas comerciales y mantiene la operación segura."
+    }
+  },
+  {
+    "model": "compania_naviera.rol",
+    "pk": 2,
+    "fields": {
+      "nombre": "Asesor de viajes",
+      "descripcion": "Acompaña a los clientes en la elección de itinerarios, ofertas y reservas personalizadas."
+    }
+  },
+  {
+    "model": "compania_naviera.rol",
+    "pk": 3,
+    "fields": {
+      "nombre": "Viajero",
+      "descripcion": "Cliente registrado que crea reservas, gestiona pagos y revisa servicios contratados."
+    }
+  },
+  {
     "model": "compania_naviera.usuariopersonalizado",
     "pk": 1,
     "fields": {
-        "password": "pbkdf2_sha256$600000$7T5eRf3RZL89Y5RKNGTQpj$QnMYYHO9L10uO+ukzKe/YFyU5tU5XOVkRo38Id19pV0=",
-        "last_login": "2025-10-02T22:33:27.801Z",
-        "is_superuser": false,
-        "first_name": "",
-        "last_name": "",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2025-10-02T22:33:18.238Z",
-        "username": "leon",
-        "email": "leonguchealezama@gmail.com",
-        "rol": null,
-        "groups": [],
-        "user_permissions": []
+      "password": "pbkdf2_sha256$600000$dQA7KjGW0KmfwwjIFHsd8j$RXlhRofYjXFQB//TJmkaFeX6lgJI+uiHC9dTnPvctDQ=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Sofía",
+      "last_name": "Ramírez",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-09-18T14:32:00Z",
+      "username": "sofia",
+      "email": "sofia.ramirez@example.com",
+      "rol": 3,
+      "groups": [],
+      "user_permissions": []
     }
-},
-{
+  },
+  {
     "model": "compania_naviera.usuariopersonalizado",
     "pk": 2,
     "fields": {
-        "password": "pbkdf2_sha256$600000$RnEUnSQbZBCqcPct7pXk8l$+J6lbeKIIfcbMnma/TuFP0NDBhY5Y9LCHhOv+Vnqfv0=",
-        "last_login": "2025-10-03T00:01:28.807Z",
-        "is_superuser": true,
-        "first_name": "",
-        "last_name": "",
-        "is_staff": true,
-        "is_active": true,
-        "date_joined": "2025-10-02T22:42:38.516Z",
-        "username": "admin",
-        "email": "admin@gmail.com",
-        "rol": null,
-        "groups": [],
-        "user_permissions": []
+      "password": "pbkdf2_sha256$600000$Z2HvoR0maC2um83MrVcvL9$RkFxQU+39GIC0ufGm/seblYn6BL3ga/kNvml8hUIFak=",
+      "last_login": null,
+      "is_superuser": true,
+      "first_name": "Laura",
+      "last_name": "Fernández",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-07-02T10:05:00Z",
+      "username": "admin",
+      "email": "admin@seastar.com",
+      "rol": 1,
+      "groups": [],
+      "user_permissions": []
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.usuariopersonalizado",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$nA1lSsMJab5Z7FKgK9ZEVL$nlR0Re4S+T063E1jshVeVWgM+l08pGmnM12JUV1qaAY=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Agustín",
+      "last_name": "Sosa",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-08-11T08:47:00Z",
+      "username": "agente",
+      "email": "agustin.sosa@seastar.com",
+      "rol": 2,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "compania_naviera.usuariopersonalizado",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$nWYH5R1DKIipGOeFOgs8KU$wjWpM32+STr0pHLOCYeoq0tXwbqW95CgA4TxP/xXRrc=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Martín",
+      "last_name": "Gómez",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-10-01T16:21:00Z",
+      "username": "martin",
+      "email": "martin.gomez@example.com",
+      "rol": 3,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
     "model": "compania_naviera.cliente",
     "pk": 1,
     "fields": {
-        "nombre": "Leon",
-        "apellido": "Guchea",
-        "dni": "47001741",
-        "direccion": "las nomeolvides 2331",
-        "fecha_nacimiento": "2025-11-20",
-        "nacionalidad": "AR",
-        "genero": "M",
-        "usuario": 1
+      "nombre": "Sofía",
+      "apellido": "Ramírez",
+      "dni": "34876543",
+      "direccion": "Av. Costanera 1020, CABA",
+      "fecha_nacimiento": "1993-05-12",
+      "nacionalidad": "AR",
+      "genero": "F",
+      "usuario": 1
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.cliente",
+    "pk": 2,
+    "fields": {
+      "nombre": "Martín",
+      "apellido": "Gómez",
+      "dni": "32654789",
+      "direccion": "Calle Colón 454, Córdoba",
+      "fecha_nacimiento": "1989-11-03",
+      "nacionalidad": "AR",
+      "genero": "M",
+      "usuario": 4
+    }
+  },
+  {
     "model": "compania_naviera.tiponavio",
     "pk": 1,
     "fields": {
-        "nombre": "De Lujop",
-        "descripcion": "Es nuestro crucero de lujo que trae cosas como bla bla bla"
+      "nombre": "Premium Resort",
+      "descripcion": "Crucero de alto lujo con suites panorámicas, gastronomía de autor y spa de talasoterapia."
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.tiponavio",
+    "pk": 2,
+    "fields": {
+      "nombre": "Expedición Polar",
+      "descripcion": "Navío reforzado para travesías en zonas árticas con laboratorios y guías naturalistas."
+    }
+  },
+  {
+    "model": "compania_naviera.tiponavio",
+    "pk": 3,
+    "fields": {
+      "nombre": "Familiar",
+      "descripcion": "Diseñado para viajes en familia con clubes infantiles, actividades deportivas y camarotes conectados."
+    }
+  },
+  {
     "model": "compania_naviera.navio",
     "pk": 1,
     "fields": {
-        "nombre": "Navio 1",
-        "altura": 185.0,
-        "eslora": 260.0,
-        "manga": 100.0,
-        "desplazamiento": 100000.0,
-        "autonomia_de_viaje": 40000,
-        "cantidad_maxima_de_pasajeros": 350,
-        "cantidad_de_motores": 3,
-        "tipo_navio": 1,
-        "imagen": "https://www.msccruceros.com.ar/cruceros/msc-yacht-club"
+      "nombre": "SEA Star Aurora",
+      "altura": 72.5,
+      "eslora": 285.0,
+      "manga": 40.0,
+      "desplazamiento": 140000.0,
+      "autonomia_de_viaje": 52000,
+      "cantidad_maxima_de_pasajeros": 4200,
+      "cantidad_de_motores": 4,
+      "tipo_navio": 1,
+      "imagen": "https://images.unsplash.com/photo-1505836318277-347b7b30c36a?auto=format&fit=crop&w=1200&q=70"
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.navio",
+    "pk": 2,
+    "fields": {
+      "nombre": "SEA Explorer Polaris",
+      "altura": 58.0,
+      "eslora": 210.0,
+      "manga": 32.0,
+      "desplazamiento": 95000.0,
+      "autonomia_de_viaje": 67000,
+      "cantidad_maxima_de_pasajeros": 1200,
+      "cantidad_de_motores": 5,
+      "tipo_navio": 2,
+      "imagen": "https://images.unsplash.com/photo-1543248939-ff40856f65d4?auto=format&fit=crop&w=1200&q=70"
+    }
+  },
+  {
+    "model": "compania_naviera.navio",
+    "pk": 3,
+    "fields": {
+      "nombre": "SEA Harmony Breeze",
+      "altura": 65.0,
+      "eslora": 250.0,
+      "manga": 36.0,
+      "desplazamiento": 108000.0,
+      "autonomia_de_viaje": 45000,
+      "cantidad_maxima_de_pasajeros": 3100,
+      "cantidad_de_motores": 4,
+      "tipo_navio": 3,
+      "imagen": "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=1200&q=70"
+    }
+  },
+  {
+    "model": "compania_naviera.cubierta",
+    "pk": 1,
+    "fields": {
+      "numero_de_cubierta": 5,
+      "navio": 1,
+      "descripcion": "Cubierta principal con lobby panorámico, concierge y restaurantes signature.",
+      "encargado": "Claudia Méndez"
+    }
+  },
+  {
+    "model": "compania_naviera.cubierta",
+    "pk": 2,
+    "fields": {
+      "numero_de_cubierta": 8,
+      "navio": 1,
+      "descripcion": "Zona premium con piscinas infinitas, bares de autor y solárium privado.",
+      "encargado": "Francisco Díaz"
+    }
+  },
+  {
+    "model": "compania_naviera.cubierta",
+    "pk": 3,
+    "fields": {
+      "numero_de_cubierta": 3,
+      "navio": 2,
+      "descripcion": "Centro de expediciones con miradores calefaccionados y laboratorios científicos.",
+      "encargado": "Isabella Kowalski"
+    }
+  },
+  {
+    "model": "compania_naviera.cubierta",
+    "pk": 4,
+    "fields": {
+      "numero_de_cubierta": 4,
+      "navio": 3,
+      "descripcion": "Área familiar con piscinas climatizadas, cine 4D y gastronomía casual.",
+      "encargado": "Diego Paredes"
+    }
+  },
+  {
+    "model": "compania_naviera.estadocamarote",
+    "pk": 1,
+    "fields": {
+      "nombre": "Disponible",
+      "descripcion": "Camarote listo para asignarse a nuevas reservas."
+    }
+  },
+  {
+    "model": "compania_naviera.estadocamarote",
+    "pk": 2,
+    "fields": {
+      "nombre": "Reservado",
+      "descripcion": "Camarote actualmente asociado a una reserva activa."
+    }
+  },
+  {
+    "model": "compania_naviera.estadocamarote",
+    "pk": 3,
+    "fields": {
+      "nombre": "En mantenimiento",
+      "descripcion": "Camarote bloqueado temporalmente por trabajos correctivos."
+    }
+  },
+  {
+    "model": "compania_naviera.tipocamarote",
+    "pk": 1,
+    "fields": {
+      "nombre": "Suite Panorama",
+      "descripcion": "Suite esquinera con balcón envolvente, mayordomo y amenities premium."
+    }
+  },
+  {
+    "model": "compania_naviera.tipocamarote",
+    "pk": 2,
+    "fields": {
+      "nombre": "Balcón Deluxe",
+      "descripcion": "Camarote con balcón privado, cama king y área de living."
+    }
+  },
+  {
+    "model": "compania_naviera.tipocamarote",
+    "pk": 3,
+    "fields": {
+      "nombre": "Interior Familiar",
+      "descripcion": "Opción económica con iluminación circadiana y literas para 4 personas."
+    }
+  },
+  {
+    "model": "compania_naviera.camarote",
+    "pk": 1,
+    "fields": {
+      "numero_de_camarote": 5021,
+      "cubierta": 1,
+      "estado_camarote": 1,
+      "tipo_camarote": 1,
+      "imagen": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=70",
+      "capacidad": 2
+    }
+  },
+  {
+    "model": "compania_naviera.camarote",
+    "pk": 2,
+    "fields": {
+      "numero_de_camarote": 5035,
+      "cubierta": 1,
+      "estado_camarote": 2,
+      "tipo_camarote": 2,
+      "imagen": "https://images.unsplash.com/photo-1505693497065-60ebeead2be9?auto=format&fit=crop&w=1200&q=70",
+      "capacidad": 4
+    }
+  },
+  {
+    "model": "compania_naviera.camarote",
+    "pk": 3,
+    "fields": {
+      "numero_de_camarote": 8042,
+      "cubierta": 2,
+      "estado_camarote": 1,
+      "tipo_camarote": 3,
+      "imagen": "https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=70",
+      "capacidad": 4
+    }
+  },
+  {
+    "model": "compania_naviera.camarote",
+    "pk": 4,
+    "fields": {
+      "numero_de_camarote": 305,
+      "cubierta": 3,
+      "estado_camarote": 1,
+      "tipo_camarote": 2,
+      "imagen": "https://images.unsplash.com/photo-1505692794403-55b39d64ac70?auto=format&fit=crop&w=1200&q=70",
+      "capacidad": 3
+    }
+  },
+  {
+    "model": "compania_naviera.camarote",
+    "pk": 5,
+    "fields": {
+      "numero_de_camarote": 412,
+      "cubierta": 4,
+      "estado_camarote": 1,
+      "tipo_camarote": 3,
+      "imagen": "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=1200&q=70",
+      "capacidad": 4
+    }
+  },
+  {
+    "model": "compania_naviera.estadopasajero",
+    "pk": 1,
+    "fields": {
+      "nombre": "Confirmado",
+      "descripcion": "Pasajero con documentación aprobada y pago registrado."
+    }
+  },
+  {
+    "model": "compania_naviera.estadopasajero",
+    "pk": 2,
+    "fields": {
+      "nombre": "Pendiente",
+      "descripcion": "Pasajero con información pendiente de validación."
+    }
+  },
+  {
+    "model": "compania_naviera.estadopasajero",
+    "pk": 3,
+    "fields": {
+      "nombre": "Cancelado",
+      "descripcion": "Pasajero que no completó requisitos o canceló participación."
+    }
+  },
+  {
     "model": "compania_naviera.tipoitinerario",
     "pk": 1,
     "fields": {
-        "nombre": "Turista",
-        "descripcion": "bla bla bla"
+      "nombre": "Escapada Tropical",
+      "descripcion": "Recorridos de clima cálido, playas paradisíacas y experiencias gastronómicas regionales."
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.tipoitinerario",
+    "pk": 2,
+    "fields": {
+      "nombre": "Expedición Ártica",
+      "descripcion": "Exploración polar con desembarcos en zodiac, observación de fauna y charlas científicas."
+    }
+  },
+  {
     "model": "compania_naviera.itinerario",
     "pk": 1,
     "fields": {
-        "categoria": 1,
-        "imagen": "https://www.google.com/imgres?q=categoria%20turista&imgurl=https%3A%2F%2Fi0.wp.com%2Ftravelandleisure-es.com%2Fwp-content%2Fuploads%2F2024%2F05%2Fasiento_de_ventana_clase_turista.jpg%3Fresize%3D1000%2"
+      "categoria": 1,
+      "imagen": "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=1200&q=70"
     }
-},
-{
+  },
+  {
     "model": "compania_naviera.itinerario",
     "pk": 2,
     "fields": {
-        "categoria": 1,
-        "imagen": "https://www.google.com/imgres?q=categoria%20turista&imgurl=https%3A%2F%2Fi0.wp.com%2Ftravelandleisure-es.com%2Fwp-content%2Fuploads%2F2024%2F05%2Fasiento_de_ventana_clase_turista.jpg%3Fresize%3D1000%2"
+      "categoria": 2,
+      "imagen": "https://images.unsplash.com/photo-1513415564515-763d91423bdd?auto=format&fit=crop&w=1200&q=70"
     }
-},
-{
+  },
+  {
     "model": "compania_naviera.orden",
     "pk": 1,
     "fields": {
-        "nombre": "Primer parada",
-        "descripcion": "En la primer parada, vamos a bla bla bla",
-        "orden": 1,
-        "itinerario": 1
+      "nombre": "Embarque en Buenos Aires",
+      "descripcion": "Check-in premium en Terminal Quinquela y sailing party al atardecer.",
+      "orden": 1,
+      "itinerario": 1
     }
-},
-{
+  },
+  {
     "model": "compania_naviera.orden",
     "pk": 2,
     "fields": {
-        "nombre": "Segunda parada",
-        "descripcion": "En esta segunda parada hacemos bajada al otro lado de America, Miami",
-        "orden": 2,
-        "itinerario": 1
+      "nombre": "Río de Janeiro",
+      "descripcion": "Excursiones a Pan de Azúcar y sunset rooftop en Ipanema.",
+      "orden": 2,
+      "itinerario": 1
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 3,
+    "fields": {
+      "nombre": "Salvador de Bahía",
+      "descripcion": "Recorrido histórico por Pelourinho y cena de mariscos en el puerto.",
+      "orden": 3,
+      "itinerario": 1
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 4,
+    "fields": {
+      "nombre": "Reykjavík",
+      "descripcion": "Visita a Blue Lagoon y tour de auroras boreales.",
+      "orden": 1,
+      "itinerario": 2
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 5,
+    "fields": {
+      "nombre": "Isla Baffin",
+      "descripcion": "Desembarco en zodiac con guías y avistaje de glaciares.",
+      "orden": 2,
+      "itinerario": 2
+    }
+  },
+  {
     "model": "compania_naviera.puerto",
     "pk": 1,
     "fields": {
-        "nombre": "Rio de Janeiro",
-        "orden": 1
+      "nombre": "Puerto Buenos Aires",
+      "orden": 1
     }
-},
-{
+  },
+  {
     "model": "compania_naviera.puerto",
     "pk": 2,
     "fields": {
-        "nombre": "Miami Beach",
-        "orden": 2
+      "nombre": "Puerto de Río",
+      "orden": 2
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.puerto",
+    "pk": 3,
+    "fields": {
+      "nombre": "Terminal Salvador",
+      "orden": 3
+    }
+  },
+  {
+    "model": "compania_naviera.puerto",
+    "pk": 4,
+    "fields": {
+      "nombre": "Puerto Reykjavík",
+      "orden": 4
+    }
+  },
+  {
+    "model": "compania_naviera.puerto",
+    "pk": 5,
+    "fields": {
+      "nombre": "Puerto Qikiqtarjuaq",
+      "orden": 5
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 1,
+    "fields": {
+      "puerto": 1,
+      "nro_muelle": 12,
+      "nombre": "Terminal Quinquela Martín"
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 2,
+    "fields": {
+      "puerto": 2,
+      "nro_muelle": 8,
+      "nombre": "Muelle Mauá"
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 3,
+    "fields": {
+      "puerto": 3,
+      "nro_muelle": 5,
+      "nombre": "Estación Marítima Salvador"
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 4,
+    "fields": {
+      "puerto": 4,
+      "nro_muelle": 3,
+      "nombre": "Harpa Cruise Pier"
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 5,
+    "fields": {
+      "puerto": 5,
+      "nro_muelle": 1,
+      "nombre": "Arctic Gateway"
+    }
+  },
+  {
     "model": "compania_naviera.actividadposible",
     "pk": 1,
     "fields": {
-        "nombre": "Caminata bajo la luna",
-        "descripcion": "Esta es una caminata bla bla bla"
+      "nombre": "Clase de cocina bahiana",
+      "descripcion": "Aprendé a cocinar moqueca con chefs locales."
     }
-},
-{
+  },
+  {
     "model": "compania_naviera.actividadposible",
     "pk": 2,
     "fields": {
-        "nombre": "Vista a la playa",
-        "descripcion": "Esta es una experiencia para gente mas ..."
+      "nombre": "Trekking urbano en Río",
+      "descripcion": "Caminata guiada por Santa Teresa y escalera de Selarón."
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.actividadposible",
+    "pk": 3,
+    "fields": {
+      "nombre": "Avistaje de ballenas",
+      "descripcion": "Salida en zodiac para fotografiar ballenas jorobadas."
+    }
+  },
+  {
+    "model": "compania_naviera.actividadposible",
+    "pk": 4,
+    "fields": {
+      "nombre": "Fotografía de auroras",
+      "descripcion": "Workshop nocturno con fotógrafo profesional."
+    }
+  },
+  {
     "model": "compania_naviera.puertoxactividad",
     "pk": 1,
     "fields": {
-        "puerto": 1,
-        "actividad": 1
+      "puerto": 2,
+      "actividad": 2
     }
-},
-{
+  },
+  {
     "model": "compania_naviera.puertoxactividad",
     "pk": 2,
     "fields": {
-        "puerto": 1,
-        "actividad": 2
+      "puerto": 3,
+      "actividad": 1
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.puertoxactividad",
+    "pk": 3,
+    "fields": {
+      "puerto": 4,
+      "actividad": 4
+    }
+  },
+  {
+    "model": "compania_naviera.puertoxactividad",
+    "pk": 4,
+    "fields": {
+      "puerto": 5,
+      "actividad": 3
+    }
+  },
+  {
     "model": "compania_naviera.viaje",
     "pk": 1,
     "fields": {
-        "nombre": "Viaje a Vancouver",
-        "descripcion": "En este viaje a Vancouver, Canada se pueden vivir nuestras atracciones",
-        "fecha_de_salida": "2025-11-21",
-        "fecha_fin": "2025-12-05",
-        "hora_salida": "18:00:00",
-        "hora_llegada": "18:00:00",
-        "lugar_destino": "CA",
-        "fecha_actual": "2025-10-02",
-        "imagen": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.kayak.com.ni%2FVancouver.6668.guide&psig=AOvVaw2mv_VXgTF-UUuT6RnhzA0F&ust=1759531967079000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCLiQ"
+      "nombre": "Ruta Atlántica de Lujo",
+      "descripcion": "15 noches navegando desde Buenos Aires hasta Salvador con experiencias gourmet y espectáculos inmersivos.",
+      "fecha_de_salida": "2025-02-10",
+      "fecha_fin": "2025-02-25",
+      "hora_salida": "18:00:00",
+      "hora_llegada": "07:30:00",
+      "lugar_destino": "BR",
+      "fecha_actual": "2024-12-15",
+      "imagen": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=70"
     }
-},
-{
+  },
+  {
+    "model": "compania_naviera.viaje",
+    "pk": 2,
+    "fields": {
+      "nombre": "Expedición Aurora Boreal",
+      "descripcion": "Navegación ártica de temporada con desembarcos en Groenlandia y talleres de fotografía nocturna.",
+      "fecha_de_salida": "2025-03-05",
+      "fecha_fin": "2025-03-18",
+      "hora_salida": "16:30:00",
+      "hora_llegada": "09:15:00",
+      "lugar_destino": "GL",
+      "fecha_actual": "2024-12-20",
+      "imagen": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=70"
+    }
+  },
+  {
     "model": "compania_naviera.viajexnavio",
     "pk": 1,
     "fields": {
-        "navio": 1,
-        "viaje": 1,
-        "precio": 13000
+      "navio": 1,
+      "viaje": 1,
+      "precio": 1890
     }
-}
+  },
+  {
+    "model": "compania_naviera.viajexnavio",
+    "pk": 2,
+    "fields": {
+      "navio": 2,
+      "viaje": 2,
+      "precio": 3250
+    }
+  },
+  {
+    "model": "compania_naviera.viajexnavio",
+    "pk": 3,
+    "fields": {
+      "navio": 3,
+      "viaje": 1,
+      "precio": 1495
+    }
+  },
+  {
+    "model": "compania_naviera.itinerarioviaje",
+    "pk": 1,
+    "fields": {
+      "viaje": 1,
+      "itinerario": 1
+    }
+  },
+  {
+    "model": "compania_naviera.itinerarioviaje",
+    "pk": 2,
+    "fields": {
+      "viaje": 2,
+      "itinerario": 2
+    }
+  },
+  {
+    "model": "compania_naviera.tripulante",
+    "pk": 1,
+    "fields": {
+      "nombre": "Lucía Herrera",
+      "legajo": "TRP-1021",
+      "dni": "28765432",
+      "direccion": "Av. Del Libertador 3210, Buenos Aires",
+      "fecha_nacimiento": "1984-02-18",
+      "nacionalidad": "AR",
+      "genero": "F"
+    }
+  },
+  {
+    "model": "compania_naviera.tripulante",
+    "pk": 2,
+    "fields": {
+      "nombre": "Erik Johansen",
+      "legajo": "TRP-2094",
+      "dni": "DK1234567",
+      "direccion": "Nyhavn 45, Copenhague",
+      "fecha_nacimiento": "1979-07-09",
+      "nacionalidad": "DK",
+      "genero": "M"
+    }
+  },
+  {
+    "model": "compania_naviera.tripulante",
+    "pk": 3,
+    "fields": {
+      "nombre": "Valentina Costa",
+      "legajo": "TRP-3107",
+      "dni": "30123456",
+      "direccion": "Rua Augusta 1120, São Paulo",
+      "fecha_nacimiento": "1990-01-22",
+      "nacionalidad": "BR",
+      "genero": "F"
+    }
+  },
+  {
+    "model": "compania_naviera.asignaciontripulanteviaje",
+    "pk": 1,
+    "fields": {
+      "tripulante": 1,
+      "viaje_navio": 1,
+      "fecha_inicio": "2025-02-05",
+      "fecha_fin": "2025-02-26"
+    }
+  },
+  {
+    "model": "compania_naviera.asignaciontripulanteviaje",
+    "pk": 2,
+    "fields": {
+      "tripulante": 3,
+      "viaje_navio": 1,
+      "fecha_inicio": "2025-02-08",
+      "fecha_fin": "2025-02-25"
+    }
+  },
+  {
+    "model": "compania_naviera.asignaciontripulanteviaje",
+    "pk": 3,
+    "fields": {
+      "tripulante": 2,
+      "viaje_navio": 2,
+      "fecha_inicio": "2025-02-28",
+      "fecha_fin": "2025-03-20"
+    }
+  },
+  {
+    "model": "compania_naviera.estadoreserva",
+    "pk": 1,
+    "fields": {
+      "nombre": "Confirmada",
+      "descripcion": "Reserva abonada y con camarote asignado."
+    }
+  },
+  {
+    "model": "compania_naviera.estadoreserva",
+    "pk": 2,
+    "fields": {
+      "nombre": "En proceso",
+      "descripcion": "Reserva preconfirmada esperando documentación o pago."
+    }
+  },
+  {
+    "model": "compania_naviera.estadoreserva",
+    "pk": 3,
+    "fields": {
+      "nombre": "Cancelada",
+      "descripcion": "Reserva anulada por solicitud del cliente o falta de pago."
+    }
+  },
+  {
+    "model": "compania_naviera.reserva",
+    "pk": 1,
+    "fields": {
+      "descripcion": "Reserva premium para aniversario, incluye pack de bienvenida y cenas temáticas.",
+      "viaje_navio": 1,
+      "estado_reserva": 1,
+      "cliente": 1,
+      "camarote": 2,
+      "created_at": "2024-11-01T12:20:00Z",
+      "updated_at": "2024-11-15T09:45:00Z"
+    }
+  },
+  {
+    "model": "compania_naviera.reserva",
+    "pk": 2,
+    "fields": {
+      "descripcion": "Reserva familiar con excursiones árticas y photography pack.",
+      "viaje_navio": 2,
+      "estado_reserva": 2,
+      "cliente": 2,
+      "camarote": 4,
+      "created_at": "2024-11-12T15:10:00Z",
+      "updated_at": "2024-11-18T08:35:00Z"
+    }
+  },
+  {
+    "model": "compania_naviera.pasajero",
+    "pk": 1,
+    "fields": {
+      "reserva": 1,
+      "nombre": "Sofía",
+      "apellido": "Ramírez",
+      "fecha_nacimiento": "1993-05-12",
+      "dni": "34876543",
+      "fecha_inicio": "2025-02-10",
+      "fecha_fin": "2025-02-25",
+      "estado_pasajero": 1
+    }
+  },
+  {
+    "model": "compania_naviera.pasajero",
+    "pk": 2,
+    "fields": {
+      "reserva": 1,
+      "nombre": "Juan",
+      "apellido": "Pereyra",
+      "fecha_nacimiento": "1990-09-08",
+      "dni": "30123654",
+      "fecha_inicio": "2025-02-10",
+      "fecha_fin": "2025-02-25",
+      "estado_pasajero": 1
+    }
+  },
+  {
+    "model": "compania_naviera.pasajero",
+    "pk": 3,
+    "fields": {
+      "reserva": 2,
+      "nombre": "Martín",
+      "apellido": "Gómez",
+      "fecha_nacimiento": "1989-11-03",
+      "dni": "32654789",
+      "fecha_inicio": "2025-03-05",
+      "fecha_fin": "2025-03-18",
+      "estado_pasajero": 2
+    }
+  },
+  {
+    "model": "compania_naviera.ocupacioncamarote",
+    "pk": 1,
+    "fields": {
+      "reserva": 1,
+      "camarote": 2,
+      "tripulante": null,
+      "pasajero": 1,
+      "viaje_navio": 1,
+      "fecha_inicio": "2025-02-10",
+      "fecha_fin": "2025-02-25"
+    }
+  },
+  {
+    "model": "compania_naviera.ocupacioncamarote",
+    "pk": 2,
+    "fields": {
+      "reserva": 1,
+      "camarote": 2,
+      "tripulante": null,
+      "pasajero": 2,
+      "viaje_navio": 1,
+      "fecha_inicio": "2025-02-10",
+      "fecha_fin": "2025-02-25"
+    }
+  },
+  {
+    "model": "compania_naviera.ocupacioncamarote",
+    "pk": 3,
+    "fields": {
+      "reserva": 2,
+      "camarote": 4,
+      "tripulante": null,
+      "pasajero": 3,
+      "viaje_navio": 2,
+      "fecha_inicio": "2025-03-05",
+      "fecha_fin": "2025-03-18"
+    }
+  },
+  {
+    "model": "compania_naviera.historialreserva",
+    "pk": 1,
+    "fields": {
+      "reserva": 1,
+      "fecha_cambio": "2024-11-10",
+      "cambio_realizado": "Confirmación de pago y asignación de camarote 5035."
+    }
+  },
+  {
+    "model": "compania_naviera.historialreserva",
+    "pk": 2,
+    "fields": {
+      "reserva": 2,
+      "fecha_cambio": "2024-11-18",
+      "cambio_realizado": "Documentación pendiente de pasajero principal."
+    }
+  },
+  {
+    "model": "compania_naviera.metodopago",
+    "pk": 1,
+    "fields": {
+      "nombre": "Tarjeta de crédito",
+      "descripcion": "Pagos con tarjeta internacional con promoción 6 cuotas sin interés."
+    }
+  },
+  {
+    "model": "compania_naviera.metodopago",
+    "pk": 2,
+    "fields": {
+      "nombre": "Transferencia bancaria",
+      "descripcion": "Pago anticipado vía transferencia bancaria en USD."
+    }
+  },
+  {
+    "model": "compania_naviera.estadopago",
+    "pk": 1,
+    "fields": {
+      "nombre": "Pagado",
+      "descripcion": "Pago acreditado y conciliado."
+    }
+  },
+  {
+    "model": "compania_naviera.estadopago",
+    "pk": 2,
+    "fields": {
+      "nombre": "Pendiente",
+      "descripcion": "Pago iniciado pero no acreditado."
+    }
+  },
+  {
+    "model": "compania_naviera.estadopago",
+    "pk": 3,
+    "fields": {
+      "nombre": "Reembolsado",
+      "descripcion": "Pago revertido total o parcialmente."
+    }
+  },
+  {
+    "model": "compania_naviera.pago",
+    "pk": 1,
+    "fields": {
+      "reserva": 1,
+      "fecha_pago": "2024-11-09",
+      "monto": 1890.0,
+      "metodo_pago": 1,
+      "estado_pago": 1,
+      "created_at": "2024-11-09T11:00:00Z",
+      "updated_at": "2024-11-09T11:15:00Z"
+    }
+  },
+  {
+    "model": "compania_naviera.pago",
+    "pk": 2,
+    "fields": {
+      "reserva": 2,
+      "fecha_pago": "2024-11-16",
+      "monto": 1625.0,
+      "metodo_pago": 2,
+      "estado_pago": 2,
+      "created_at": "2024-11-16T14:10:00Z",
+      "updated_at": "2024-11-18T08:30:00Z"
+    }
+  },
+  {
+    "model": "compania_naviera.historialpago",
+    "pk": 1,
+    "fields": {
+      "pago": 1,
+      "fecha_cambio": "2024-11-09",
+      "cambio_realizado": "Pago validado por finanzas internas.",
+      "estado_pago": 1,
+      "usuario_responsable": 2
+    }
+  },
+  {
+    "model": "compania_naviera.historialpago",
+    "pk": 2,
+    "fields": {
+      "pago": 2,
+      "fecha_cambio": "2024-11-18",
+      "cambio_realizado": "Envío de recordatorio de pago restante al cliente.",
+      "estado_pago": 2,
+      "usuario_responsable": 3
+    }
+  }
 ]

@@ -2,83 +2,125 @@
 {% load static %}
 
 {% block content %}
-<section class="min-h-[80vh] flex items-center justify-center px-6">
+<section class="min-h-[80vh] flex items-center justify-center px-6 py-12 lg:px-12">
   <form method="POST" action="{% url 'contacto' %}"
-        class="relative w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 md:p-10 shadow-2xl space-y-6 text-white">
-    {% csrf_token %}
+        class="relative isolate w-full max-w-3xl overflow-hidden rounded-3xl border border-primary/25 bg-surface/95 p-8 md:p-12 text-text shadow-[0_35px_70px_rgba(5,24,36,0.35)]">
+    <div class="absolute inset-0 -z-10 opacity-80"
+         style="background: radial-gradient(120% 120% at -10% -20%, rgba(24,183,190,0.18), transparent),
+                radial-gradient(80% 80% at 110% 0%, rgba(255,111,94,0.15), transparent);"></div>
+    <div class="absolute inset-0 -z-10 bg-gradient-to-br from-[#0F2E3D]/40 via-transparent to-[#03161F]/60"></div>
 
-    <!-- Header -->
-    <div class="text-center space-y-2">
-      <div class="mx-auto w-12 h-12 rounded-full bg-white text-blue-900 flex items-center justify-center font-bold">★</div>
-      <h2 class="text-3xl font-bold">Contáctanos</h2>
-      <p class="text-white/80">¿Tenés dudas o consultas? Nuestro equipo está para ayudarte.</p>
-    </div>
+    <div class="relative z-10 space-y-7">
+      {% csrf_token %}
 
-    <!-- Mensajes Django (opcional) -->
-    {% if messages %}
-      <ul class="space-y-2">
-        {% for message in messages %}
-          <li class="text-sm px-3 py-2 rounded border
-                     {% if message.tags == 'error' %}bg-red-500/20 border-red-400/50{% else %}bg-green-500/20 border-green-400/50{% endif %}">
-            {{ message }}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+      <!-- Header -->
+      <header class="text-center space-y-3">
+        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/20 text-primary text-2xl shadow-[0_12px_30px_rgba(5,24,36,0.25)]">
+          <i class="fa-solid fa-life-ring"></i>
+        </div>
+        <div class="space-y-1">
+          <h2 class="text-3xl font-semibold tracking-tight">¿Necesitás ayuda?</h2>
+          <p class="text-text/70 text-sm md:text-base">Escribinos y nuestro equipo de SEA STAR te responderá a la brevedad.</p>
+        </div>
+      </header>
 
-    <!-- Nombre -->
-    <div class="space-y-2">
-      <label for="nombre" class="block text-sm font-medium">Nombre</label>
-      <div class="relative">
-        <i class="fa-solid fa-user absolute left-3 top-1/2 -translate-y-1/2 text-white/70"></i>
-        <input id="nombre" name="nombre" type="text" required
-               class="w-full pl-10 pr-4 py-3 rounded-lg bg-white/10 text-white placeholder-white/70
-                      border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400"
-               placeholder="Tu nombre completo">
+      <!-- Mensajes Django -->
+      {% if messages %}
+        <ul class="space-y-3">
+          {% for message in messages %}
+            <li class="flex items-start gap-3 rounded-2xl border px-4 py-3 text-sm md:text-base
+                       {% if message.tags == 'error' %}
+                         border-red-400/50 bg-red-500/10 text-red-100
+                       {% elif message.tags == 'success' %}
+                         border-primary/40 bg-primary/15 text-primary
+                       {% else %}
+                         border-secondary/35 bg-bg/60 text-text
+                       {% endif %}">
+              <span class="mt-0.5 text-lg">
+                {% if message.tags == 'error' %}
+                  <i class="fa-solid fa-circle-xmark"></i>
+                {% elif message.tags == 'success' %}
+                  <i class="fa-solid fa-circle-check"></i>
+                {% else %}
+                  <i class="fa-solid fa-circle-info"></i>
+                {% endif %}
+              </span>
+              <span>{{ message }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <div class="grid gap-5 md:grid-cols-2">
+        <!-- Nombre -->
+        <div class="space-y-2">
+          <label for="nombre" class="text-sm font-medium uppercase tracking-wide text-text/70">Nombre</label>
+          <div class="relative">
+            <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-text/50"></i>
+            <input id="nombre" name="nombre" type="text" required
+                   class="form-control w-full border border-primary/35 pl-12 pr-4 py-3 focus:ring-primary/60"
+                   placeholder="Tu nombre completo">
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="space-y-2">
+          <label for="email" class="text-sm font-medium uppercase tracking-wide text-text/70">Email</label>
+          <div class="relative">
+            <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-text/50"></i>
+            <input id="email" name="email" type="email" required
+                   class="form-control w-full border border-primary/35 pl-12 pr-4 py-3 focus:ring-primary/60"
+                   placeholder="ejemplo@correo.com">
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensaje -->
+      <div class="space-y-2">
+        <label for="mensaje" class="text-sm font-medium uppercase tracking-wide text-text/70">Mensaje</label>
+        <div class="relative">
+          <i class="fa-solid fa-comment-dots absolute left-4 top-5 text-text/50"></i>
+          <textarea id="mensaje" name="mensaje" rows="5" required
+                    class="form-control w-full min-h-[180px] border border-primary/35 pl-12 pr-4 py-3 focus:ring-primary/60 resize-y"
+                    placeholder="Contanos en qué podemos ayudarte..."></textarea>
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <p class="text-sm text-text/60 flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-secondary"></i>
+          Tus datos están protegidos y sólo se usarán para responder tu consulta.
+        </p>
+        <button type="submit"
+                class="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-semibold tracking-wide btn-primary transition-transform duration-200 hover:scale-[1.02]">
+          <i class="fa-solid fa-paper-plane"></i>
+          Enviar mensaje
+        </button>
+      </div>
+
+      <!-- Datos rápidos -->
+      <div class="grid gap-4 rounded-2xl border border-primary/25 bg-bg/60 p-5 text-sm md:grid-cols-2 md:text-base">
+        <div class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
+            <i class="fa-brands fa-whatsapp"></i>
+          </span>
+          <div>
+            <p class="font-semibold">WhatsApp</p>
+            <p class="text-text/60">+54 351 000 0000</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
+            <i class="fa-solid fa-at"></i>
+          </span>
+          <div>
+            <p class="font-semibold">Email</p>
+            <p class="text-text/60">contacto@seastar.com</p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- Email -->
-    <div class="space-y-2">
-      <label for="email" class="block text-sm font-medium">Email</label>
-      <div class="relative">
-        <i class="fa-solid fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-white/70"></i>
-        <input id="email" name="email" type="email" required
-               class="w-full pl-10 pr-4 py-3 rounded-lg bg-white/10 text-white placeholder-white/70
-                      border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400"
-               placeholder="ejemplo@correo.com">
-      </div>
-    </div>
-
-    <!-- Mensaje -->
-    <div class="space-y-2">
-      <label for="mensaje" class="block text-sm font-medium">Mensaje</label>
-      <div class="relative">
-        <i class="fa-solid fa-comment-dots absolute left-3 top-4 text-white/70"></i>
-        <textarea id="mensaje" name="mensaje" rows="5" required
-                  class="w-full pl-10 pr-4 py-3 rounded-lg bg-white/10 text-white placeholder-white/70
-                         border border-white/30 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-y"
-                  placeholder="Escribí tu mensaje aquí..."></textarea>
-      </div>
-    </div>
-
-    <!-- Botón -->
-    <button type="submit"
-            class="w-full py-3 rounded-lg font-semibold shadow-lg transition
-                   bg-orange-500 hover:bg-orange-600 active:bg-orange-700">
-      Enviar
-    </button>
-
-    <!-- Datos rápidos -->
-    <div class="pt-2 text-sm text-white/80 text-center space-y-1">
-      <p class="flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-white/80"></i> +54 351 000 0000</p>
-      <p class="flex items-center justify-center gap-2"><i class="fa-solid fa-at text-white/80"></i> contacto@seastar.com</p>
-    </div>
-
-    <!-- Decoración suave -->
-    <div class="pointer-events-none absolute -inset-0.5 rounded-2xl"
-         style="background: radial-gradient(60% 60% at 20% 0%, rgba(255,255,255,.08), transparent 60%);"></div>
   </form>
 </section>
 {% endblock %}
-
