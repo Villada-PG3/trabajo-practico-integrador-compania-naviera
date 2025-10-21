@@ -1,45 +1,15 @@
-# ==========================================================
-# 📦 Librerías estándar
-# ==========================================================
-from collections import defaultdict
-
-# Django - HTTP y utilidades
 from django.http import JsonResponse, HttpResponseBadRequest
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required   
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Prefetch, Avg
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.utils.timezone import now
-
-# ==========================================================
-# 🔐 Django - Autenticación y mensajes
-# ==========================================================
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-# ==========================================================
-# 🧩 Django - Modelos y consultas ORM
-# ==========================================================
-from django.db.models import Avg, Prefetch
-
-# Django - Vistas genéricas (basadas en clases)
-from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView, DeleteView
-)
-
-# Django - Configuración y correo
-from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView
+from django.db.models import Prefetch, Avg
+from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.conf import settings
-
-
-
 
 from .forms import (
     FormularioCambioContrasenia,
@@ -55,11 +25,9 @@ from .models import (
     Cliente,
     EstadoPasajero,
     EstadoReserva,
-    HistorialPago,
     ItinerarioViaje,
     Navio,
     OcupacionCamarote,
-    Pago,
     Pasajero,
     Puerto,
     PuertoxActividad,
@@ -70,13 +38,10 @@ from .models import (
     ViajeXNavio,
 )
 
-
-
 # ===========================
 # Públicos / generales
 # ===========================
 
-    
 def main_view(request):
     """
     Home público: muestra próximos viajes.
@@ -355,7 +320,6 @@ class CrearClienteView(LoginRequiredMixin, CreateView):
         messages.success(self.request, "Cliente creado correctamente.")
         return redirect(self.success_url)
 
-
 # Crear reserva
 class ReservaCreateView(LoginRequiredMixin, CreateView):
     model = Reserva
@@ -512,9 +476,6 @@ def ajax_camarotes(request):
         for c in qs
     ]
     return JsonResponse(data, safe=False)
-
-
-
 
 
 class CrucerosView(ListView):
