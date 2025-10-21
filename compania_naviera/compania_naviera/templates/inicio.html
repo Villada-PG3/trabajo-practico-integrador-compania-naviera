@@ -17,8 +17,8 @@
 <section class="relative overflow-hidden">
 
   <!-- Burbujas decorativas -->
-  <div class="pointer-events-none absolute -top-24 -left-10 w-80 h-80 rounded-full bg-white/10 blur-3xl animate-float"></div>
-  <div class="pointer-events-none absolute -bottom-20 -right-10 w-72 h-72 rounded-full bg-blue-500/20 blur-3xl animate-float" style="animation-delay:1s"></div>
+  <div class="pointer-events-none absolute -top-24 -left-10 w-80 h-80 rounded-full bg-secondary/10 blur-3xl animate-float"></div>
+  <div class="pointer-events-none absolute -bottom-20 -right-10 w-72 h-72 rounded-full bg-accent/15 blur-3xl animate-float" style="animation-delay:1s"></div>
 
 
 
@@ -28,29 +28,29 @@
 
       <!-- Texto -->
       <div>
-        <span class="inline-flex items-center gap-2 text-xs md:text-sm uppercase tracking-widest text-white/80">
+        <span class="inline-flex items-center gap-2 text-xs md:text-sm uppercase tracking-widest text-text/70">
           <i class="fa-solid fa-ship"></i> Sea Star · Cruceros
         </span>
         <h1 class="mt-3 text-4xl md:text-5xl font-extrabold leading-tight">
-          Navegá momentos <span class="text-orange-400">inolvidables</span>
+          Navegá momentos <span class="text-primary">inolvidables</span>
         </h1>
-        <p class="mt-4 text-lg text-white/90">
+        <p class="mt-4 text-lg text-text/90">
           Destinos soñados, confort premium y atención personalizada. Embarcate con SEA STAR y viví el mar como nunca.
         </p>
 
         <!-- Chips -->
         <div class="mt-5 flex flex-wrap gap-2">
-          <span class="px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm">All inclusive</span>
-          <span class="px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm">Excursiones únicas</span>
-          <span class="px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sm">Asistencia 24/7</span>
+          <span class="px-3 py-1 rounded-full border border-secondary/30 bg-secondary/10 text-sm text-text/90">All inclusive</span>
+          <span class="px-3 py-1 rounded-full border border-secondary/30 bg-secondary/10 text-sm text-text/90">Excursiones únicas</span>
+          <span class="px-3 py-1 rounded-full border border-secondary/30 bg-secondary/10 text-sm text-text/90">Asistencia 24/7</span>
         </div>
 
         <!-- CTAs -->
         <div class="mt-7 flex flex-col sm:flex-row gap-3">
-          <a href="{% url 'registro' %}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold bg-orange-500 hover:bg-orange-600 transition shadow">
+          <a href="{% url 'registro' %}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold btn-primary shadow-neon transition">
             REGÍSTRATE
           </a>
-          <a href="{% url 'cruceros' %}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold border border-white/30 bg-white/10 hover:bg-white/20 transition">
+          <a href="{% url 'cruceros' %}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold btn-secondary transition">
             Ver cruceros
           </a>
         </div>
@@ -58,31 +58,31 @@
         <!-- Métricas -->
         <div class="mt-8 grid grid-cols-3 gap-4 max-w-md">
           <div class="text-center">
-            <div class="text-3xl font-extrabold">+150</div>
-            <div class="text-xs mt-1 text-white/80">Destinos</div>
+            <div class="text-3xl font-extrabold text-primary">+150</div>
+            <div class="text-xs mt-1 text-text/70">Destinos</div>
           </div>
           <div class="text-center">
-            <div class="text-3xl font-extrabold">24/7</div>
-            <div class="text-xs mt-1 text-white/80">Asistencia</div>
+            <div class="text-3xl font-extrabold text-primary">24/7</div>
+            <div class="text-xs mt-1 text-text/70">Asistencia</div>
           </div>
           <div class="text-center">
-            <div class="text-3xl font-extrabold">Premium</div>
-            <div class="text-xs mt-1 text-white/80">Confort</div>
+            <div class="text-3xl font-extrabold text-primary">Premium</div>
+            <div class="text-xs mt-1 text-text/70">Confort</div>
           </div>
         </div>
       </div>
 
       <!-- Imagen / card -->
       <div class="relative">
-        <div class="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/20">
+        <div class="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-secondary/20">
           <img src="{% static 'a.jpg' %}" alt="Crucero SEA STAR" class="w-full h-[380px] sm:h-[480px] lg:h-[560px] object-cover" loading="eager" decoding="async" />
-          <div class="absolute inset-0 bg-gradient-to-t from-blue-900/40 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-surface/70 via-transparent to-transparent"></div>
           <!-- Badge -->
-          <div class="absolute bottom-5 right-5 bg-white/15 backdrop-blur-md border border-white/30 rounded-xl px-4 py-3 flex items-center gap-3 shadow-lg">
-            <div class="w-9 h-9 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold">★</div>
+          <div class="absolute bottom-5 right-5 bg-surface/90 backdrop-blur-md border border-secondary/30 rounded-xl px-4 py-3 flex items-center gap-3 shadow-[0_16px_35px_rgba(5,24,36,0.12)]">
+            <div class="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white font-bold">★</div>
             <div>
               <p class="text-sm font-semibold leading-tight">SEA STAR</p>
-              <p class="text-xs text-white/80">Tu viaje, nuestra pasión</p>
+              <p class="text-xs text-text/70">Tu viaje, nuestra pasión</p>
             </div>
           </div>
         </div>
@@ -93,21 +93,21 @@
 
   <!-- Barra de beneficios (icons) -->
   <div class="mt-12 mx-auto max-w-6xl px-6">
-    <div class="grid sm:grid-cols-3 lg:grid-cols-5 gap-3 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl p-4">
+    <div class="grid sm:grid-cols-3 lg:grid-cols-5 gap-3 rounded-2xl border border-secondary/25 bg-surface/80 backdrop-blur-xl p-4 shadow-neon">
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-utensils text-xl text-orange-400"></i><span class="text-sm">Gastronomía gourmet</span>
+        <i class="fa-solid fa-utensils text-xl text-primary"></i><span class="text-sm text-text/85">Gastronomía gourmet</span>
       </div>
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-spa text-xl text-orange-400"></i><span class="text-sm">Spa & bienestar</span>
+        <i class="fa-solid fa-spa text-xl text-primary"></i><span class="text-sm text-text/85">Spa & bienestar</span>
       </div>
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-person-swimming text-xl text-orange-400"></i><span class="text-sm">Piscinas & solárium</span>
+        <i class="fa-solid fa-person-swimming text-xl text-primary"></i><span class="text-sm text-text/85">Piscinas & solárium</span>
       </div>
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-map-location-dot text-xl text-orange-400"></i><span class="text-sm">Excursiones curadas</span>
+        <i class="fa-solid fa-map-location-dot text-xl text-primary"></i><span class="text-sm text-text/85">Excursiones curadas</span>
       </div>
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-shield-heart text-xl text-orange-400"></i><span class="text-sm">Seguridad a bordo</span>
+        <i class="fa-solid fa-shield-heart text-xl text-primary"></i><span class="text-sm text-text/85">Seguridad a bordo</span>
       </div>
     </div>
   </div>
@@ -118,24 +118,24 @@
   <div class="mt-14 mx-auto max-w-7xl px-6 lg:px-10">
     <div class="flex items-end justify-between gap-4">
       <h2 class="text-2xl md:text-3xl font-extrabold">Destinos destacados</h2>
-      <a href="{% url 'cruceros' %}" class="text-sm font-semibold text-orange-400 hover:text-orange-300">Ver todos</a>
+      <a href="{% url 'cruceros' %}" class="text-sm font-semibold link-secondary">Ver todos</a>
     </div>
 
     <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for viaje in proximos_viajes %}
-        <article class="group relative overflow-hidden rounded-2xl border border-white/20">
+        <article class="group relative overflow-hidden rounded-2xl border border-secondary/20 bg-surface/80 shadow-neon">
           {% if viaje.imagen %}
             <img src="{{ viaje.imagen }}" alt="{{ viaje.nombre }}" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
           {% else %}
             <img src="{% static 'default-viaje.jpg' %}" alt="{{ viaje.nombre }}" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
           {% endif %}
-          <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent"></div>
           <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
             <div>
-              <h3 class="font-semibold">{{ viaje.nombre }}</h3>
-              <p class="text-xs text-white/80">{{ viaje.lugar_destino }} • {{ viaje.fecha_de_salida }}</p>
+              <h3 class="font-semibold text-text">{{ viaje.nombre }}</h3>
+              <p class="text-xs text-text/70">{{ viaje.lugar_destino }} • {{ viaje.fecha_de_salida }}</p>
             </div>
-            <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Conocer</a>
+            <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg btn-primary text-sm font-semibold">Conocer</a>
           </div>
         </article>
       {% empty %}
@@ -148,34 +148,34 @@
   <div class="mt-14 mx-auto max-w-7xl px-6 lg:px-10">
     <h2 class="text-2xl md:text-3xl font-extrabold mb-6">Experiencias a bordo</h2>
     <div class="grid md:grid-cols-3 gap-6">
-      <div class="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10">
-        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 blur-2xl rounded-full"></div>
-        <div class="p-6 relative">
-          <div class="w-10 h-10 rounded-lg bg-orange-500/90 text-white flex items-center justify-center font-bold mb-3">
+      <div class="relative overflow-hidden rounded-2xl border border-secondary/20 bg-surface shadow-[0_18px_38px_rgba(5,24,36,0.12)]">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-secondary/15 blur-2xl rounded-full"></div>
+        <div class="p-6 relative space-y-3">
+          <div class="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
             <i class="fa-solid fa-martini-glass-citrus"></i>
           </div>
-          <h3 class="font-bold text-lg mb-1">Gastronomía</h3>
-          <p class="text-white/80 text-sm">Restaurantes temáticos, room service y catas guiadas por sommeliers.</p>
+          <h3 class="font-bold text-lg text-text">Gastronomía</h3>
+          <p class="text-text/80 text-sm">Restaurantes temáticos, room service y catas guiadas por sommeliers.</p>
         </div>
       </div>
-      <div class="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10">
-        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 blur-2xl rounded-full"></div>
-        <div class="p-6 relative">
-          <div class="w-10 h-10 rounded-lg bg-orange-500/90 text-white flex items-center justify-center font-bold mb-3">
+      <div class="relative overflow-hidden rounded-2xl border border-secondary/20 bg-surface shadow-[0_18px_38px_rgba(5,24,36,0.12)]">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-secondary/15 blur-2xl rounded-full"></div>
+        <div class="p-6 relative space-y-3">
+          <div class="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
             <i class="fa-solid fa-heart-pulse"></i>
           </div>
-          <h3 class="font-bold text-lg mb-1">Bienestar</h3>
-          <p class="text-white/80 text-sm">Spa, masajes, yoga con vista al mar y circuitos de agua.</p>
+          <h3 class="font-bold text-lg text-text">Bienestar</h3>
+          <p class="text-text/80 text-sm">Spa, masajes, yoga con vista al mar y circuitos de agua.</p>
         </div>
       </div>
-      <div class="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10">
-        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 blur-2xl rounded-full"></div>
-        <div class="p-6 relative">
-          <div class="w-10 h-10 rounded-lg bg-orange-500/90 text-white flex items-center justify-center font-bold mb-3">
+      <div class="relative overflow-hidden rounded-2xl border border-secondary/20 bg-surface shadow-[0_18px_38px_rgba(5,24,36,0.12)]">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-secondary/15 blur-2xl rounded-full"></div>
+        <div class="p-6 relative space-y-3">
+          <div class="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
             <i class="fa-solid fa-masks-theater"></i>
           </div>
-          <h3 class="font-bold text-lg mb-1">Entretenimiento</h3>
-          <p class="text-white/80 text-sm">Shows en vivo, cine bajo estrellas y actividades para todas las edades.</p>
+          <h3 class="font-bold text-lg text-text">Entretenimiento</h3>
+          <p class="text-text/80 text-sm">Shows en vivo, cine bajo estrellas y actividades para todas las edades.</p>
         </div>
       </div>
     </div>
@@ -185,23 +185,23 @@
   <div class="mt-14 mx-auto max-w-7xl px-6 lg:px-10 mb-10">
     <h2 class="text-2xl md:text-3xl font-extrabold mb-6">¿Cómo empiezo?</h2>
     <div class="grid md:grid-cols-3 gap-6">
-      <div class="bg-white/10 border border-white/20 rounded-2xl p-6">
-        <div class="w-9 h-9 rounded-lg bg-white text-blue-900 flex items-center justify-center font-bold mb-3">1</div>
-        <h3 class="font-semibold mb-1">Creá tu cuenta</h3>
-        <p class="text-sm text-white/80">Registrate en minutos y personalizá tus preferencias de viaje.</p>
-        <a href="{% url 'registro' %}" class="inline-block mt-3 text-sm font-semibold text-orange-400 hover:text-orange-300">Registrarme</a>
+      <div class="rounded-2xl border border-secondary/25 bg-surface p-6 shadow-[0_18px_38px_rgba(5,24,36,0.12)]">
+        <div class="w-9 h-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold mb-3 shadow-[0_6px_14px_rgba(5,24,36,0.18)]">1</div>
+        <h3 class="font-semibold mb-1 text-text">Creá tu cuenta</h3>
+        <p class="text-sm text-text/75">Registrate en minutos y personalizá tus preferencias de viaje.</p>
+        <a href="{% url 'registro' %}" class="inline-block mt-3 text-sm font-semibold link-secondary">Registrarme</a>
       </div>
-      <div class="bg-white/10 border border-white/20 rounded-2xl p-6">
-        <div class="w-9 h-9 rounded-lg bg-white text-blue-900 flex items-center justify-center font-bold mb-3">2</div>
-        <h3 class="font-semibold mb-1">Elegí tu crucero</h3>
-        <p class="text-sm text-white/80">Compará destinos, fechas y experiencias según tu estilo.</p>
-        <a href="{% url 'cruceros' %}" class="inline-block mt-3 text-sm font-semibold text-orange-400 hover:text-orange-300">Ver cruceros</a>
+      <div class="rounded-2xl border border-secondary/25 bg-surface p-6 shadow-[0_18px_38px_rgba(5,24,36,0.12)]">
+        <div class="w-9 h-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold mb-3 shadow-[0_6px_14px_rgba(5,24,36,0.18)]">2</div>
+        <h3 class="font-semibold mb-1 text-text">Elegí tu crucero</h3>
+        <p class="text-sm text-text/75">Compará destinos, fechas y experiencias según tu estilo.</p>
+        <a href="{% url 'cruceros' %}" class="inline-block mt-3 text-sm font-semibold link-secondary">Ver cruceros</a>
       </div>
-      <div class="bg-white/10 border border-white/20 rounded-2xl p-6">
-        <div class="w-9 h-9 rounded-lg bg-white text-blue-900 flex items-center justify-center font-bold mb-3">3</div>
-        <h3 class="font-semibold mb-1">Listo para zarpar</h3>
-        <p class="text-sm text-white/80">Te acompañamos en cada paso para que solo te preocupes por disfrutar.</p>
-        <a href="{% url 'contacto' %}" class="inline-block mt-3 text-sm font-semibold text-orange-400 hover:text-orange-300">Contáctanos</a>
+      <div class="rounded-2xl border border-secondary/25 bg-surface p-6 shadow-[0_18px_38px_rgba(5,24,36,0.12)]">
+        <div class="w-9 h-9 rounded-lg bg-primary text-white flex items-center justify-center font-bold mb-3 shadow-[0_6px_14px_rgba(5,24,36,0.18)]">3</div>
+        <h3 class="font-semibold mb-1 text-text">Listo para zarpar</h3>
+        <p class="text-sm text-text/75">Te acompañamos en cada paso para que solo te preocupes por disfrutar.</p>
+        <a href="{% url 'contacto' %}" class="inline-block mt-3 text-sm font-semibold link-secondary">Contáctanos</a>
       </div>
     </div>
   </div>

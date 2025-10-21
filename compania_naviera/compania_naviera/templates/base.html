@@ -5,58 +5,176 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{% block title %}SEA STAR - Cruceros{% endblock %}</title>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#071922',
+            surface: '#0E2430',
+            'surface-soft': '#133447',
+            primary: '#18B7BE',
+            'primary-dark': '#11848B',
+            secondary: '#FF6F5E',
+            'secondary-dark': '#E35243',
+            accent: '#F7C948',
+            text: '#F3F7FA',
+            'text-muted': 'rgba(243, 247, 250, 0.72)'
+          },
+          boxShadow: {
+            neon: '0 18px 35px rgba(7, 25, 34, 0.38)'
+          }
+        }
+      }
+    };
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+    :root {
+      --bg: #071922;
+      --bg-alt: #0B2634;
+      --surface: #0E2430;
+      --surface-soft: #133447;
+      --primary: #18B7BE;
+      --primary-dark: #11848B;
+      --secondary: #FF6F5E;
+      --secondary-dark: #E35243;
+      --accent: #F7C948;
+      --accent-dark: #D9AC3A;
+      --text: #F3F7FA;
+      --text-muted: rgba(243, 247, 250, 0.72);
+    }
+    body {
+      background: radial-gradient(circle at top, rgba(24, 183, 190, 0.16), transparent 60%), var(--bg);
+      color: var(--text);
+    }
+    .card-surface {
+      background: var(--surface);
+      border: 1px solid rgba(24, 183, 190, 0.18);
+      box-shadow: 0 18px 40px rgba(4, 18, 28, 0.55);
+    }
+    .card-soft {
+      background: var(--surface-soft);
+      border: 1px solid rgba(24, 183, 190, 0.14);
+      box-shadow: 0 14px 32px rgba(4, 18, 28, 0.45);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #10939A);
+      color: #03161F;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-dark), #0D7C83);
+      color: #03161F;
+    }
+    .btn-secondary {
+      background: rgba(255, 111, 94, 0.16);
+      color: var(--text);
+      border: 1px solid rgba(255, 111, 94, 0.32);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 111, 94, 0.24);
+      color: var(--text);
+    }
+    .link-secondary { color: var(--secondary); }
+    .link-secondary:hover { color: var(--accent); }
+    .badge-accent {
+      background: rgba(247, 201, 72, 0.16);
+      color: #E1B439;
+      border: 1px solid rgba(247, 201, 72, 0.36);
+    }
+    .bg-white\/5 { background-color: rgba(247, 201, 72, 0.08) !important; }
+    .bg-white\/10 { background-color: rgba(14, 36, 48, 0.55) !important; color: var(--text); }
+    .bg-white\/15 { background-color: rgba(14, 36, 48, 0.68) !important; color: var(--text); }
+    .bg-white\/20 { background-color: rgba(14, 36, 48, 0.78) !important; color: var(--text); }
+    .bg-white\/30 { background-color: rgba(14, 36, 48, 0.88) !important; color: var(--text); }
+    .bg-white\/80,
+    .bg-white\/90,
+    .bg-white\/95 {
+      background-color: rgba(14, 36, 48, 0.94) !important;
+      color: var(--text);
+    }
+    .border-white\/10 { border-color: rgba(24, 183, 190, 0.12) !important; }
+    .border-white\/15 { border-color: rgba(24, 183, 190, 0.18) !important; }
+    .border-white\/20 { border-color: rgba(24, 183, 190, 0.25) !important; }
+    .border-white\/30 { border-color: rgba(24, 183, 190, 0.35) !important; }
+    .border-white\/40 { border-color: rgba(24, 183, 190, 0.45) !important; }
+    .text-white { color: var(--text) !important; }
+    .text-orange-400, .text-orange-300, .text-orange-200, .text-orange-100 { color: var(--secondary) !important; }
+    .bg-orange-500, .bg-orange-400 { background-color: var(--secondary) !important; color: #071922; }
+    .bg-orange-600, .bg-orange-700 { background-color: var(--secondary-dark) !important; color: #071922; }
+    .hover\:bg-orange-600:hover, .hover\:bg-orange-500:hover { background-color: var(--secondary-dark) !important; color: #071922; }
+    .from-orange-400 { --tw-gradient-from: rgba(255, 111, 94, 0.28) var(--tw-gradient-from-position); --tw-gradient-to: rgba(255, 111, 94, 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+    .to-orange-600 { --tw-gradient-to: rgba(24, 183, 190, 0.2) var(--tw-gradient-to-position); }
+    .text-blue-900, .text-blue-700, .text-blue-600 { color: var(--primary) !important; }
+    .bg-blue-900, .bg-blue-800, .bg-blue-600 { background-color: var(--primary) !important; }
+    .from-blue-600 { --tw-gradient-from: rgba(24, 183, 190, 0.32) var(--tw-gradient-from-position); --tw-gradient-to: rgba(24, 183, 190, 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+    .via-blue-500 { --tw-gradient-stops: var(--tw-gradient-from), rgba(255, 111, 94, 0.2), var(--tw-gradient-to); }
+    .to-purple-500 { --tw-gradient-to: rgba(247, 201, 72, 0.18) var(--tw-gradient-to-position); }
+    .focus\:ring-orange-400:focus, .focus\:ring-orange-200\/70:focus { --tw-ring-color: rgba(24, 183, 190, 0.45); }
+    .border-orange-400\/40, .border-orange-400\/30 { border-color: rgba(24, 183, 190, 0.32) !important; }
+    .border-orange-400, .border-orange-300 { border-color: rgba(24, 183, 190, 0.42) !important; }
+    .bg-green-500\/20 { background-color: rgba(247, 201, 72, 0.2) !important; color: var(--accent-dark); }
+    .border-green-400\/50 { border-color: rgba(247, 201, 72, 0.4) !important; }
+    .form-control {
+      background-color: rgba(14, 36, 48, 0.65);
+      color: var(--text);
+      border-color: rgba(24, 183, 190, 0.35);
+    }
+    .form-control::placeholder {
+      color: var(--text-muted);
+    }
+  </style>
 </head>
-<body class="min-h-screen font-sans bg-gradient-to-br from-blue-800 to-blue-900 text-white">
+<body class="min-h-screen font-sans text-text antialiased">
 
   <!-- Navigation -->
-  <nav class="bg-blue-900 text-white px-6 py-4 flex justify-between items-center">
-    <div class="flex items-center gap-2">
+  <nav class="bg-white/95 border-b border-white/40 backdrop-blur-md text-text px-6 py-4 flex justify-between items-center shadow-[0_18px_32px_rgba(5,24,36,0.45)]">
+    <div class="flex items-center gap-3">
       <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'home' %}{% endif %}"
-         class="flex items-center gap-2 hover:text-orange-400 transition">
-        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-900 font-bold text-sm">★</div>
-        <span class="font-bold text-lg">SEA STAR</span>
+         class="flex items-center gap-3 transition hover:text-primary">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg shadow-[0_12px_22px_rgba(5,24,36,0.45)]">★</div>
+        <span class="font-bold text-xl tracking-wide">SEA STAR</span>
       </a>
     </div>
 
-    <div class="hidden md:flex items-center gap-6">
+    <div class="hidden md:flex items-center gap-8 font-medium">
 
       {% if user.is_authenticated %}
-        <a href="{% url 'mis_reservas' %}" class="relative hover:text-orange-400 transition">Mis reservas</a>
+        <a href="{% url 'mis_reservas' %}" class="relative transition hover:text-secondary">Mis reservas</a>
       {% endif %}
 
-      <a href="{% url 'contacto' %}" class="relative hover:text-orange-400 transition">Contáctanos</a>
-      <a href="{% url 'cruceros' %}" class="relative hover:text-orange-400 transition">Cruceros</a>
-      <a href="{% url 'destinos' %}" class="relative hover:text-orange-400 transition">Destinos</a>
-      <a href="{% url 'ofertas' %}" class="relative hover:text-orange-400 transition">Ofertas</a>
+      <a href="{% url 'contacto' %}" class="relative transition hover:text-secondary">Contáctanos</a>
+      <a href="{% url 'cruceros' %}" class="relative transition hover:text-secondary">Cruceros</a>
+      <a href="{% url 'destinos' %}" class="relative transition hover:text-secondary">Destinos</a>
+      <a href="{% url 'ofertas' %}" class="relative transition hover:text-secondary">Ofertas</a>
 
       {% if user.is_authenticated %}
         <!-- Dropdown usuario -->
         <div class="relative" x-data="{ open: false }">
           <button @click="open = !open"
-                  class="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full hover:bg-orange-500 transition">
+                  class="w-11 h-11 flex items-center justify-center rounded-full bg-bg/70 text-text hover:bg-secondary/30 transition shadow-[inset_0_2px_6px_rgba(5,24,36,0.35)]">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
-                 class="text-white" viewBox="0 0 24 24">
+                 class="text-text" viewBox="0 0 24 24">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
           </button>
 
           <div x-show="open" @click.away="open = false"
-               class="absolute right-0 mt-2 w-56 bg-white/20 backdrop-blur-md rounded-lg shadow-lg text-white p-4 z-50">
+               class="absolute right-0 mt-3 w-56 rounded-xl border border-white/40 bg-white/95 backdrop-blur-md shadow-[0_22px_40px_rgba(5,24,36,0.45)] text-text p-4 z-50">
             <!-- Nombre de usuario -->
-            <p class="mb-2 font-semibold">{{ user.username }}</p>
+            <p class="mb-3 font-semibold text-primary">{{ user.username }}</p>
 
             <!-- Editar perfil -->
             <a href="{% url 'editar_perfil' %}" 
-               class="block px-3 py-2 mb-1 rounded hover:bg-white/30 transition">
+               class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-white/10 hover:text-secondary">
               <i class="fa fa-user mr-2"></i>Editar perfil
             </a>
 
             <!-- Cambiar contraseña -->
             <a href="{% url 'cambiar_contrasenia' %}" 
-               class="block px-3 py-2 mb-1 rounded hover:bg-white/30 transition">
+               class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition hover:bg-white/10 hover:text-secondary">
               <i class="fa fa-key mr-2"></i>Cambiar contraseña
             </a>
 
@@ -64,7 +182,7 @@
             <form method="POST" action="{% url 'logout' %}">
               {% csrf_token %}
               <button type="submit" 
-                      class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium mt-1">
+                      class="w-full rounded-lg bg-red-500/90 py-2 font-semibold text-white transition hover:bg-red-500">
                 Cerrar sesión
               </button>
             </form>
@@ -73,9 +191,9 @@
       {% else %}
         <!-- Botón login -->
         <a href="{% url 'login' %}"
-           class="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full hover:bg-orange-500 transition">
+           class="w-11 h-11 flex items-center justify-center rounded-full bg-primary/20 text-text transition hover:bg-secondary/30">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
-               class="text-white" viewBox="0 0 24 24">
+               class="text-text" viewBox="0 0 24 24">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
@@ -85,7 +203,7 @@
   </nav>
 
   <!-- Contenido dinámico -->
-  <main class="p-6">
+  <main class="p-6 sm:p-10">
     {% block content %}{% endblock %}
   </main>
 

@@ -7,48 +7,49 @@
   <div class="mx-auto w-full max-w-5xl">
     <div class="grid gap-6 lg:grid-cols-[1.15fr,1fr]">
       <!-- Panel informativo -->
-      <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-blue-600/80 via-blue-500/70 to-purple-500/70 p-10 shadow-2xl">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.25),transparent_55%)] pointer-events-none"></div>
+      <div class="relative overflow-hidden rounded-3xl border border-secondary/20 bg-gradient-to-br from-primary/20 via-secondary/20 to-surface/90 p-10 shadow-neon text-text">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(92,225,166,0.35),transparent_60%)] pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(42,157,244,0.25),transparent_60%)] pointer-events-none"></div>
         <div class="relative z-10 space-y-6">
           <div>
-            <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white/80">
-              <i class="fa-solid fa-anchor text-orange-300"></i>
+            <span class="inline-flex items-center gap-2 rounded-full bg-bg/40 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-text/80 border border-secondary/25">
+              <i class="fa-solid fa-anchor text-primary"></i>
               Bienvenido a bordo
             </span>
-            <h1 class="mt-6 text-3xl lg:text-4xl font-black leading-tight">
+            <h1 class="mt-6 text-3xl lg:text-4xl font-black leading-tight text-text">
               Viví la experiencia SEA STAR desde tu primer acceso.
             </h1>
-            <p class="mt-3 text-white/80 text-sm lg:text-base">
+            <p class="mt-3 text-text/80 text-sm lg:text-base">
               Creá tu cuenta y aprovechá beneficios exclusivos, recordatorios de viaje y asistencia personalizada para cada destino.
             </p>
           </div>
 
           <ul class="space-y-4 text-sm lg:text-base">
             <li class="flex items-start gap-3">
-              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-orange-200">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(5,24,36,0.12)]">
                 <i class="fa-solid fa-gift"></i>
               </div>
               <div>
-                <p class="font-semibold">Ofertas personalizadas</p>
-                <p class="text-white/70">Reservá antes que nadie y enterate de upgrades exclusivos para miembros.</p>
+                <p class="font-semibold text-text">Ofertas personalizadas</p>
+                <p class="text-text/75">Reservá antes que nadie y enterate de upgrades exclusivos para miembros.</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-orange-200">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(5,24,36,0.12)]">
                 <i class="fa-solid fa-passport"></i>
               </div>
               <div>
-                <p class="font-semibold">Seguimiento de reservas</p>
-                <p class="text-white/70">Gestioná pasajeros, pagos y trámites previos a cada embarque.</p>
+                <p class="font-semibold text-text">Seguimiento de reservas</p>
+                <p class="text-text/75">Gestioná pasajeros, pagos y trámites previos a cada embarque.</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-orange-200">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(5,24,36,0.12)]">
                 <i class="fa-solid fa-headset"></i>
               </div>
               <div>
-                <p class="font-semibold">Asistencia 24/7</p>
-                <p class="text-white/70">Nuestro equipo está disponible para ayudarte antes y durante tu travesía.</p>
+                <p class="font-semibold text-text">Asistencia 24/7</p>
+                <p class="text-text/75">Nuestro equipo está disponible para ayudarte antes y durante tu travesía.</p>
               </div>
             </li>
           </ul>
@@ -56,56 +57,65 @@
       </div>
 
       <!-- Formulario de registro -->
-      <div class="rounded-3xl border border-white/10 bg-white/10 p-8 lg:p-10 shadow-xl backdrop-blur-xl">
+      <div class="rounded-3xl border border-secondary/20 card-surface p-8 lg:p-10 shadow-neon backdrop-blur-xl space-y-6">
         {% if messages %}
         <div class="mb-5 space-y-2">
           {% for message in messages %}
-          <div class="rounded-lg px-3 py-2 text-sm {% if message.tags == 'success' %}bg-green-500/80{% elif message.tags == 'error' %}bg-red-500/80{% else %}bg-white/20{% endif %}">
+          <div class="rounded-lg px-3 py-2 text-sm {% if message.tags == 'success' %}badge-accent{% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-bg/40 border border-secondary/30{% endif %}">
             {{ message }}
           </div>
           {% endfor %}
         </div>
         {% endif %}
 
-        <h2 class="text-2xl font-semibold text-white">Crear cuenta</h2>
-        <p class="mt-1 text-sm text-white/70">Ingresá tus datos tal como figuran en tus documentos.</p>
+        <h2 class="text-2xl font-semibold text-text">Crear cuenta</h2>
+        <p class="text-sm text-text/75">Ingresá tus datos tal como figuran en tus documentos.</p>
 
         <form method="POST" novalidate class="mt-6 space-y-5">
           {% csrf_token %}
           {% if form.non_field_errors %}
-          <div class="rounded-lg border border-red-400/40 bg-red-500/30 px-3 py-2 text-sm">
+          <div class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
             {% for error in form.non_field_errors %}
-            <p>{{ error }}</p>
+            <p class="text-red-600">{{ error }}</p>
             {% endfor %}
           </div>
           {% endif %}
 
           {% for field in form %}
-          <div>
-            <label for="{{ field.id_for_label }}" class="mb-1 block text-sm font-medium text-white">
+          <div class="space-y-1">
+            <label for="{{ field.id_for_label }}" class="mb-1 block text-sm font-medium text-text/90">
               {{ field.label }}
             </label>
             {{ field }}
             {% if field.help_text %}
-            <p class="mt-1 text-xs text-white/60">{{ field.help_text }}</p>
+            <p class="mt-1 text-xs text-text/60">{{ field.help_text }}</p>
             {% endif %}
             {% for error in field.errors %}
-            <p class="mt-1 text-sm text-red-300">{{ error }}</p>
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
             {% endfor %}
           </div>
           {% endfor %}
 
-          <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-orange-400 to-orange-600 py-3 font-semibold text-white shadow-lg transition hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-200/70">
+          <button type="submit" class="w-full rounded-xl py-3 font-semibold btn-primary transition hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-primary/40">
             Registrarme
           </button>
         </form>
 
-        <div class="mt-6 text-center text-sm text-white/80">
+        <div class="mt-6 text-center text-sm text-text/80">
           ¿Ya tenés cuenta?
-          <a href="{% url 'login' %}" class="font-medium text-orange-300 hover:text-orange-200 hover:underline">Iniciá sesión acá</a>
+          <a href="{% url 'login' %}" class="font-medium link-secondary">Iniciá sesión acá</a>
         </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('form input, form select').forEach((field) => {
+      field.classList.add(
+        'w-full','rounded-lg','border','border-secondary/25','bg-bg/40','px-4','py-3','text-text','placeholder-text/50','focus:outline-none','focus:ring-2','focus:ring-primary/60'
+      );
+    });
+  });
+</script>
 {% endblock %}

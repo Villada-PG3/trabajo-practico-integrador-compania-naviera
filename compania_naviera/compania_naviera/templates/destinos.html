@@ -6,58 +6,58 @@
 <section class="mx-auto max-w-7xl px-6 lg:px-10 py-10">
   <div class="grid gap-10 lg:grid-cols-[minmax(0,2.2fr),minmax(0,1fr)] items-start">
     <div class="space-y-8">
-      <header class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-white/0 p-8 shadow-2xl">
+      <header class="relative overflow-hidden rounded-3xl border border-secondary/25 card-surface p-8 shadow-neon">
         <div class="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <p class="text-xs uppercase tracking-[0.25em] text-white/60">Explorá el mundo con SEA STAR</p>
+            <p class="text-xs uppercase tracking-[0.25em] text-text/65">Explorá el mundo con SEA STAR</p>
             <h1 class="text-3xl lg:text-4xl font-black leading-tight">Nuestros destinos destacados</h1>
-            <p class="mt-2 text-sm text-white/70 max-w-2xl">
+            <p class="mt-2 text-sm text-text/75 max-w-2xl">
               Descubrí puertos imperdibles, itinerarios exclusivos y actividades diseñadas para cada viajero. Elegí tu próxima escala y planificá tu travesía ideal.
             </p>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-[240px]">
-            <div class="rounded-3xl bg-blue-500/15 border border-blue-400/30 px-5 py-4">
-              <p class="text-xs uppercase tracking-wide text-white/60">Destinos disponibles</p>
-              <p class="mt-2 text-3xl font-bold text-white">{{ destinos|length }}</p>
+            <div class="rounded-3xl bg-secondary/15 border border-secondary/30 px-5 py-4">
+              <p class="text-xs uppercase tracking-wide text-text/65">Destinos disponibles</p>
+              <p class="mt-2 text-3xl font-bold text-secondary">{{ destinos|length }}</p>
             </div>
-            <div class="rounded-3xl bg-orange-500/20 border border-orange-400/30 px-5 py-4">
-              <p class="text-xs uppercase tracking-wide text-white/60">Experiencias a medida</p>
-              <p class="mt-2 text-sm text-white/80">Gastronomía, aventura y cultura en cada parada.</p>
+            <div class="rounded-3xl bg-primary/20 border border-primary/35 px-5 py-4">
+              <p class="text-xs uppercase tracking-wide text-text/65">Experiencias a medida</p>
+              <p class="mt-2 text-sm text-text/80">Gastronomía, aventura y cultura en cada parada.</p>
             </div>
           </div>
         </div>
-        <div class="pointer-events-none absolute -top-16 -right-20 h-40 w-40 rounded-full bg-orange-400/30 blur-3xl"></div>
-        <div class="pointer-events-none absolute bottom-0 left-10 h-28 w-28 rounded-full bg-blue-500/40 blur-3xl"></div>
+        <div class="pointer-events-none absolute -top-16 -right-20 h-40 w-40 rounded-full bg-primary/25 blur-3xl"></div>
+        <div class="pointer-events-none absolute bottom-0 left-10 h-28 w-28 rounded-full bg-secondary/25 blur-3xl"></div>
       </header>
 
       <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
       {% for puerto in destinos %}
-        <article class="group relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-md transition duration-300 hover:border-orange-400/40 hover:bg-white/10">
+        <article class="group relative overflow-hidden rounded-3xl border border-secondary/20 card-surface p-6 shadow-neon transition duration-300 hover:-translate-y-1 hover:border-secondary/40">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <a href="{% url 'destino_detail' puerto.pk %}" class="inline-flex items-center gap-2 text-2xl font-semibold text-white transition hover:text-orange-200">
-                <i class="fa-solid fa-location-dot text-orange-300"></i>
+              <a href="{% url 'destino_detail' puerto.pk %}" class="inline-flex items-center gap-2 text-2xl font-semibold text-text transition hover:text-secondary">
+                <i class="fa-solid fa-location-dot text-secondary"></i>
                 {{ puerto.nombre }}
               </a>
-              <p class="mt-3 text-sm text-white/70 flex items-center gap-2">
-                <span class="inline-flex items-center justify-center rounded-full bg-white/10 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-orange-200">
+              <p class="mt-3 text-sm text-text/75 flex items-center gap-2">
+                <span class="inline-flex items-center justify-center rounded-full bg-secondary/15 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-secondary border border-secondary/30">
                   {{ puerto.itinerario.categoria.nombre }}
                 </span>
-                <span class="flex items-center gap-2 text-white/60">
-                  <i class="fa-solid fa-route text-orange-200"></i>
+                <span class="flex items-center gap-2 text-text/70">
+                  <i class="fa-solid fa-route text-secondary"></i>
                   Orden {{ puerto.orden }}
                 </span>
               </p>
             </div>
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-sm font-semibold text-white/70">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
               #{{ forloop.counter }}
             </span>
           </div>
 
           {% if puerto.ubicaciones.all %}
-          <div class="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm">
-            <p class="text-xs uppercase tracking-wide text-white/50 mb-1">Ubicaciones</p>
-            <p class="text-white/80 leading-relaxed">
+          <div class="mt-4 rounded-2xl border border-secondary/20 bg-bg/35 p-4 text-sm">
+            <p class="text-xs uppercase tracking-wide text-text/60 mb-1">Ubicaciones</p>
+            <p class="text-text/80 leading-relaxed">
               {% for ubicacion in puerto.ubicaciones.all %}
                 {{ ubicacion.nombre }}{% if not forloop.last %}, {% endif %}
               {% endfor %}
@@ -66,64 +66,64 @@
           {% endif %}
 
           <div class="mt-5 space-y-3">
-            <h3 class="text-sm font-semibold text-white/80 uppercase tracking-wide">Actividades disponibles</h3>
-            <ul class="space-y-2 text-sm text-white/70">
+            <h3 class="text-sm font-semibold text-text/80 uppercase tracking-wide">Actividades disponibles</h3>
+            <ul class="space-y-2 text-sm text-text/75">
               {% for act in puerto.actividades.all %}
                 <li class="flex items-start gap-2">
-                  <span class="mt-[6px] h-1.5 w-1.5 rounded-full bg-orange-300"></span>
+                  <span class="mt-[6px] h-1.5 w-1.5 rounded-full bg-secondary"></span>
                   <div>
-                    <p class="font-medium text-white">{{ act.actividad.nombre }}</p>
-                    <p class="text-white/60">{{ act.actividad.descripcion }}</p>
+                    <p class="font-medium text-text">{{ act.actividad.nombre }}</p>
+                    <p class="text-text/65">{{ act.actividad.descripcion }}</p>
                   </div>
                 </li>
               {% empty %}
-                <li class="rounded-lg border border-dashed border-white/20 bg-white/5 px-3 py-2 text-white/60">No hay actividades disponibles.</li>
+                <li class="rounded-lg border border-dashed border-secondary/25 bg-bg/35 px-3 py-2 text-text/65">No hay actividades disponibles.</li>
               {% endfor %}
             </ul>
           </div>
         </article>
       {% empty %}
-        <div class="sm:col-span-2 xl:col-span-3 rounded-3xl border border-dashed border-white/30 bg-white/5 p-10 text-center text-white/80">
-          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-2xl text-orange-300">
+        <div class="sm:col-span-2 xl:col-span-3 rounded-3xl border border-dashed border-secondary/25 bg-bg/35 p-10 text-center text-text/80 shadow-neon">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-secondary/15 text-2xl text-secondary">
             <i class="fa-solid fa-compass"></i>
           </div>
-          <h2 class="mt-4 text-2xl font-semibold">No hay destinos disponibles por el momento.</h2>
-          <p class="mt-2 text-sm text-white/70">Volvé pronto para descubrir nuevas rutas y aventuras marítimas.</p>
+          <h2 class="mt-4 text-2xl font-semibold text-text">No hay destinos disponibles por el momento.</h2>
+          <p class="mt-2 text-sm text-text/70">Volvé pronto para descubrir nuevas rutas y aventuras marítimas.</p>
         </div>
       {% endfor %}
       </div>
     </div>
 
     <aside class="lg:sticky lg:top-24">
-      <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-blue-500/80 via-blue-600/70 to-indigo-500/70 p-8 shadow-2xl text-white">
+      <div class="relative overflow-hidden rounded-3xl border border-secondary/25 bg-gradient-to-br from-primary/25 via-secondary/20 to-surface/95 p-8 shadow-neon text-text">
         <div class="relative z-10 space-y-5">
           <h3 class="text-2xl font-bold">Planificá tu recorrido</h3>
-          <p class="text-sm text-white/80">Seleccioná los puertos que más te inspiran y explorá los cruceros que visitan estos destinos soñados.</p>
-          <ul class="space-y-3 text-sm text-white/80">
+          <p class="text-sm text-text/80">Seleccioná los puertos que más te inspiran y explorá los cruceros que visitan estos destinos soñados.</p>
+          <ul class="space-y-3 text-sm text-text/80">
             <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
                 <i class="fa-solid fa-map-location-dot"></i>
               </span>
               Compará itinerarios y paradas clave
             </li>
             <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
                 <i class="fa-solid fa-ticket"></i>
               </span>
               Reservá excursiones y experiencias especiales
             </li>
             <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
                 <i class="fa-solid fa-life-ring"></i>
               </span>
               Recibí asistencia personalizada 24/7
             </li>
           </ul>
-          <a href="{% url 'cruceros' %}" class="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-blue-700 transition hover:bg-white">
+          <a href="{% url 'cruceros' %}" class="inline-flex items-center gap-2 rounded-full btn-primary px-5 py-3 text-sm font-semibold transition hover:scale-[1.02]">
             <i class="fa-solid fa-ship"></i> Ver cruceros disponibles
           </a>
         </div>
-        <div class="pointer-events-none absolute -bottom-16 -right-10 h-36 w-36 rounded-full bg-white/30 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-16 -right-10 h-36 w-36 rounded-full bg-secondary/25 blur-3xl"></div>
       </div>
     </aside>
   </div>

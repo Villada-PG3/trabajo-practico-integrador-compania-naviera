@@ -1,47 +1,61 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cambiar Contraseña - SEA STAR</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gradient-to-br from-blue-800 to-blue-600 text-white min-h-screen flex items-center justify-center">
 
-  <div class="bg-white/20 p-8 rounded-xl shadow-xl backdrop-blur-md w-full max-w-md">
-    <h1 class="text-2xl font-semibold mb-6 text-center">Cambiar Contraseña</h1>
+{% block title %}Cambiar contraseña - SEA STAR{% endblock %}
+
+{% block content %}
+<section class="min-h-[70vh] flex items-center justify-center px-6 py-12">
+  <div class="relative w-full max-w-lg card-surface backdrop-blur-xl rounded-3xl p-8 md:p-10 shadow-neon space-y-6">
+    <div class="space-y-2 text-center">
+      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-[0_12px_30px_rgba(5,24,36,0.15)]">★</span>
+      <h1 class="text-3xl font-semibold text-text">Cambiar contraseña</h1>
+      <p class="text-sm text-text/75">Por seguridad, asegurate de elegir una clave única y combinar números, letras y símbolos.</p>
+    </div>
 
     {% if messages %}
-    <div class="mb-4">
+    <div class="space-y-2">
       {% for message in messages %}
-      <div class="p-3 mb-2 rounded text-sm {% if message.tags == 'success' %}bg-green-500/80{% elif message.tags == 'error' %}bg-red-500/80{% endif %}">
-        {{ message }}
-      </div>
+        <div class="rounded-lg px-3 py-2 text-sm {% if message.tags == 'success' %}badge-accent{% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-bg/40 border border-secondary/30{% endif %}">
+          {{ message }}
+        </div>
       {% endfor %}
     </div>
     {% endif %}
 
-    <form method="POST">
+    <form method="POST" class="space-y-5">
       {% csrf_token %}
       {% for field in form %}
-        <div class="mb-4">
-          {{ field.label_tag }}
+        <div class="space-y-1">
+          <label for="{{ field.id_for_label }}" class="text-sm font-medium text-text/90">{{ field.label }}</label>
           {{ field }}
           {% if field.errors %}
-            <p class="text-red-300 text-xs mt-1">{{ field.errors|striptags }}</p>
+            <p class="text-xs text-red-600">{{ field.errors|striptags }}</p>
           {% endif %}
         </div>
       {% endfor %}
-      <button type="submit" class="w-full py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-semibold rounded-lg hover:shadow-lg transition">
-        Actualizar Contraseña
+      <button type="submit" class="w-full rounded-xl py-3 font-semibold btn-primary transition hover:scale-[1.01]">
+        Actualizar contraseña
       </button>
     </form>
 
-    <div class="text-center mt-6 text-sm text-white">
-      <a href="{% url 'menu_user' %}" class="text-orange-400 hover:underline">← Volver al menú</a>
+    <div class="text-center text-sm">
+      <a href="{% url 'menu_user' %}" class="link-secondary inline-flex items-center gap-2 justify-center">
+        <i class="fa-solid fa-arrow-left"></i> Volver al menú
+      </a>
     </div>
-  </div>
 
-</body>
-</html>
+    <div class="pointer-events-none absolute -top-8 -right-10 h-32 w-32 rounded-full bg-secondary/15 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-accent/20 blur-3xl"></div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('form input').forEach((input) => {
+      input.classList.add(
+        'w-full','rounded-lg','bg-bg/40','border','border-secondary/25','px-4','py-3','text-text','placeholder-text/50','focus:outline-none','focus:ring-2','focus:ring-primary/60'
+      );
+    });
+  });
+</script>
+{% endblock %}

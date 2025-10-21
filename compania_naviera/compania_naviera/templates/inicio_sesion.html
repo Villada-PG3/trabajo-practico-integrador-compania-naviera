@@ -1,35 +1,88 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="flex justify-center items-center min-h-[calc(100vh-80px)] px-4 py-8">
-  <div class="bg-white/20 p-8 rounded-xl shadow-xl backdrop-blur-md max-w-md w-full">
-    <h1 class="text-3xl font-semibold text-center mb-6">Iniciar Sesión</h1>
+<div class="flex items-center justify-center min-h-[calc(100vh-80px)] px-6 py-16 md:px-10">
+  <div class="relative isolate w-full max-w-lg overflow-hidden rounded-3xl border border-primary/25 bg-surface/95 p-8 md:p-12 shadow-[0_30px_65px_rgba(5,24,36,0.35)]">
+    <div class="absolute inset-0 -z-10 opacity-80"
+         style="background: radial-gradient(100% 80% at 0% 0%, rgba(24,183,190,0.16), transparent),
+                 radial-gradient(80% 70% at 120% -10%, rgba(255,111,94,0.14), transparent);"></div>
 
-    {% if messages %}
-    <div class="mb-4">
-      {% for message in messages %}
-      <div class="p-3 mb-2 rounded text-sm {% if message.tags == 'success' %}bg-green-500/80{% elif message.tags == 'error' %}bg-red-500/80{% endif %}">
-        {{ message }}
+    <div class="relative z-10 space-y-8">
+      <div class="text-center space-y-3">
+        <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/20 text-primary text-xl shadow-[0_12px_30px_rgba(5,24,36,0.18)]">
+          <i class="fa-solid fa-user-astronaut"></i>
+        </span>
+        <div class="space-y-1">
+          <h1 class="text-3xl font-semibold tracking-tight">Iniciar sesión</h1>
+          <p class="text-sm md:text-base text-text/70">Ingresá para gestionar reservas, beneficios y experiencias SEA STAR.</p>
+        </div>
       </div>
-      {% endfor %}
-    </div>
-    {% endif %}
 
-    <form method="POST" action="{% url 'login' %}" class="space-y-4">
-      {% csrf_token %}
-      <div>
-        <label class="block text-sm font-medium text-white">Usuario o correo electrónico</label>
-        <input type="text" name="username" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder="Usuario o email" required>
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-white">Contraseña</label>
-        <input type="password" name="password" class="w-full p-3 mt-2 bg-white/10 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder="••••••••" required>
-      </div>
-      <button type="submit" class="w-full py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-semibold rounded-lg hover:shadow-lg focus:outline-none transition">Iniciar Sesión</button>
-    </form>
+      {% if messages %}
+        <ul class="space-y-3">
+          {% for message in messages %}
+            <li class="flex items-start gap-3 rounded-2xl border px-4 py-3 text-sm md:text-base
+                       {% if message.tags == 'error' %}
+                         border-red-400/50 bg-red-500/10 text-red-100
+                       {% elif message.tags == 'success' %}
+                         border-primary/40 bg-primary/15 text-primary
+                       {% else %}
+                         border-secondary/35 bg-bg/60 text-text
+                       {% endif %}">
+              <span class="mt-0.5 text-lg">
+                {% if message.tags == 'error' %}
+                  <i class="fa-solid fa-circle-xmark"></i>
+                {% elif message.tags == 'success' %}
+                  <i class="fa-solid fa-circle-check"></i>
+                {% else %}
+                  <i class="fa-solid fa-circle-info"></i>
+                {% endif %}
+              </span>
+              <span>{{ message }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
 
-    <div class="text-center mt-6 text-sm text-white">
-      ¿No tienes una cuenta? 
-      <a href="{% url 'registro' %}" class="text-orange-400 hover:underline">Regístrate aquí</a>
+      <form method="POST" action="{% url 'login' %}" class="space-y-5">
+        {% csrf_token %}
+        <div class="space-y-2">
+          <label class="text-sm font-medium uppercase tracking-wide text-text/70">Usuario o correo electrónico</label>
+          <div class="relative">
+            <i class="fa-solid fa-envelope-open-text absolute left-4 top-1/2 -translate-y-1/2 text-text/50"></i>
+            <input
+              type="text"
+              name="username"
+              class="form-control w-full border border-primary/35 pl-12 pr-4 py-3 focus:ring-primary/60"
+              placeholder="usuario@correo.com"
+              required>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm font-medium uppercase tracking-wide text-text/70">Contraseña</label>
+          <div class="relative">
+            <i class="fa-solid fa-lock-keyhole absolute left-4 top-1/2 -translate-y-1/2 text-text/50"></i>
+            <input
+              type="password"
+              name="password"
+              class="form-control w-full border border-primary/35 pl-12 pr-4 py-3 focus:ring-primary/60"
+              placeholder="••••••••"
+              required>
+          </div>
+        </div>
+        <button type="submit"
+                class="w-full rounded-xl px-6 py-3 font-semibold tracking-wide btn-primary transition-transform duration-200 hover:scale-[1.02]">
+          Ingresar a mi cuenta
+        </button>
+      </form>
+
+      <div class="flex flex-col items-center gap-3 rounded-2xl border border-primary/15 bg-bg/60 p-5 text-sm text-text/70 md:flex-row md:justify-between md:text-base">
+        <span>¿Todavía no sos parte de SEA STAR?</span>
+        <a href="{% url 'registro' %}"
+           class="inline-flex items-center gap-2 rounded-full border border-secondary/40 px-4 py-2 text-sm font-semibold transition hover:border-secondary hover:text-secondary">
+          <i class="fa-solid fa-user-plus"></i>
+          Crear cuenta
+        </a>
+      </div>
     </div>
   </div>
 </div>
