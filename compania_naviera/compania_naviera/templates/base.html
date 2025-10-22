@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{% block title %}SEA STAR - Cruceros{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
   <script>
     tailwind.config = {
       theme: {
@@ -45,10 +46,24 @@
       --text: #F3F7FA;
       --text-muted: rgba(243, 247, 250, 0.72);
     }
+    html {
+      font-size: 18px;
+    }
     body {
       background: radial-gradient(circle at top, rgba(24, 183, 190, 0.16), transparent 60%), var(--bg);
       color: var(--text);
+      font-size: 1.05rem;
+      line-height: 1.6;
     }
+    p, li, label, input, select, textarea, button {
+      font-size: 1.05rem;
+    }
+    small {
+      font-size: 1rem;
+    }
+    .text-xs { font-size: 0.95rem !important; }
+    .text-sm { font-size: 1rem !important; }
+    .text-base { font-size: 1.05rem !important; }
     .card-surface {
       background: var(--surface);
       border: 1px solid rgba(24, 183, 190, 0.18);
@@ -120,6 +135,7 @@
       background-color: rgba(14, 36, 48, 0.65);
       color: var(--text);
       border-color: rgba(24, 183, 190, 0.35);
+      font-size: 1.05rem;
     }
     .form-control::placeholder {
       color: var(--text-muted);
