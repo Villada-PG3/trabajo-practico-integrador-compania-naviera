@@ -1,80 +1,118 @@
-# 🛳️ Proyecto Compañía Naviera SEA STAR
+# 🛳️ Compañía Naviera SEA STAR — Guía de Instalación
 
-Aplicación web Django para gestionar destinos, viajes y pasajeros.
+## 📘 Introducción
 
----
+La *Compañía Naviera SEA STAR* se dedica a la realización de cruceros y cuenta con una flota de navíos que ofrecen distintos niveles de lujo y capacidad.
+El sistema desarrollado permite gestionar navíos, cubiertas, camarotes, tripulación, itinerarios, viajes y pasajeros, manteniendo toda la información organizada y accesible.
 
-## 📌 Requisitos
-
-- Python 3.10+ (recomendado 3.12)
-- Django 5.2.6
-- SQLite (por defecto) o tu motor preferido
-- Pip / venv
+El proyecto está desarrollado con *Django, utiliza **SQLite* como base de datos por defecto y el tema *Unfold* para personalizar el panel de administración.
 
 ---
 
-## ⚙️ Instalación (paso a paso)
+## ⚙️ 1. Requisitos previos
 
-```bash
-# 1) Crear y activar un entorno virtual (Windows)
+Antes de comenzar, asegurate de tener instalado:
+
+* *Python 3.10+*
+* *Git*
+* *Pip* (incluido con Python)
+* *Virtualenv* (opcional, pero recomendado)
+
+---
+
+## 🐍 2. Clonar el repositorio
+
+bash
+git clone https://github.com/Villada-PG3/trabajo-practico-integrador-compania-naviera.git
+cd trabajo-practico-integrador-compania-naviera
+
+
+---
+
+## 🧩 3. Crear y activar entorno virtual
+
+### En Windows:
+
+bash
 python -m venv venv
 venv\Scripts\activate
 
-# Linux / macOS
+
+### En Linux/Mac:
+
+bash
 python3 -m venv venv
 source venv/bin/activate
 
-# 2) Instalar dependencias
-pip install -r compania_naviera/requirements.txt
 
-# 3) Migraciones
-cd compania_naviera
+---
+
+## 📦 4. Instalar dependencias
+
+bash
+pip install -r requirements.txt
+
+
+> Para asegurarte de que requirements.txt tenga todas las librerías instaladas, podés actualizarlo con:
+>
+> bash
+> pip freeze > requirements.txt
+> 
+
+---
+
+## 🚀 5. Crear y aplicar migraciones
+
+Ejecutá los siguientes comandos para crear las tablas en la base de datos:
+
+bash
+python manage.py makemigrations
 python manage.py migrate
 
-# 4) Crear superusuario
+
+> ⚠️ La base de datos estará vacía hasta que se agreguen datos.
+
+---
+
+## 📂 6. Cargar datos iniciales desde data.json
+
+Si querés poblar la base de datos con datos de ejemplo, podés usar el fixture data.json incluido en el proyecto:
+
+bash
+python manage.py loaddata data.json
+
+
+> Esto agregará los registros de navíos, cubiertas, camarotes, tripulación, itinerarios, viajes y pasajeros a la base de datos.
+
+---
+
+## 🧑‍💻 7. Crear un superusuario
+
+Para acceder al panel de administración y agregar datos manualmente:
+
+bash
 python manage.py createsuperuser
 
-# 5) Ejecutar
+
+Ingresá los datos solicitados.
+
+---
+
+## ▶️ 8. Ejecutar el servidor
+
+bash
 python manage.py runserver
-```
 
-Admin: http://127.0.0.1:8000/admin/
 
----
+Luego abrí tu navegador y accedé a:
 
-## 🎨 Admin con tema (preconfigurado)
 
-Se incluye el paquete **Jazzmin** para modernizar el admin.
+http://127.0.0.1:8000/
 
-- Paquete: `django-jazzmin==3.0.1`
-- Compatible con Django 5.2.x
-- Ya agregado en `INSTALLED_APPS` y configurado en `Config/settings.py` con `JAZZMIN_SETTINGS`.
-
-Si quieres desactivarlo, quita `'jazzmin'` de `INSTALLED_APPS` y elimina el bloque `JAZZMIN_SETTINGS`.
-
-### Cambiar branding del admin
-- Logo: coloca tu archivo en `compania_naviera/compania_naviera/static/` y ajusta `JAZZMIN_SETTINGS["site_logo"]`.
-- Colores/tema: cambia `JAZZMIN_SETTINGS["theme"]` o usa el **UI Builder** (ícono pincel) dentro del admin.
 
 ---
 
-## 🧰 Comandos útiles
+## 👥 Autores
 
-```bash
-# Crear app
-python manage.py startapp <nombre_app>
-
-# Superusuario
-python manage.py createsuperuser
-
-# Recopilar estáticos (si usas DEBUG=False en producción)
-python manage.py collectstatic
-```
-
----
-
-## 🧪 Verificación rápida
-
-1. Levanta el servidor y entra a `/admin`.
-2. Valida que veas el tema Jazzmin con el branding **SEA STAR**.
-3. Crea objetos de ejemplo desde el admin para asegurar que las relaciones funcionan.
+Proyecto desarrollado por el equipo de *Villada PG3*,
+como parte del *Trabajo Práctico Integrador — Compañía Naviera SEA STAR*.
