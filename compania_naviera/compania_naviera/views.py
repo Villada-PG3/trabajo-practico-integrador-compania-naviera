@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch, Avg, Q, Min
-from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView
+from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView, View
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -366,17 +366,37 @@ class CrearClienteView(LoginRequiredMixin, CreateView):
         return redirect(self.success_url)
 
 # Crear reserva
-class ReservaCreateView(LoginRequiredMixin, CreateView):
-    model = Reserva
-    form_class = FormularioReserva
+from django.views import View
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Cliente, ViajeXNavio, Camarote, OcupacionCamarote, Reserva, Pasajero, EstadoReserva, EstadoPasajero, TipoCamarote
+
+class ReservaCreateView(LoginRequiredMixin, View):
     template_name = "crear_reserva.html"
     success_url = reverse_lazy("mis_reservas")
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx["clientes"] = Cliente.objects.filter(usuario=self.request.user)
-        ctx["viajes"] = ViajeXNavio.objects.all()
-        return ctx
+    def get(self, request, *args, **kwargs):
+        clientes = Cliente.objects.filter(usuario=request.user)
+        viaje_navio_id = request.GET.get("viaje_navio_id")
+
+        if not viaje_navio_id:
+            messages.error(request, "No se ha seleccionado un viaje.")
+            return redirect("ofertas")
+
+        try:
+            viaje_seleccionado = ViajeXNavio.objects.select_related("viaje", "navio").get(id=viaje_navio_id)
+        except ViajeXNavio.DoesNotExist:
+            messages.error(request, "Viaje no encontrado.")
+            return redirect("ofertas")
+
+        context = {
+            "clientes": clientes,
+            "viaje_seleccionado": viaje_seleccionado,
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         cliente_id = request.POST.get("cliente")
@@ -384,8 +404,8 @@ class ReservaCreateView(LoginRequiredMixin, CreateView):
         camarote_id = request.POST.get("camarote")
 
         if not cliente_id or not viaje_id or not camarote_id:
-            messages.error(request, "Debes seleccionar cliente, viaje y camarote.")
-            return redirect("crear_reserva")
+            messages.error(request, "Debes seleccionar cliente y camarote.")
+            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
 
         try:
             cliente = Cliente.objects.get(id=cliente_id, usuario=request.user)
@@ -393,22 +413,20 @@ class ReservaCreateView(LoginRequiredMixin, CreateView):
             camarote = Camarote.objects.get(id=camarote_id)
         except (Cliente.DoesNotExist, ViajeXNavio.DoesNotExist, Camarote.DoesNotExist):
             messages.error(request, "Datos seleccionados inválidos.")
-            return redirect("crear_reserva")
+            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
 
-        # Verificar si el camarote ya está ocupado en ese viaje
-        ocupado = OcupacionCamarote.objects.filter(camarote=camarote, viaje_navio=viaje_navio).exists()
-        if ocupado:
-            messages.error(request, f"El camarote #{camarote.numero_de_camarote} ya está ocupado en este viaje. Seleccioná otro.")
-            return redirect("crear_reserva")
+        # Verificar ocupación
+        if OcupacionCamarote.objects.filter(camarote=camarote, viaje_navio=viaje_navio).exists():
+            messages.error(request, f"El camarote #{camarote.numero_de_camarote} ya está ocupado en este viaje.")
+            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
 
-        # Recoger pasajeros dinámicos
+        # Recoger pasajeros
         pasajeros = []
         for i in range(camarote.capacidad):
             nombre = request.POST.get(f"pasajero_nombre_{i}")
             apellido = request.POST.get(f"pasajero_apellido_{i}")
             dni = request.POST.get(f"pasajero_dni_{i}")
             fecha_nac = request.POST.get(f"pasajero_fecha_nacimiento_{i}")
-
             if nombre and apellido and dni and fecha_nac:
                 pasajeros.append({
                     "nombre": nombre,
@@ -419,17 +437,13 @@ class ReservaCreateView(LoginRequiredMixin, CreateView):
 
         if len(pasajeros) == 0:
             messages.error(request, "Debes agregar al menos un pasajero con todos los datos obligatorios.")
-            return redirect("crear_reserva")
-
+            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
         if len(pasajeros) > camarote.capacidad:
             messages.error(request, f"La cantidad de pasajeros excede la capacidad ({camarote.capacidad}).")
-            return redirect("crear_reserva")
+            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
 
         # Crear reserva
-        estado_reserva, _ = EstadoReserva.objects.get_or_create(
-            nombre="Pendiente",
-            defaults={"descripcion": "Pendiente"}
-        )
+        estado_reserva, _ = EstadoReserva.objects.get_or_create(nombre="Pendiente", defaults={"descripcion": "Pendiente"})
         reserva = Reserva.objects.create(
             descripcion="Reserva creada desde formulario",
             viaje_navio=viaje_navio,
@@ -438,11 +452,8 @@ class ReservaCreateView(LoginRequiredMixin, CreateView):
             camarote=camarote
         )
 
-        # Crear pasajeros y ocupación de camarote
-        estado_pasajero, _ = EstadoPasajero.objects.get_or_create(
-            nombre="Activo",
-            defaults={"descripcion": "Activo"}
-        )
+        # Crear pasajeros y ocupación
+        estado_pasajero, _ = EstadoPasajero.objects.get_or_create(nombre="Activo", defaults={"descripcion": "Activo"})
         for p in pasajeros:
             pasajero = Pasajero.objects.create(
                 reserva=reserva,
@@ -467,7 +478,9 @@ class ReservaCreateView(LoginRequiredMixin, CreateView):
         return redirect(self.success_url)
 
 
+# ======================
 # AJAX
+# ======================
 def ajax_tipos_camarote(request):
     viaje_navio_id = request.GET.get("viaje_navio_id")
     if not viaje_navio_id:
@@ -480,6 +493,7 @@ def ajax_tipos_camarote(request):
     data = [{"id": t.id, "nombre": t.nombre} for t in tipos]
     return JsonResponse(data, safe=False)
 
+
 def ajax_capacidades(request):
     viaje_navio_id = request.GET.get("viaje_navio_id")
     tipo_id = request.GET.get("tipo_id")
@@ -490,11 +504,11 @@ def ajax_capacidades(request):
     except ViajeXNavio.DoesNotExist:
         return JsonResponse([], safe=False)
     capacidades = Camarote.objects.filter(
-        cubierta__navio=viaje_navio.navio,
-        tipo_camarote_id=tipo_id
+        cubierta__navio=viaje_navio.navio, tipo_camarote_id=tipo_id
     ).values_list("capacidad", flat=True).distinct()
     data = sorted(list(set(capacidades)))
     return JsonResponse([{"capacidad": c} for c in data], safe=False)
+
 
 def ajax_camarotes(request):
     viaje_navio_id = request.GET.get("viaje_navio_id")
@@ -513,7 +527,7 @@ def ajax_camarotes(request):
     if capacidad:
         qs = qs.filter(capacidad=capacidad)
 
-    ocupados = OcupacionCamarote.objects.filter(viaje_navio=viaje_navio).values_list('camarote_id', flat=True)
+    ocupados = OcupacionCamarote.objects.filter(viaje_navio=viaje_navio).values_list("camarote_id", flat=True)
     qs = qs.exclude(id__in=ocupados)
 
     data = [

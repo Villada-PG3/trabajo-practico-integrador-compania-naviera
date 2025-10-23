@@ -13,7 +13,7 @@
     <form method="post" id="reservaForm" class="space-y-4">
       {% csrf_token %}
 
-      <!-- Paso 0: Seleccionar cliente -->
+      <!-- Seleccionar cliente -->
       <div>
         <label class="block text-sm font-medium mb-1">Selecciona un cliente</label>
         <select name="cliente" id="cliente" class="form-control">
@@ -27,20 +27,16 @@
         </a>
       </div>
 
-      <!-- Paso 1: Seleccionar viaje -->
-      <div>
-        <label class="block text-sm font-medium mb-1">Selecciona un viaje</label>
-        <select name="viaje_navio" id="viaje_navio" class="form-control">
-          <option value="">-- Selecciona un viaje --</option>
-          {% for v in viajes %}
-            <option value="{{ v.id }}">
-              {{ v.viaje.nombre }} — {{ v.navio.nombre }} ({{ v.viaje.fecha_de_salida }})
-            </option>
-          {% endfor %}
-        </select>
+      <!-- Viaje fijo -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1 text-text/80">Viaje seleccionado:</label>
+        <p class="text-text font-medium mb-1">
+          {{ viaje_seleccionado.viaje.nombre }} — {{ viaje_seleccionado.navio.nombre }}
+        </p>
+        <input type="hidden" name="viaje_navio" value="{{ viaje_seleccionado.id }}">
       </div>
 
-      <!-- Paso 2: Seleccionar tipo de camarote -->
+      <!-- Paso 2: Tipo de camarote -->
       <div id="tipoDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Selecciona tipo de camarote</label>
         <select name="tipo_camarote" id="tipo_camarote" class="form-control">
@@ -48,7 +44,7 @@
         </select>
       </div>
 
-      <!-- Paso 3: Seleccionar capacidad -->
+      <!-- Paso 3: Capacidad -->
       <div id="capacidadDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Selecciona capacidad</label>
         <select name="capacidad" id="capacidad" class="form-control">
@@ -56,7 +52,7 @@
         </select>
       </div>
 
-      <!-- Paso 4: Seleccionar camarote -->
+      <!-- Paso 4: Camarote -->
       <div id="camaroteDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Selecciona un camarote</label>
         <select name="camarote" id="camarote" class="form-control">
@@ -64,7 +60,7 @@
         </select>
       </div>
 
-      <!-- Paso 5: Agregar pasajeros dinámicamente -->
+      <!-- Paso 5: Pasajeros -->
       <div id="pasajerosDiv" style="display:none;">
         <label class="block text-sm font-medium mb-1">Agregar pasajeros</label>
         <div id="pasajerosContainer" class="space-y-2 mt-2"></div>
@@ -74,8 +70,7 @@
       </div>
 
       <!-- Botón final -->
-      <button type="submit" id="submitBtn"
-              class="w-full btn-primary font-semibold py-3 rounded-xl shadow-lg transition mt-4 hidden">
+      <button type="submit" id="submitBtn" class="w-full btn-primary font-semibold py-3 rounded-xl shadow-lg transition mt-4 hidden">
         Confirmar Reserva
       </button>
     </form>
@@ -84,7 +79,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  const viajeSelect = document.getElementById('viaje_navio');
+  const viajeId = "{{ viaje_seleccionado.id }}";
   const tipoSelect = document.getElementById('tipo_camarote');
   const capacidadSelect = document.getElementById('capacidad');
   const camaroteSelect = document.getElementById('camarote');
@@ -98,16 +93,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
   let capacidadMax = 0;
   let contadorPasajeros = 0;
+
   const applyFieldStyles = (element) => {
     element.classList.add(
       'w-full','rounded-lg','border','border-secondary/25','bg-bg/40','px-4','py-3','text-text',
       'placeholder-text/50','focus:outline-none','focus:ring-2','focus:ring-primary/60'
     );
   };
-
   document.querySelectorAll('.form-control').forEach(applyFieldStyles);
 
-  // Función para crear inputs de pasajero
+  // Función para agregar pasajero
   function agregarPasajero(){
     if(contadorPasajeros >= capacidadMax){
       alert("Ya alcanzaste la capacidad máxima del camarote");
@@ -126,39 +121,19 @@ document.addEventListener("DOMContentLoaded", function() {
     div.querySelectorAll('.pasajero-input').forEach(applyFieldStyles);
     contadorPasajeros++;
   }
-
   agregarPasajeroBtn.addEventListener("click", agregarPasajero);
 
-  // Eventos para cargar tipos, capacidades y camarotes (igual que antes)
-  viajeSelect.addEventListener('change', async () => {
-    const viajeId = viajeSelect.value;
-    if (!viajeId) {
-      tipoDiv.style.display = "none";
-      capacidadDiv.style.display = "none";
-      camaroteDiv.style.display = "none";
-      pasajerosDiv.style.display = "none";
-      submitBtn.classList.add("hidden");
-      capacidadMax = 0;
-      contadorPasajeros = 0;
-      pasajerosContainer.innerHTML = "";
-      return;
-    }
+  // Cargar tipos de camarote al cargar la página
+  async function cargarTipos() {
     const res = await fetch(`/ajax/tipos-camarote/?viaje_navio_id=${viajeId}`);
     const data = await res.json();
     tipoSelect.innerHTML = `<option value="">-- Selecciona tipo --</option>`;
     data.forEach(t => tipoSelect.innerHTML += `<option value="${t.id}">${t.nombre}</option>`);
     tipoDiv.style.display = "block";
-    capacidadDiv.style.display = "none";
-    camaroteDiv.style.display = "none";
-    pasajerosDiv.style.display = "none";
-    submitBtn.classList.add("hidden");
-    capacidadMax = 0;
-    contadorPasajeros = 0;
-    pasajerosContainer.innerHTML = "";
-  });
+  }
+  cargarTipos();
 
   tipoSelect.addEventListener('change', async () => {
-    const viajeId = viajeSelect.value;
     const tipoId = tipoSelect.value;
     if (!tipoId) {
       capacidadDiv.style.display = "none";
@@ -181,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   capacidadSelect.addEventListener('change', async () => {
-    const viajeId = viajeSelect.value;
     const tipoId = tipoSelect.value;
     const capacidad = capacidadSelect.value;
     if (!capacidad) {
