@@ -116,3 +116,7 @@ http://127.0.0.1:8000/
 
 Proyecto desarrollado por el equipo de *Villada PG3*,
 como parte del *Trabajo Práctico Integrador — Compañía Naviera SEA STAR*.
+
+
+## Presentacion link 
+https://prezi.com/p/ogdu6-1xjpfr/?present=1
