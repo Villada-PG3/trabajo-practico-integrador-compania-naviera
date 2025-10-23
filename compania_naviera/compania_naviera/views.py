@@ -101,10 +101,6 @@ class DestinoDetailView(DetailView):
 class OfertasView(TemplateView):
     template_name = "ofertas.html"
 
-    
-class OfertasView(TemplateView):
-    template_name = "ofertas.html"
-
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         hoy = now().date()
