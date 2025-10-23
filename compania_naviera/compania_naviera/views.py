@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Prefetch, Avg
+from django.db.models import Prefetch, Avg, Q, Min
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView
 from django.core.mail import send_mail
 from django.conf import settings
@@ -101,31 +101,46 @@ class DestinoDetailView(DetailView):
 class OfertasView(TemplateView):
     template_name = "ofertas.html"
 
+    
+class OfertasView(TemplateView):
+    template_name = "ofertas.html"
+
     def get_context_data(self, **kwargs):
         contexto = super().get_context_data(**kwargs)
         hoy = now().date()
 
-        promedio = ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy).aggregate(
-            Avg("precio")
-        )["precio__avg"]
+        # --- FILTROS DINÁMICOS ---
+        destino = self.request.GET.get('destino')
+        fecha = self.request.GET.get('fecha')
+        precio_min = self.request.GET.get('precio_min')
+        precio_max = self.request.GET.get('precio_max')
 
-        ofertas_qs = ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy).select_related(
-            "navio", "viaje"
-        ).prefetch_related(
-            Prefetch(
-                "viaje__itinerarioviaje_set",
-                queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
+        filtros = Q()
+        if destino:
+            filtros &= Q(viaje__lugar_destino__icontains=destino)
+        if fecha:
+            filtros &= Q(viaje__fecha_de_salida=fecha)
+        if precio_min:
+            filtros &= Q(precio__gte=float(precio_min))
+        if precio_max:
+            filtros &= Q(precio__lte=float(precio_max))
+
+        # --- Query principal ---
+        ofertas_qs = (
+            ViajeXNavio.objects.filter(filtros)
+            .select_related("navio", "viaje")
+            .prefetch_related(
+                Prefetch(
+                    "viaje__itinerarioviaje_set",
+                    queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
+                )
             )
-        ).filter(precio__lte=1000)
+            .order_by('precio')  # más baratos primero
+        )
 
-        if promedio is not None:
-            ofertas_qs = ofertas_qs | ViajeXNavio.objects.filter(
-                viaje__fecha_de_salida__gte=hoy, precio__lt=promedio
-            )
-
-        ofertas_qs = ofertas_qs.order_by("precio")[:5]
         ofertas = list(ofertas_qs)
 
+        # --- Enriquecer datos para template ---
         for oferta in ofertas:
             noches = 0
             if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:

@@ -22,17 +22,75 @@
   </div>
 </section>
 
-<!-- ======= GRID DE OFERTAS (DINÁMICO) ======= -->
+<!-- ======= FILTROS DINÁMICOS ======= -->
+<!-- ======= FILTROS DINÁMICOS ======= -->
+<section class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
+  <div class="rounded-2xl border border-secondary/25 bg-gradient-to-br from-surface/70 via-bg/60 to-surface/80 backdrop-blur-xl p-6 md:p-8 shadow-lg">
+    <h2 class="text-xl font-semibold text-text mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-filter text-primary"></i> Filtrar ofertas
+    </h2>
+
+    <form method="get" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <!-- Destino -->
+      <div class="flex flex-col">
+        <label for="destino" class="text-sm font-medium text-text/80 mb-1">Destino</label>
+        <input type="text" name="destino" id="destino"
+               value="{{ request.GET.destino }}"
+               placeholder="Ej: Caribe"
+               class="w-full px-3 py-2 rounded-lg bg-bg/70 border border-secondary/30 text-text focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary/40 transition">
+      </div>
+
+      <!-- Fecha -->
+      <div class="flex flex-col">
+        <label for="fecha" class="text-sm font-medium text-text/80 mb-1">Fecha de salida</label>
+        <input type="date" name="fecha" id="fecha"
+               value="{{ request.GET.fecha }}"
+               class="w-full px-3 py-2 rounded-lg bg-bg/70 border border-secondary/30 text-text focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary/40 transition">
+      </div>
+
+      <!-- Precio mínimo -->
+      <div class="flex flex-col">
+        <label for="precio_min" class="text-sm font-medium text-text/80 mb-1">Precio mínimo</label>
+        <input type="number" name="precio_min" id="precio_min"
+               value="{{ request.GET.precio_min }}"
+               placeholder="USD"
+               min="0"
+               class="w-full px-3 py-2 rounded-lg bg-bg/70 border border-secondary/30 text-text focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary/40 transition">
+      </div>
+
+      <!-- Precio máximo -->
+      <div class="flex flex-col">
+        <label for="precio_max" class="text-sm font-medium text-text/80 mb-1">Precio máximo</label>
+        <input type="number" name="precio_max" id="precio_max"
+               value="{{ request.GET.precio_max }}"
+               placeholder="USD"
+               min="0"
+               class="w-full px-3 py-2 rounded-lg bg-bg/70 border border-secondary/30 text-text focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary/40 transition">
+      </div>
+
+      <!-- Botón -->
+      <div class="flex flex-col justify-end">
+        <button type="submit"
+                class="w-full py-2.5 rounded-lg bg-primary text-white font-medium shadow-md hover:shadow-lg hover:scale-[1.02] transition">
+          <i class="fa-solid fa-magnifying-glass"></i> Filtrar
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+
+<!-- ======= GRID DE OFERTAS ======= -->
 <section class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
   <div id="oCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-text">
 
     {% for oferta in ofertas %}
       <article data-card
-               data-title="{{ oferta.viaje.destino }}"
+               data-title="{{ oferta.viaje.nombre }}"
                data-cat="{{ oferta.categoria_slug }}"
                data-price="{{ oferta.precio }}"
                data-nights="{{ oferta.noches }}"
-               data-dest="{{ oferta.viaje.destino }}"
+               data-dest="{{ oferta.viaje.lugar_destino }}"
                class="group relative">
         <div class="rounded-2xl p-[1px] bg-gradient-to-br from-secondary/40 via-secondary/10 to-transparent shadow-neon">
           <div class="flex h-full flex-col rounded-2xl card-surface border border-secondary/20 backdrop-blur-sm shadow-lg
@@ -53,16 +111,16 @@
             </div>
             <div class="p-6 flex flex-col gap-3">
               <h3 class="text-xl font-semibold flex items-center gap-2">
-                <i class="fa-solid fa-ship text-secondary"></i> {{ oferta.viaje.destino }}
+                <i class="fa-solid fa-ship text-secondary"></i> {{ oferta.viaje.nombre }}
               </h3>
               <p class="text-text/75 text-sm">
-                {{ oferta.noches }} noches desde {{ oferta.viaje.origen }}. {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
+                {{ oferta.noches }} noches desde {{ oferta.viaje.nombre }}. {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
               </p>
               <div class="mt-auto flex items-center justify-between gap-3 pt-2">
                 <div class="text-xs text-text/70 flex items-center gap-2">
                   <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> {{ oferta.noches }} noches</span>
                   <span class="opacity-50">•</span>
-                  <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.destino }}</span>
+                  <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.lugar_destino }}</span>
                 </div>
                 <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
                    class="px-4 py-2 rounded-lg btn-primary font-medium shadow hover:scale-[1.02]">
