@@ -85,57 +85,56 @@
   <div id="oCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-text">
 
     {% for oferta in ofertas %}
-      <article data-card
-               data-title="{{ oferta.viaje.nombre }}"
-               data-cat="{{ oferta.categoria_slug }}"
-               data-price="{{ oferta.precio }}"
-               data-nights="{{ oferta.noches }}"
-               data-dest="{{ oferta.viaje.lugar_destino }}"
-               class="group relative">
-        <div class="rounded-2xl p-[1px] bg-gradient-to-br from-secondary/40 via-secondary/10 to-transparent shadow-neon">
-          <div class="flex h-full flex-col rounded-2xl card-surface border border-secondary/20 backdrop-blur-sm shadow-lg
-                      transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
-            <div class="relative">
-              {% if oferta.navio.imagen %}
-                <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
-              {% else %}
-                <img src="{% static 'placeholder.jpg' %}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
-              {% endif %}
-              <div class="absolute inset-0 bg-gradient-to-t from-surface/85 via-transparent to-transparent"></div>
-              <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-bg/60 text-text/80">
-                {{ oferta.categoria_nombre }}
-              </span>
-              <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-primary text-white font-bold shadow-[0_10px_22px_rgba(5,24,36,0.12)]">
-                USD {{ oferta.precio }}
-              </span>
-            </div>
-            <div class="p-6 flex flex-col gap-3">
-              <h3 class="text-xl font-semibold flex items-center gap-2">
-                <i class="fa-solid fa-ship text-secondary"></i> {{ oferta.viaje.nombre }}
-              </h3>
-              <p class="text-text/75 text-sm">
-                {{ oferta.noches }} noches desde {{ oferta.viaje.nombre }}. {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
-              </p>
-              <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-                <div class="text-xs text-text/70 flex items-center gap-2">
-                  <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> {{ oferta.noches }} noches</span>
-                  <span class="opacity-50">•</span>
-                  <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.lugar_destino }}</span>
-                </div>
-                <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                   class="px-4 py-2 rounded-lg btn-primary font-medium shadow hover:scale-[1.02]">
-                  {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
-                </a>
-              </div>
+      <a href="{% url 'detalle_oferta' oferta.id %}" 
+         class="group relative block rounded-2xl p-[1px] bg-gradient-to-br from-secondary/40 via-secondary/10 to-transparent shadow-neon hover:shadow-2xl transition transform hover:-translate-y-1 duration-300">
+
+        <div class="flex h-full flex-col rounded-2xl card-surface border border-secondary/20 backdrop-blur-sm shadow-lg overflow-hidden">
+          
+          <!-- Imagen -->
+          <div class="relative">
+            {% if oferta.navio.imagen %}
+              <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover transition duration-500 group-hover:scale-105">
+            {% else %}
+              <img src="{% static 'placeholder.jpg' %}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover transition duration-500 group-hover:scale-105">
+            {% endif %}
+            <div class="absolute inset-0 bg-gradient-to-t from-surface/85 via-transparent to-transparent"></div>
+
+            <!-- Etiquetas -->
+            <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-bg/60 text-text/80">
+              {{ oferta.categoria_nombre }}
+            </span>
+            <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-primary text-white font-bold shadow-[0_10px_22px_rgba(5,24,36,0.12)]">
+              USD {{ oferta.precio }}
+            </span>
+          </div>
+
+          <!-- Contenido -->
+          <div class="p-6 flex flex-col gap-3">
+            <h3 class="text-xl font-semibold flex items-center gap-2">
+              <i class="fa-solid fa-ship text-secondary"></i> {{ oferta.viaje.nombre }}
+            </h3>
+            <p class="text-text/75 text-sm">
+              {{ oferta.noches }} noches hacia {{ oferta.viaje.lugar_destino }}. 
+              {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
+            </p>
+
+            <div class="mt-auto flex items-center justify-between gap-3 pt-2 text-xs text-text/70">
+              <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> {{ oferta.noches }} noches</span>
+              <span class="opacity-50">•</span>
+              <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.lugar_destino }}</span>
             </div>
           </div>
+
+          <!-- Overlay hover sutil -->
+          <div class="absolute inset-0 rounded-2xl bg-black/0 group-hover:bg-black/10 transition"></div>
         </div>
-      </article>
+      </a>
     {% empty %}
       <p class="col-span-3 text-center text-text/75">No hay ofertas disponibles en este momento.</p>
     {% endfor %}
 
   </div>
 </section>
+
 
 {% endblock %}

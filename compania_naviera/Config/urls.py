@@ -10,6 +10,7 @@ from compania_naviera.views import (
     DestinoDetailView,
     OfertasView,
     RegistroUsuario,
+    DetalleOfertaView,
 )
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
     path('destinos/', DestinosView.as_view(), name='destinos'),
     path('destino/<int:pk>/', DestinoDetailView.as_view(), name='destino_detail'),
     path('ofertas/', OfertasView.as_view(), name='ofertas'),
+    path('<int:pk>/', DetalleOfertaView.as_view(), name='detalle_oferta'),
 
     # ----------------------
     # Login / Logout / Registro

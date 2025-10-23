@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ oferta.viaje.nombre }} - SEA STAR{% endblock %}
+
+{% block content %}
+<section class="max-w-6xl mx-auto px-6 lg:px-10 py-10 text-text">
+
+  <!-- ENCABEZADO -->
+  <div class="flex flex-col md:flex-row gap-8 mb-10">
+    <div class="md:w-1/2">
+      {% if oferta.navio.imagen %}
+        <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="w-full h-80 object-cover rounded-2xl shadow-lg">
+      {% else %}
+        <img src="{% static 'placeholder.jpg' %}" alt="Imagen del viaje" class="w-full h-80 object-cover rounded-2xl shadow-lg">
+      {% endif %}
+    </div>
+
+    <div class="md:w-1/2 flex flex-col justify-center">
+      <h1 class="text-3xl font-bold mb-3">{{ oferta.viaje.nombre }}</h1>
+      <p class="text-text/80 mb-4">{{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}</p>
+
+      <ul class="space-y-2 text-sm">
+        <li><i class="fa-solid fa-location-dot text-primary"></i> <strong>Destino:</strong> {{ oferta.viaje.lugar_destino }}</li>
+        <li><i class="fa-regular fa-calendar text-primary"></i> <strong>Salida:</strong> {{ oferta.viaje.fecha_de_salida }}</li>
+        <li><i class="fa-regular fa-moon text-primary"></i> <strong>Noches:</strong> {{ noches }}</li>
+        <li><i class="fa-solid fa-ship text-primary"></i> <strong>Navío:</strong> {{ oferta.navio.nombre }}</li>
+        <li><i class="fa-solid fa-tag text-primary"></i> <strong>Precio:</strong> USD {{ oferta.precio }}</li>
+        <li><i class="fa-solid fa-layer-group text-primary"></i> <strong>Categoría:</strong> {{ categoria_nombre }}</li>
+      </ul>
+
+      <div class="mt-6">
+        <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'detalle_oferta' oferta.id %}{% endif %}"
+           class="btn-primary px-6 py-3 rounded-lg font-medium text-white shadow-md hover:scale-[1.03] transition">
+          {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITINERARIO -->
+  {% if itinerarios %}
+    <div class="mt-10">
+      <h2 class="text-2xl font-semibold mb-4">🗺️ Itinerario del viaje</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for item in itinerarios %}
+          <div class="rounded-xl border border-secondary/25 bg-bg/40 p-5 shadow-sm backdrop-blur-sm">
+            <h3 class="font-semibold text-primary mb-2">{{ item.itinerario.nombre }}</h3>
+            <p class="text-sm text-text/70">{{ item.itinerario.descripcion|default:"Sin descripción." }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+</section>
+{% endblock %}

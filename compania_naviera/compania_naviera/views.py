@@ -160,6 +160,36 @@ class OfertasView(TemplateView):
 
         contexto["ofertas"] = ofertas
         return contexto
+    
+
+class DetalleOfertaView(DetailView):
+    model = ViajeXNavio
+    template_name = "detalle_oferta.html"
+    context_object_name = "oferta"
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        oferta = self.get_object()
+
+        # Calcular noches
+        noches = 0
+        if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
+            noches = max((oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days, 0)
+
+        # Obtener categoría del itinerario
+        itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
+        categoria_nombre = ""
+        if itinerarios:
+            itinerario_obj = getattr(itinerarios[0], "itinerario", None)
+            categoria = getattr(itinerario_obj, "categoria", None)
+            if categoria:
+                categoria_nombre = categoria.nombre
+
+        contexto["noches"] = noches
+        contexto["categoria_nombre"] = categoria_nombre or "Otros"
+        contexto["itinerarios"] = itinerarios
+        return contexto
+
 # ===========================
 # Autenticación / Perfil
 # ===========================
