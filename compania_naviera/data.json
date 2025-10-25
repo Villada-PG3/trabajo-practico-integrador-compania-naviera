@@ -4,23 +4,100 @@
     "pk": 1,
     "fields": {
       "nombre": "Administrador",
-      "descripcion": "Gestiona la plataforma, define políticas comerciales y mantiene la operación segura."
+      "descripcion": "Administra todo el sistema y los registros principales."
     }
   },
   {
     "model": "compania_naviera.rol",
     "pk": 2,
     "fields": {
-      "nombre": "Asesor de viajes",
-      "descripcion": "Acompaña a los clientes en la elección de itinerarios, ofertas y reservas personalizadas."
+      "nombre": "Empleado",
+      "descripcion": "Gestiona reservas, pagos y asignaciones de pasajeros."
     }
   },
   {
     "model": "compania_naviera.rol",
     "pk": 3,
     "fields": {
-      "nombre": "Viajero",
-      "descripcion": "Cliente registrado que crea reservas, gestiona pagos y revisa servicios contratados."
+      "nombre": "Cliente",
+      "descripcion": "Usuario con acceso a su perfil y estado de reservas."
+    }
+  },
+  {
+    "model": "compania_naviera.rol",
+    "pk": 4,
+    "fields": {
+      "nombre": "Auditor",
+      "descripcion": "Audita los registros de pagos y validaciones contables."
+    }
+  },
+
+  {
+    "model": "compania_naviera.usuariopersonalizado",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$admin$yTzyrj7Rr4Sa4H0BQwC81IvfY7Shz5m+3hIV2CJYdjk=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin_naviera",
+      "email": "admin@naviera.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-11-01T00:00:00Z",
+      "rol": 1,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "compania_naviera.usuariopersonalizado",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$empleado$LQPi04R41Kac8uW8xYqzjZ74oZbVk8so8YJ3VbV8Yh8=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "empleado_naviera",
+      "email": "empleado@naviera.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-11-01T00:00:00Z",
+      "rol": 2,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "compania_naviera.usuariopersonalizado",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$cliente$ZrPzQ3LyAcPYwUkD0h6kfgPKP5d+Mlo7G94KUBnbv1A=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "cliente_naviera",
+      "email": "cliente@naviera.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-11-01T00:00:00Z",
+      "rol": 3,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "compania_naviera.usuariopersonalizado",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$auditor$NfBjy9EKCvsu1QqGBm3qbpX01cM7SmxQvEFeiOf0W+s=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "auditor_naviera",
+      "email": "auditor@naviera.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-11-01T00:00:00Z",
+      "rol": 4,
+      "groups": [],
+      "user_permissions": []
     }
   },
 
@@ -31,11 +108,11 @@
       "nombre": "Sofía",
       "apellido": "Ramírez",
       "dni": "34876543",
-      "direccion": "Av. Costanera 1020, CABA",
+      "direccion": "Av. Belgrano 2041, Buenos Aires",
       "fecha_nacimiento": "1993-05-12",
       "nacionalidad": "AR",
       "genero": "F",
-      "usuario": 1
+      "usuario": 3
     }
   },
   {
@@ -45,13 +122,14 @@
       "nombre": "Martín",
       "apellido": "Gómez",
       "dni": "32654789",
-      "direccion": "Calle Colón 454, Córdoba",
+      "direccion": "Rua Augusta 120, São Paulo",
       "fecha_nacimiento": "1989-11-03",
-      "nacionalidad": "AR",
+      "nacionalidad": "BR",
       "genero": "M",
       "usuario": 4
     }
   },
+
   {
     "model": "compania_naviera.tiponavio",
     "pk": 1,
@@ -901,9 +979,9 @@
     "fields": {
       "pago": 2,
       "fecha_cambio": "2024-11-18",
-      "cambio_realizado": "Envío de recordatorio de pago restante al cliente.",
+      "cambio_realizado": "Auditoría de seguimiento de pago pendiente.",
       "estado_pago": 2,
-      "usuario_responsable": 3
+      "usuario_responsable": 4
     }
-  }
+  } 
 ]
