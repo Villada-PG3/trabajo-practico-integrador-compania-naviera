@@ -1,134 +1,78 @@
 {% extends "base.html" %}
-
 {% block title %}Destinos - SEA STAR{% endblock %}
 
 {% block content %}
 <section class="mx-auto max-w-7xl px-6 lg:px-10 py-10">
-  <div class="grid gap-10 lg:grid-cols-[minmax(0,2.2fr),minmax(0,1fr)] items-start">
-    <div class="space-y-8">
-      <!-- Header -->
-      <header class="relative overflow-hidden rounded-3xl border border-secondary/25 card-surface p-8 shadow-neon">
-        <div class="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p class="text-xs uppercase tracking-[0.25em] text-text/65">Explorá el mundo con SEA STAR</p>
-            <h1 class="text-3xl lg:text-4xl font-black leading-tight">Nuestros destinos destacados</h1>
-            <p class="mt-2 text-sm text-text/75 max-w-2xl">
-              Descubrí puertos imperdibles, itinerarios exclusivos y actividades diseñadas para cada viajero. Elegí tu próxima escala y planificá tu travesía ideal.
-            </p>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-[240px]">
-            <div class="rounded-3xl bg-secondary/15 border border-secondary/30 px-5 py-4">
-              <p class="text-xs uppercase tracking-wide text-text/65">Destinos disponibles</p>
-              <p class="mt-2 text-3xl font-bold text-secondary">{{ destinos|length }}</p>
-            </div>
-            <div class="rounded-3xl bg-primary/20 border border-primary/35 px-5 py-4">
-              <p class="text-xs uppercase tracking-wide text-text/65">Experiencias a medida</p>
-              <p class="mt-2 text-sm text-text/80">Gastronomía, aventura y cultura en cada parada.</p>
-            </div>
-          </div>
+  <!-- Encabezado reducido -->
+  <header class="text-center mb-12">
+    <h1 class="text-4xl font-bold text-text">Destinos destacados</h1>
+    <p class="mt-2 text-sm text-text/70 max-w-2xl mx-auto">
+      Elegí tu próxima escala y descubrí los puertos más emblemáticos del mundo.
+    </p>
+  </header>
+
+  <!-- Cards de destinos -->
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-16">
+    {% for puerto in destinos %}
+      <a href="{% url 'destino_detail' puerto.pk %}"
+         class="group block overflow-hidden rounded-3xl border border-secondary/20 bg-surface/70 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md hover:border-secondary/40">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-text group-hover:text-secondary flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-secondary"></i>
+            {{ puerto.nombre }}
+          </h2>
+          <span class="text-xs text-text/50">#{{ forloop.counter }}</span>
         </div>
-        <div class="pointer-events-none absolute -top-16 -right-20 h-40 w-40 rounded-full bg-primary/25 blur-3xl"></div>
-        <div class="pointer-events-none absolute bottom-0 left-10 h-28 w-28 rounded-full bg-secondary/25 blur-3xl"></div>
-      </header>
 
-      <!-- Lista de destinos -->
-      <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-      {% for puerto in destinos %}
-        <a href="{% url 'destino_detail' puerto.pk %}" class="group relative block overflow-hidden rounded-3xl border border-secondary/20 card-surface p-6 shadow-neon transition duration-300 hover:-translate-y-1 hover:border-secondary/40">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="inline-flex items-center gap-2 text-2xl font-semibold text-text transition group-hover:text-secondary">
-                <i class="fa-solid fa-location-dot text-secondary"></i>
-                {{ puerto.nombre }}
-              </p>
-              <p class="mt-3 text-sm text-text/75 flex items-center gap-2">
-                <span class="inline-flex items-center justify-center rounded-full bg-secondary/15 px-2 py-1 text-xs font-semibold uppercase tracking-wide text-secondary border border-secondary/30">
-                  {{ puerto.itinerario.categoria.nombre }}
-                </span>
-                <span class="flex items-center gap-2 text-text/70">
-                  <i class="fa-solid fa-route text-secondary"></i>
-                  Orden {{ puerto.orden }}
-                </span>
-              </p>
-            </div>
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
-              #{{ forloop.counter }}
-            </span>
-          </div>
+        {% if puerto.itinerario %}
+          <p class="mt-2 text-xs uppercase tracking-wide text-secondary/80">
+            {{ puerto.itinerario.categoria.nombre }}
+          </p>
+        {% endif %}
 
-          {% if puerto.ubicaciones.all %}
-          <div class="mt-4 rounded-2xl border border-secondary/20 bg-bg/35 p-4 text-sm">
-            <p class="text-xs uppercase tracking-wide text-text/60 mb-1">Ubicaciones</p>
-            <p class="text-text/80 leading-relaxed">
-              {% for ubicacion in puerto.ubicaciones.all %}
-                {{ ubicacion.nombre }}{% if not forloop.last %}, {% endif %}
-              {% endfor %}
-            </p>
-          </div>
-          {% endif %}
+        {% if puerto.ubicaciones.all %}
+          <p class="mt-3 text-sm text-text/70">
+            {% for ubicacion in puerto.ubicaciones.all %}
+              {{ ubicacion.nombre }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+        {% endif %}
 
-          <div class="mt-5 space-y-3">
-            <h3 class="text-sm font-semibold text-text/80 uppercase tracking-wide">Actividades disponibles</h3>
-            <ul class="space-y-2 text-sm text-text/75">
-              {% for act in puerto.actividades.all %}
-                <li class="flex items-start gap-2">
-                  <span class="mt-[6px] h-1.5 w-1.5 rounded-full bg-secondary"></span>
-                  <div>
-                    <p class="font-medium text-text">{{ act.actividad.nombre }}</p>
-                    <p class="text-text/65">{{ act.actividad.descripcion }}</p>
-                  </div>
-                </li>
-              {% empty %}
-                <li class="rounded-lg border border-dashed border-secondary/25 bg-bg/35 px-3 py-2 text-text/65">No hay actividades disponibles.</li>
-              {% endfor %}
-            </ul>
-          </div>
-        </a>
-      {% empty %}
-        <div class="sm:col-span-2 xl:col-span-3 rounded-3xl border border-dashed border-secondary/25 bg-bg/35 p-10 text-center text-text/80 shadow-neon">
-          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-secondary/15 text-2xl text-secondary">
-            <i class="fa-solid fa-compass"></i>
-          </div>
-          <h2 class="mt-4 text-2xl font-semibold text-text">No hay destinos disponibles por el momento.</h2>
-          <p class="mt-2 text-sm text-text/70">Volvé pronto para descubrir nuevas rutas y aventuras marítimas.</p>
-        </div>
-      {% endfor %}
-      </div>
-    </div>
-
-    <!-- Aside / Sidebar -->
-    <aside class="lg:sticky lg:top-24">
-      <div class="relative overflow-hidden rounded-3xl border border-secondary/25 bg-gradient-to-br from-primary/25 via-secondary/20 to-surface/95 p-8 shadow-neon text-text">
-        <div class="relative z-10 space-y-5">
-          <h3 class="text-2xl font-bold">Planificá tu recorrido</h3>
-          <p class="text-sm text-text/80">Seleccioná los puertos que más te inspiran y explorá los cruceros que visitan estos destinos soñados.</p>
-          <ul class="space-y-3 text-sm text-text/80">
-            <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
-                <i class="fa-solid fa-map-location-dot"></i>
-              </span>
-              Compará itinerarios y paradas clave
-            </li>
-            <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
-                <i class="fa-solid fa-ticket"></i>
-              </span>
-              Reservá excursiones y experiencias especiales
-            </li>
-            <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
-                <i class="fa-solid fa-life-ring"></i>
-              </span>
-              Recibí asistencia personalizada 24/7
-            </li>
+        {% if puerto.actividades.all %}
+          <ul class="mt-4 space-y-1 text-sm text-text/75">
+            {% for act in puerto.actividades.all|slice:":2" %}
+              <li class="flex items-start gap-2">
+                <span class="mt-[6px] h-1.5 w-1.5 rounded-full bg-secondary"></span>
+                {{ act.actividad.nombre }}
+              </li>
+            {% endfor %}
+            {% if puerto.actividades.count > 2 %}
+              <li class="text-text/50 text-xs italic">+ más actividades...</li>
+            {% endif %}
           </ul>
-          <a href="{% url 'cruceros' %}" class="inline-flex items-center gap-2 rounded-full btn-primary px-5 py-3 text-sm font-semibold transition hover:scale-[1.02]">
-            <i class="fa-solid fa-ship"></i> Ver cruceros disponibles
-          </a>
-        </div>
-        <div class="pointer-events-none absolute -bottom-16 -right-10 h-36 w-36 rounded-full bg-secondary/25 blur-3xl"></div>
+        {% endif %}
+      </a>
+    {% empty %}
+      <div class="sm:col-span-2 lg:col-span-3 text-center py-20 border border-dashed border-secondary/25 rounded-3xl bg-bg/35">
+        <p class="text-xl font-semibold text-text">No hay destinos disponibles por el momento.</p>
+        <p class="mt-2 text-sm text-text/60">Vuelve pronto para descubrir nuevas rutas marítimas.</p>
       </div>
-    </aside>
+    {% endfor %}
   </div>
+
+  <!-- Card "Planificá tu recorrido" -->
+  <div class="max-w-md mx-auto">
+    <div class="rounded-3xl border border-secondary/20 bg-surface/80 p-6 text-center shadow-sm transition hover:shadow-md">
+      <h3 class="text-2xl font-bold text-text mb-2">Planificá tu recorrido</h3>
+      <p class="text-sm text-text/70 mb-4">
+        Seleccioná los puertos que más te inspiran y explorá los cruceros disponibles.
+      </p>
+      <a href="{% url 'cruceros' %}"
+         class="inline-flex items-center gap-2 rounded-full btn-primary px-5 py-3 text-sm font-semibold transition hover:scale-[1.02]">
+        <i class="fa-solid fa-ship"></i> Ver cruceros disponibles
+      </a>
+    </div>
+  </div>
+
 </section>
 {% endblock %}
