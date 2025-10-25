@@ -66,7 +66,6 @@ pip install -r requirements.txt
 Ejecutá los siguientes comandos para crear las tablas en la base de datos:
 
 bash
-python manage.py makemigrations
 python manage.py migrate
 
 
