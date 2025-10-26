@@ -7,30 +7,7 @@
       "descripcion": "Administra todo el sistema y los registros principales."
     }
   },
-  {
-    "model": "compania_naviera.rol",
-    "pk": 2,
-    "fields": {
-      "nombre": "Empleado",
-      "descripcion": "Gestiona reservas, pagos y asignaciones de pasajeros."
-    }
-  },
-  {
-    "model": "compania_naviera.rol",
-    "pk": 3,
-    "fields": {
-      "nombre": "Cliente",
-      "descripcion": "Usuario con acceso a su perfil y estado de reservas."
-    }
-  },
-  {
-    "model": "compania_naviera.rol",
-    "pk": 4,
-    "fields": {
-      "nombre": "Auditor",
-      "descripcion": "Audita los registros de pagos y validaciones contables."
-    }
-  },
+  
 
   {
     "model": "compania_naviera.usuariopersonalizado",
@@ -49,23 +26,7 @@
       "user_permissions": []
     }
   },
-  {
-    "model": "compania_naviera.usuariopersonalizado",
-    "pk": 2,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$empleado$LQPi04R41Kac8uW8xYqzjZ74oZbVk8so8YJ3VbV8Yh8=",
-      "last_login": null,
-      "is_superuser": false,
-      "username": "empleado_naviera",
-      "email": "empleado@naviera.com",
-      "is_staff": true,
-      "is_active": true,
-      "date_joined": "2024-11-01T00:00:00Z",
-      "rol": 2,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
+  
 
   {
     "model": "compania_naviera.tiponavio",
@@ -682,87 +643,6 @@
       "viaje_navio": 2,
       "fecha_inicio": "2025-02-28",
       "fecha_fin": "2025-03-20"
-    }
-  },
-  {
-    "model": "compania_naviera.pasajero",
-    "pk": 1,
-    "fields": {
-      "reserva": 1,
-      "nombre": "Sofía",
-      "apellido": "Ramírez",
-      "fecha_nacimiento": "1993-05-12",
-      "dni": "34876543",
-      "fecha_inicio": "2025-02-10",
-      "fecha_fin": "2025-02-25",
-      "estado_pasajero": 1
-    }
-  },
-  {
-    "model": "compania_naviera.pasajero",
-    "pk": 2,
-    "fields": {
-      "reserva": 1,
-      "nombre": "Juan",
-      "apellido": "Pereyra",
-      "fecha_nacimiento": "1990-09-08",
-      "dni": "30123654",
-      "fecha_inicio": "2025-02-10",
-      "fecha_fin": "2025-02-25",
-      "estado_pasajero": 1
-    }
-  },
-  {
-    "model": "compania_naviera.pasajero",
-    "pk": 3,
-    "fields": {
-      "reserva": 2,
-      "nombre": "Martín",
-      "apellido": "Gómez",
-      "fecha_nacimiento": "1989-11-03",
-      "dni": "32654789",
-      "fecha_inicio": "2025-03-05",
-      "fecha_fin": "2025-03-18",
-      "estado_pasajero": 2
-    }
-  },
-  {
-    "model": "compania_naviera.ocupacioncamarote",
-    "pk": 1,
-    "fields": {
-      "reserva": 1,
-      "camarote": 2,
-      "tripulante": null,
-      "pasajero": 1,
-      "viaje_navio": 1,
-      "fecha_inicio": "2025-02-10",
-      "fecha_fin": "2025-02-25"
-    }
-  },
-  {
-    "model": "compania_naviera.ocupacioncamarote",
-    "pk": 2,
-    "fields": {
-      "reserva": 1,
-      "camarote": 2,
-      "tripulante": null,
-      "pasajero": 2,
-      "viaje_navio": 1,
-      "fecha_inicio": "2025-02-10",
-      "fecha_fin": "2025-02-25"
-    }
-  },
-  {
-    "model": "compania_naviera.ocupacioncamarote",
-    "pk": 3,
-    "fields": {
-      "reserva": 2,
-      "camarote": 4,
-      "tripulante": null,
-      "pasajero": 3,
-      "viaje_navio": 2,
-      "fecha_inicio": "2025-03-05",
-      "fecha_fin": "2025-03-18"
     }
   }
 ]
