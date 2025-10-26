@@ -47,6 +47,9 @@ def main_view(request):
     logout(request)  # deja la sesión limpia al entrar al home
     
     return render(request, "inicio.html")
+
+
+
 class ContactoView(TemplateView):
     template_name = "contacto.html"
 
