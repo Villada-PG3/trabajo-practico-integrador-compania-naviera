@@ -305,6 +305,30 @@
     }
   },
   {
+    "model": "compania_naviera.itinerario",
+    "pk": 3,
+    "fields": {
+      "categoria": 1,
+      "imagen": "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1200&q=70"
+    }
+  },
+  {
+    "model": "compania_naviera.itinerario",
+    "pk": 4,
+    "fields": {
+      "categoria": 1,
+      "imagen": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=70"
+    }
+  },
+  {
+    "model": "compania_naviera.itinerario",
+    "pk": 5,
+    "fields": {
+      "categoria": 2,
+      "imagen": "https://images.unsplash.com/photo-1476610182048-b716b8518aae?auto=format&fit=crop&w=1200&q=70"
+    }
+  },
+  {
     "model": "compania_naviera.orden",
     "pk": 1,
     "fields": {
@@ -352,6 +376,96 @@
       "descripcion": "Desembarco en zodiac con guías y avistaje de glaciares.",
       "orden": 2,
       "itinerario": 2
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 6,
+    "fields": {
+      "nombre": "Porto Belo",
+      "descripcion": "Snorkel en piscinas naturales y paseo por el centro colonial.",
+      "orden": 1,
+      "itinerario": 3
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 7,
+    "fields": {
+      "nombre": "Ilhabela",
+      "descripcion": "Senderismo por cascadas selváticas y tarde en playa Castelhanos.",
+      "orden": 2,
+      "itinerario": 3
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 8,
+    "fields": {
+      "nombre": "Armação dos Búzios",
+      "descripcion": "Recorrido en escuna por las mejores playas y cena gourmet frente al mar.",
+      "orden": 3,
+      "itinerario": 3
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 9,
+    "fields": {
+      "nombre": "Bridgetown",
+      "descripcion": "City tour patrimonial y degustación de ron en destilería boutique.",
+      "orden": 1,
+      "itinerario": 4
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 10,
+    "fields": {
+      "nombre": "Castries",
+      "descripcion": "Ascenso a los Pitons y tarde de relax en Rodney Bay.",
+      "orden": 2,
+      "itinerario": 4
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 11,
+    "fields": {
+      "nombre": "Willemstad",
+      "descripcion": "Paseo por Punda y snorkel entre arrecifes en Playa Kenepa.",
+      "orden": 3,
+      "itinerario": 4
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 12,
+    "fields": {
+      "nombre": "Nuuk",
+      "descripcion": "Exploración cultural con guías locales y mercado inuit.",
+      "orden": 1,
+      "itinerario": 5
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 13,
+    "fields": {
+      "nombre": "Ilulissat",
+      "descripcion": "Navegación entre icebergs declarados Patrimonio de la Humanidad.",
+      "orden": 2,
+      "itinerario": 5
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 14,
+    "fields": {
+      "nombre": "Tromsø",
+      "descripcion": "Safari de auroras boreales y visita al Polar Museum.",
+      "orden": 3,
+      "itinerario": 5
     }
   },
   {
@@ -561,6 +675,33 @@
     }
   },
   {
+    "model": "compania_naviera.viajexnavio",
+    "pk": 4,
+    "fields": {
+      "navio": 2,
+      "viaje": 1,
+      "precio": 2090
+    }
+  },
+  {
+    "model": "compania_naviera.viajexnavio",
+    "pk": 5,
+    "fields": {
+      "navio": 1,
+      "viaje": 2,
+      "precio": 2790
+    }
+  },
+  {
+    "model": "compania_naviera.viajexnavio",
+    "pk": 6,
+    "fields": {
+      "navio": 3,
+      "viaje": 2,
+      "precio": 2995
+    }
+  },
+  {
     "model": "compania_naviera.itinerarioviaje",
     "pk": 1,
     "fields": {
@@ -574,6 +715,30 @@
     "fields": {
       "viaje": 2,
       "itinerario": 2
+    }
+  },
+  {
+    "model": "compania_naviera.itinerarioviaje",
+    "pk": 3,
+    "fields": {
+      "viaje": 1,
+      "itinerario": 3
+    }
+  },
+  {
+    "model": "compania_naviera.itinerarioviaje",
+    "pk": 4,
+    "fields": {
+      "viaje": 1,
+      "itinerario": 4
+    }
+  },
+  {
+    "model": "compania_naviera.itinerarioviaje",
+    "pk": 5,
+    "fields": {
+      "viaje": 2,
+      "itinerario": 5
     }
   },
   {

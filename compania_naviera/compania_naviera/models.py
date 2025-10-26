@@ -142,6 +142,21 @@ class Itinerario(models.Model):
 
     def __str__(self):
         return f"Itinerario {self.id}"
+
+    def nombre(self):
+        if self.categoria_id and self.categoria.nombre:
+            return self.categoria.nombre
+        return f"Itinerario {self.id}"
+
+    def descripcion(self):
+        pasos = list(
+            self.ordenes.order_by('orden').values_list('nombre', flat=True)[:4]
+        )
+        if pasos:
+            return " → ".join(pasos)
+        if self.categoria_id and self.categoria.descripcion:
+            return self.categoria.descripcion
+        return ""
     
 class Orden(models.Model):
     nombre = models.CharField(max_length=100)
@@ -272,4 +287,3 @@ class HistorialReserva(models.Model):
     reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
     fecha_cambio = models.DateField()
     cambio_realizado = models.TextField()
-
