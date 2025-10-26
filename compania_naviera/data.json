@@ -66,69 +66,6 @@
       "user_permissions": []
     }
   },
-  {
-    "model": "compania_naviera.usuariopersonalizado",
-    "pk": 3,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$cliente$ZrPzQ3LyAcPYwUkD0h6kfgPKP5d+Mlo7G94KUBnbv1A=",
-      "last_login": null,
-      "is_superuser": false,
-      "username": "cliente_naviera",
-      "email": "cliente@naviera.com",
-      "is_staff": false,
-      "is_active": true,
-      "date_joined": "2024-11-01T00:00:00Z",
-      "rol": 3,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "compania_naviera.usuariopersonalizado",
-    "pk": 4,
-    "fields": {
-      "password": "pbkdf2_sha256$720000$auditor$NfBjy9EKCvsu1QqGBm3qbpX01cM7SmxQvEFeiOf0W+s=",
-      "last_login": null,
-      "is_superuser": false,
-      "username": "auditor_naviera",
-      "email": "auditor@naviera.com",
-      "is_staff": false,
-      "is_active": true,
-      "date_joined": "2024-11-01T00:00:00Z",
-      "rol": 4,
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-
-  {
-    "model": "compania_naviera.cliente",
-    "pk": 1,
-    "fields": {
-      "nombre": "Sofía",
-      "apellido": "Ramírez",
-      "dni": "34876543",
-      "direccion": "Av. Belgrano 2041, Buenos Aires",
-      "fecha_nacimiento": "1993-05-12",
-      "nacionalidad": "AR",
-      "genero": "F",
-      "usuario": 3
-    }
-  },
-  {
-    "model": "compania_naviera.cliente",
-    "pk": 2,
-    "fields": {
-      "nombre": "Martín",
-      "apellido": "Gómez",
-      "dni": "32654789",
-      "direccion": "Rua Augusta 120, São Paulo",
-      "fecha_nacimiento": "1989-11-03",
-      "nacionalidad": "BR",
-      "genero": "M",
-      "usuario": 4
-    }
-  },
 
   {
     "model": "compania_naviera.tiponavio",
@@ -748,56 +685,6 @@
     }
   },
   {
-    "model": "compania_naviera.estadoreserva",
-    "pk": 1,
-    "fields": {
-      "nombre": "Confirmada",
-      "descripcion": "Reserva abonada y con camarote asignado."
-    }
-  },
-  {
-    "model": "compania_naviera.estadoreserva",
-    "pk": 2,
-    "fields": {
-      "nombre": "En proceso",
-      "descripcion": "Reserva preconfirmada esperando documentación o pago."
-    }
-  },
-  {
-    "model": "compania_naviera.estadoreserva",
-    "pk": 3,
-    "fields": {
-      "nombre": "Cancelada",
-      "descripcion": "Reserva anulada por solicitud del cliente o falta de pago."
-    }
-  },
-  {
-    "model": "compania_naviera.reserva",
-    "pk": 1,
-    "fields": {
-      "descripcion": "Reserva premium para aniversario, incluye pack de bienvenida y cenas temáticas.",
-      "viaje_navio": 1,
-      "estado_reserva": 1,
-      "cliente": 1,
-      "camarote": 2,
-      "created_at": "2024-11-01T12:20:00Z",
-      "updated_at": "2024-11-15T09:45:00Z"
-    }
-  },
-  {
-    "model": "compania_naviera.reserva",
-    "pk": 2,
-    "fields": {
-      "descripcion": "Reserva familiar con excursiones árticas y photography pack.",
-      "viaje_navio": 2,
-      "estado_reserva": 2,
-      "cliente": 2,
-      "camarote": 4,
-      "created_at": "2024-11-12T15:10:00Z",
-      "updated_at": "2024-11-18T08:35:00Z"
-    }
-  },
-  {
     "model": "compania_naviera.pasajero",
     "pk": 1,
     "fields": {
@@ -876,24 +763,6 @@
       "viaje_navio": 2,
       "fecha_inicio": "2025-03-05",
       "fecha_fin": "2025-03-18"
-    }
-  },
-  {
-    "model": "compania_naviera.historialreserva",
-    "pk": 1,
-    "fields": {
-      "reserva": 1,
-      "fecha_cambio": "2024-11-10",
-      "cambio_realizado": "Confirmación de pago y asignación de camarote 5035."
-    }
-  },
-  {
-    "model": "compania_naviera.historialreserva",
-    "pk": 2,
-    "fields": {
-      "reserva": 2,
-      "fecha_cambio": "2024-11-18",
-      "cambio_realizado": "Documentación pendiente de pasajero principal."
     }
   }
 ]

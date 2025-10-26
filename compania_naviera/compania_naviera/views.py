@@ -1,7 +1,9 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.utils import slugify, now
+
+from django.utils.text import slugify
+from django.utils.timezone import now
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,6 +17,7 @@ from .forms import (
     FormularioCliente,
     FormularioEdicionPerfil,
     FormularioRegistroPersonalizado,
+    
 )
 
 from .models import (
