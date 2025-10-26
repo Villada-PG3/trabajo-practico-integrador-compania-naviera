@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.utils.timezone import now
-from django_countries.widgets import CountrySelectWidget
 
 from .models import UsuarioPersonalizado, Reserva, ViajeXNavio, Cliente, Rol, TipoCamarote, Camarote
 

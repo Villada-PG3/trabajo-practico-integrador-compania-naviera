@@ -1,12 +1,11 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.utils.text import slugify
-from django.utils.timezone import now
+from django.utils import slugify, now
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Prefetch, Avg, Q, Min
+from django.db.models import Prefetch, Q
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView, View
 from django.core.mail import send_mail
 from django.conf import settings
@@ -16,7 +15,6 @@ from .forms import (
     FormularioCliente,
     FormularioEdicionPerfil,
     FormularioRegistroPersonalizado,
-    FormularioReserva,
 )
 
 from .models import (

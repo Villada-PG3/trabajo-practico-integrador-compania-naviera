@@ -1,8 +1,34 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin
-from django import forms
-from .models import *
+from .models import (
+    Rol,
+    UsuarioPersonalizado,
+    Cliente,
+    EstadoCamarote,
+    EstadoPasajero,
+    Pasajero,
+    Reserva,
+    TipoNavio,
+    Navio,
+    Cubierta,
+    TipoCamarote,
+    Camarote,
+    TipoItinerario,
+    Itinerario,
+    Orden,
+    Puerto,
+    PuertoxActividad,
+    UbicacionPuerto,
+    ActividadPosible,
+    Viaje,
+    ViajeXNavio,
+    Tripulante,
+    AsignacionTripulanteViaje,
+    OcupacionCamarote,
+    EstadoReserva,
+    HistorialReserva
+)
 
 # ---------- Helpers ----------
 def _thumb(image_field, width=50, height=50):

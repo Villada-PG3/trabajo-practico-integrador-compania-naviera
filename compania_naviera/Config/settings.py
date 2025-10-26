@@ -1,7 +1,3 @@
-"""
-Django settings for compania_naviera project.
-"""
-
 from pathlib import Path
 from django.templatetags.static import static
 from django.urls import reverse_lazy
