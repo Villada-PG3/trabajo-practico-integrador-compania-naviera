@@ -17,7 +17,7 @@
       <div>
         <label class="block text-sm font-medium mb-1">Selecciona un cliente</label>
         <select name="cliente" id="cliente" class="form-control">
-          <option value="">-- Selecciona un cliente --</option>
+          <option value="">-- Selecciona al tutor de la reserva --</option>
           {% for c in clientes %}
             <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellido }}</option>
           {% endfor %}
@@ -95,11 +95,12 @@ document.addEventListener("DOMContentLoaded", function() {
   let contadorPasajeros = 0;
 
   const applyFieldStyles = (element) => {
-    element.classList.add(
-      'w-full','rounded-lg','border','border-secondary/25','bg-bg/40','px-4','py-3','text-text',
-      'placeholder-text/50','focus:outline-none','focus:ring-2','focus:ring-primary/60'
-    );
-  };
+  element.classList.add(
+    'w-full','rounded-lg','border','border-secondary/25','bg-bg/40','px-4','py-3','text-text',
+    'placeholder-gray-500','focus:outline-none','focus:ring-2','focus:ring-primary/60'
+  );
+};
+
   document.querySelectorAll('.form-control').forEach(applyFieldStyles);
 
   // Función para agregar pasajero
@@ -109,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
     const div = document.createElement("div");
-    div.classList.add("p-4", "rounded-xl", "border", "border-secondary/25", "bg-bg/35", "space-y-2");
+    div.classList.add("p-4", "rounded-xl", "border", "border-secondary/25", "bg-bg/40", "space-y-2");
     div.innerHTML = `
       <h4 class="font-semibold text-text">Pasajero ${contadorPasajeros + 1}</h4>
       <input type="text" name="pasajero_nombre_${contadorPasajeros}" placeholder="Nombre" class="pasajero-input" autocomplete="off">
@@ -195,4 +196,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 </script>
+<style>
+  .pasajero-input {
+    background-color: rgba(15, 23, 42, 0.4) !important; /* Fondo oscuro translúcido (ajusta si tu tema usa otro) */
+    color: var(--text-color, #e5e7eb) !important; /* Texto claro (usa el mismo que text-text) */
+  }
+
+  .pasajero-input::placeholder {
+    color: rgba(229, 231, 235, 0.6) !important; /* Gris claro visible */
+    opacity: 1;
+  }
+</style>
 {% endblock %}

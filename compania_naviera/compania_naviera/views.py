@@ -96,6 +96,7 @@ class DestinoDetailView(DetailView):
     template_name = "destino_detail.html"
     context_object_name = "puerto"
 
+
 class OfertasView(TemplateView):
     template_name = "ofertas.html"
 
@@ -109,7 +110,9 @@ class OfertasView(TemplateView):
         precio_min = self.request.GET.get('precio_min')
         precio_max = self.request.GET.get('precio_max')
 
-        filtros = Q()
+        # --- Filtros base (solo viajes futuros) ---
+        filtros = Q(viaje__fecha_de_salida__gte=hoy)
+
         if destino:
             filtros &= Q(viaje__lugar_destino__icontains=destino)
         if fecha:
@@ -119,7 +122,7 @@ class OfertasView(TemplateView):
         if precio_max:
             filtros &= Q(precio__lte=float(precio_max))
 
-        # --- Query principal ---
+        # --- Query principal (ofertas filtradas) ---
         ofertas_qs = (
             ViajeXNavio.objects.filter(filtros)
             .select_related("navio", "viaje")
@@ -129,12 +132,12 @@ class OfertasView(TemplateView):
                     queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
                 )
             )
-            .order_by('precio')  # más baratos primero
+            .order_by('precio')
         )
 
         ofertas = list(ofertas_qs)
 
-        # --- Enriquecer datos para template ---
+        # --- Enriquecer datos ---
         for oferta in ofertas:
             noches = 0
             if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
@@ -152,9 +155,37 @@ class OfertasView(TemplateView):
             oferta.categoria_nombre = categoria_nombre or "Otros"
             oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
 
+        # --- Determinar si hubo búsqueda sin resultados ---
+        sin_resultados = len(ofertas) == 0 and any([destino, fecha, precio_min, precio_max])
+
+        # --- Ofertas recomendadas (cuando no hay resultados) ---
+        recomendadas = []
+        if sin_resultados:
+            recomendadas = (
+                ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
+                .select_related("navio", "viaje")
+                .order_by('precio')[:6]  # las 6 más baratas
+            )
+
+            for oferta in recomendadas:
+                noches = 0
+                if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
+                    noches = max((oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days, 0)
+                oferta.noches = noches
+                itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
+                categoria_nombre = ""
+                if itinerarios:
+                    itinerario_obj = getattr(itinerarios[0], "itinerario", None)
+                    categoria = getattr(itinerario_obj, "categoria", None)
+                    if categoria:
+                        categoria_nombre = categoria.nombre
+                oferta.categoria_nombre = categoria_nombre or "Otros"
+                oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
+
         contexto["ofertas"] = ofertas
+        contexto["sin_resultados"] = sin_resultados
+        contexto["recomendadas"] = recomendadas
         return contexto
-    
 
 class DetalleOfertaView(DetailView):
     model = ViajeXNavio
