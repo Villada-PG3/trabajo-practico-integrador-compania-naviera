@@ -161,30 +161,30 @@
     <aside class="lg:sticky lg:top-24">
       <div class="relative overflow-hidden rounded-3xl border border-secondary/25 bg-gradient-to-br from-primary/25 via-secondary/20 to-surface/95 p-8 shadow-neon text-text">
         <div class="relative z-10 space-y-5">
-          <h3 class="text-2xl font-bold">Checklist pre-embarque</h3>
-          <p class="text-text/80 text-sm">Confirmá tus datos, cargá documentación y seleccioná actividades extra antes de subir a bordo.</p>
+          <h3 class="text-2xl font-bold">Explorá nuestras ofertas</h3>
+          <p class="text-text/80 text-sm">Descubrí los cruceros disponibles y programá tu próximo viaje con anticipación.</p>
           <ul class="space-y-3 text-sm">
             <li class="flex items-center gap-3">
               <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
-                <i class="fa-solid fa-passport"></i>
+                <i class="fa-solid fa-compass"></i>
               </span>
-              Documentación actualizada
+              Navegá nuestras rutas y destinos
             </li>
             <li class="flex items-center gap-3">
               <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
-                <i class="fa-solid fa-suitcase-rolling"></i>
+                <i class="fa-solid fa-calendar-check"></i>
               </span>
-              Equipaje permitido y excursiones reservadas
+              Programá tu viaje a la fecha que prefieras
             </li>
             <li class="flex items-center gap-3">
               <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
-                <i class="fa-solid fa-headset"></i>
+                <i class="fa-solid fa-ticket"></i>
               </span>
-              Contactanos si necesitás asistencia personalizada
+              Reservá tus lugares y camarotes
             </li>
           </ul>
-          <a href="{% url 'crear_reserva' %}" class="inline-flex items-center gap-2 rounded-full btn-primary px-5 py-3 text-sm font-semibold transition hover:scale-[1.02]">
-            <i class="fa-solid fa-pen-to-square"></i> Gestionar reserva
+          <a href="{% url 'ofertas' %}" class="inline-flex items-center gap-2 rounded-full btn-primary px-5 py-3 text-sm font-semibold transition hover:scale-[1.02]">
+            <i class="fa-solid fa-ship"></i> Ver ofertas
           </a>
         </div>
         <div class="pointer-events-none absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-secondary/25 blur-3xl"></div>
