@@ -273,32 +273,3 @@ class HistorialReserva(models.Model):
     fecha_cambio = models.DateField()
     cambio_realizado = models.TextField()
 
-class MetodoPago(models.Model):
-    nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
-
-    def __str__(self): 
-        return self.nombre
-
-class EstadoPago(models.Model):
-    nombre = models.CharField(max_length=50)
-    descripcion = models.TextField()
-
-    def __str__(self):
-        return self.nombre
-
-class Pago(models.Model):
-    reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE, related_name='pagos')
-    fecha_pago = models.DateField()
-    monto = models.FloatField()
-    metodo_pago = models.ForeignKey(MetodoPago, on_delete=models.PROTECT)
-    estado_pago = models.ForeignKey(EstadoPago, on_delete=models.PROTECT)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-class HistorialPago(models.Model):
-    pago = models.ForeignKey(Pago, on_delete=models.CASCADE)
-    fecha_cambio = models.DateField()
-    cambio_realizado = models.TextField()
-    estado_pago = models.ForeignKey(EstadoPago, on_delete=models.PROTECT)
-    usuario_responsable = models.ForeignKey(UsuarioPersonalizado, on_delete=models.PROTECT)

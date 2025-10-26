@@ -226,30 +226,3 @@ class EstadoReservaAdmin(ModelAdmin):
 class HistorialReservaAdmin(ModelAdmin):
     list_display = ('reserva', 'fecha_cambio', 'cambio_realizado')
     search_fields = ('reserva__id',)
-
-# --- METODO PAGO ---
-@admin.register(MetodoPago)
-class MetodoPagoAdmin(ModelAdmin):
-    list_display = ('nombre', 'descripcion')
-    search_fields = ('nombre',)
-
-# --- ESTADO PAGO ---
-@admin.register(EstadoPago)
-class EstadoPagoAdmin(ModelAdmin):
-    list_display = ('nombre', 'descripcion')
-    search_fields = ('nombre',)
-
-# --- PAGO ---
-@admin.register(Pago)
-class PagoAdmin(ModelAdmin):
-    list_display = ('reserva', 'fecha_pago', 'monto', 'metodo_pago', 'estado_pago', 'created_at', 'updated_at')
-    search_fields = ('reserva__id',)
-    list_filter = ('estado_pago', 'metodo_pago', 'fecha_pago')
-    readonly_fields = ('created_at', 'updated_at')
-
-# --- HISTORIAL PAGO ---
-@admin.register(HistorialPago)
-class HistorialPagoAdmin(ModelAdmin):
-    list_display = ('pago', 'fecha_cambio', 'estado_pago', 'usuario_responsable', 'cambio_realizado')
-    search_fields = ('pago__reserva__id', 'usuario_responsable__username')
-    list_filter = ('estado_pago',)
