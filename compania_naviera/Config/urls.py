@@ -17,9 +17,6 @@ urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
 
-    # Autenticación predeterminada de Django
-    path('accounts/', include('django.contrib.auth.urls')),
-
     # ----------------------
     # Home y páginas públicas
     # ----------------------
