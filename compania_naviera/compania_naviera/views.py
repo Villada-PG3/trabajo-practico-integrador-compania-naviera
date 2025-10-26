@@ -45,11 +45,8 @@ def main_view(request):
     Home público: muestra próximos viajes.
     """
     logout(request)  # deja la sesión limpia al entrar al home
-    proximos_viajes = (
-        Viaje.objects.filter(fecha_de_salida__gte=now().date())
-        .order_by("fecha_de_salida")[:6]
-    )
-    return render(request, "inicio.html", {"proximos_viajes": proximos_viajes})
+    
+    return render(request, "inicio.html")
 class ContactoView(TemplateView):
     template_name = "contacto.html"
 
