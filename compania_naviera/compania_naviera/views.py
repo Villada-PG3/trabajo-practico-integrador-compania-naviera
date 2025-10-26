@@ -1,7 +1,6 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django.contrib import messages
@@ -11,15 +10,13 @@ from django.db.models import Prefetch, Q
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView, View
 from django.core.mail import send_mail
 from django.conf import settings
-
+from django.contrib.auth.decorators import login_required
 from .forms import (
     FormularioCambioContrasenia,
     FormularioCliente,
     FormularioEdicionPerfil,
     FormularioRegistroPersonalizado,
-    
 )
-
 from .models import (
     ActividadPosible,
     Camarote,
@@ -337,17 +334,14 @@ class MisReservasView(LoginRequiredMixin, ListView):
             .order_by("-created_at")
         )
 
+@login_required
+def cancelar_reserva_view(request, reserva_id):
+    reserva = get_object_or_404(Reserva, id=reserva_id, cliente__usuario=request.user)
 
-class CancelarReservaView(LoginRequiredMixin, DeleteView):
-    model = Reserva
-    success_url = reverse_lazy("mis_reservas")
+    reserva.delete()
+    messages.success(request, f"La reserva #{reserva_id} se ha eliminado correctamente.")
+    return redirect(reverse_lazy("mis_reservas"))
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(Reserva, id=self.kwargs["reserva_id"], cliente__usuario=self.request.user)
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, f"La reserva #{self.kwargs['reserva_id']} se ha eliminado correctamente.")
-        return super().delete(request, *args, **kwargs)
 
 
 class CrearClienteView(LoginRequiredMixin, CreateView):

@@ -13,7 +13,7 @@ from compania_naviera.views import (
     DetalleOfertaView,
     MenuUserView,
     MisReservasView,
-    CancelarReservaView,
+    cancelar_reserva_view,
     ReservaCreateView,
     CrearClienteView,
     CrucerosView,
@@ -56,7 +56,7 @@ urlpatterns = [
     # ----------------------
     path('menu/', MenuUserView.as_view(), name='menu_user'),
     path('mis-reservas/', MisReservasView.as_view(), name='mis_reservas'),
-    path('reserva/<int:reserva_id>/cancelar/', CancelarReservaView.as_view(), name='cancelar_reserva'),
+    path('reserva/<int:reserva_id>/cancelar/', cancelar_reserva_view, name='cancelar_reserva'),
     path('reservas/nueva/', ReservaCreateView.as_view(), name='crear_reserva'),
 
     # ----------------------

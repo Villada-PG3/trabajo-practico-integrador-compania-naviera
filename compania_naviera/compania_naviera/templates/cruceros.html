@@ -10,29 +10,29 @@
   </header>
 
   <section>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {% for navio in navios %}
-        <article class="group relative overflow-hidden rounded-2xl border border-secondary/20 card-surface shadow-neon transition duration-300 hover:-translate-y-1 hover:border-secondary/40">
-          <div class="aspect-[16/9] overflow-hidden rounded-t-2xl">
-            {% if navio.imagen %}
-              <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-            {% else %}
-              <div class="flex items-center justify-center text-5xl bg-bg/40">🛳️</div>
-            {% endif %}
-          </div>
-          <div class="absolute inset-0 bg-gradient-to-t from-surface/90 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100"></div>
-          <div class="relative p-5 space-y-2">
-            <h3 class="font-semibold text-lg text-text">{{ navio.nombre }}</h3>
-            <p class="text-text/80">Tipo: {{ navio.tipo_navio.nombre }}</p>
-            <p class="text-text/80">Capacidad: {{ navio.cantidad_maxima_de_pasajeros }} pasajeros</p>
-            <a href="{% url 'navio_detail' navio.pk %}" class="inline-flex items-center gap-2 text-sm font-semibold link-secondary">
-              Ver detalles <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </article>
-      {% endfor %}
-    </div>
-  </section>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for navio in navios %}
+      <a href="{% url 'navio_detail' navio.pk %}" class="group block relative overflow-hidden rounded-2xl border border-secondary/20 card-surface shadow-neon transition duration-300 hover:-translate-y-1 hover:border-secondary/40">
+        <div class="aspect-[16/9] overflow-hidden rounded-t-2xl">
+          {% if navio.imagen %}
+            <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+          {% else %}
+            <div class="flex items-center justify-center text-5xl bg-bg/40">🛳️</div>
+          {% endif %}
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface/90 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100"></div>
+        <div class="relative p-5 space-y-2">
+          <h3 class="font-semibold text-lg text-text">{{ navio.nombre }}</h3>
+          <p class="text-text/80">Tipo: {{ navio.tipo_navio.nombre }}</p>
+          <p class="text-text/80">Capacidad: {{ navio.cantidad_maxima_de_pasajeros }} pasajeros</p>
+          <span class="inline-flex items-center gap-2 text-sm font-semibold link-secondary">
+            Ver detalles <i class="fa fa-arrow-right text-xs"></i>
+          </span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
 
 </main>
 
