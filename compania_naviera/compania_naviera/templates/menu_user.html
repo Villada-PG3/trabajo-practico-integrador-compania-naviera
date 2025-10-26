@@ -9,108 +9,46 @@
   <header class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
     <div>
       <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">¡Hola, {{ user.first_name|default:user.username }}!</h1>
-      <p class="text-text/80">Bienvenido a tu panel. Revisá tus reservas y próximas experiencias.</p>
+      <p class="text-text/80">Bienvenido a tu panel. Accedé rápidamente a tus opciones y ofertas.</p>
     </div>
     <div class="flex flex-wrap items-center gap-3">
-      <a href="{% url 'editar_perfil' %}" class="px-4 py-2 rounded-xl btn-secondary transition">
+      <a href="{% url 'editar_perfil' %}" class="px-4 py-2 rounded-2xl btn-secondary transition text-base">
         <i class="fa fa-user mr-2"></i> Editar perfil
       </a>
-      <a href="{% url 'cambiar_contrasenia' %}" class="px-4 py-2 rounded-xl btn-secondary transition">
+      <a href="{% url 'cambiar_contrasenia' %}" class="px-4 py-2 rounded-2xl btn-secondary transition text-base">
         <i class="fa fa-key mr-2"></i> Cambiar contraseña
       </a>
-      <a href="{% url 'crear_reserva' %}" class="px-4 py-2 rounded-xl btn-primary transition font-semibold hover:scale-[1.02]">
+      <a href="{% url 'crear_reserva' %}" class="px-4 py-2 rounded-2xl btn-primary transition font-semibold hover:scale-[1.02] text-base">
         <i class="fa fa-plus mr-2"></i> Nueva reserva
       </a>
     </div>
   </header>
 
-  <!-- KPI Cards (3 columnas) -->
-  <section class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-    <article class="card-surface rounded-2xl p-6 shadow-neon">
-      <div class="text-sm text-text/65 uppercase tracking-wide">Reservas totales</div>
-      <div class="mt-2 text-3xl font-bold text-primary">{{ reservas_total|default:0 }}</div>
-      <a href="{% url 'mis_reservas' %}" class="text-sm mt-3 inline-flex items-center gap-1 link-secondary">
-        Ver reservas <i class="fa fa-arrow-right text-xs"></i>
-      </a>
-    </article>
-
-    <article class="card-surface rounded-2xl p-6 shadow-neon">
-      <div class="text-sm text-text/65 uppercase tracking-wide">Reservas activas</div>
-      <div class="mt-2 text-3xl font-bold text-primary">{{ reservas_activas|default:0 }}</div>
-      <a href="{% url 'mis_reservas' %}" class="text-sm mt-3 inline-flex items-center gap-1 link-secondary">
-        Administrar <i class="fa fa-arrow-right text-xs"></i>
-      </a>
-    </article>
-
-    <article class="card-surface rounded-2xl p-6 shadow-neon">
-      <div class="text-sm text-text/65 uppercase tracking-wide">Ofertas</div>
-      <div class="mt-2 text-3xl font-bold text-primary">
-        {{ ofertas_destacadas|length|default:0 }}
-      </div>
-      <a href="{% url 'ofertas' %}" class="text-sm mt-3 inline-flex items-center gap-1 link-secondary">
-        Ver ofertas <i class="fa fa-arrow-right text-xs"></i>
-      </a>
-    </article>
-  </section>
-
-  <!-- Accesos rápidos -->
-  <section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    <a href="{% url 'mis_reservas' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-6 shadow-neon transition duration-300">
-      <div class="text-4xl mb-3">📅</div>
-      <h3 class="text-lg font-semibold mb-1">Mis Reservas</h3>
-      <p class="text-text/75">Revisá y administrá tus reservas de crucero.</p>
+  <!-- Accesos rápidos (2x2 tamaño moderado) -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <a href="{% url 'mis_reservas' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-8 shadow-neon transition duration-300">
+      <div class="text-5xl mb-4">📅</div>
+      <h3 class="text-xl font-bold mb-1">Mis Reservas</h3>
+      <p class="text-base text-text/75">Revisá y administrá tus reservas de crucero.</p>
     </a>
 
-    <a href="{% url 'cruceros' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-6 shadow-neon transition duration-300">
-      <div class="text-4xl mb-3">🛳</div>
-      <h3 class="text-lg font-semibold mb-1">Cruceros</h3>
-      <p class="text-text/75">Explorá próximos viajes y reservá tu lugar.</p>
+    <a href="{% url 'cruceros' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-8 shadow-neon transition duration-300">
+      <div class="text-5xl mb-4">🛳</div>
+      <h3 class="text-xl font-bold mb-1">Cruceros</h3>
+      <p class="text-base text-text/75">Explorá próximos viajes y reservá tu lugar.</p>
     </a>
 
-    <a href="{% url 'destinos' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-6 shadow-neon transition duration-300">
-      <div class="text-4xl mb-3">📍</div>
-      <h3 class="text-lg font-semibold mb-1">Destinos</h3>
-      <p class="text-text/75">Conocé nuestros puertos y experiencias.</p>
+    <a href="{% url 'destinos' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-8 shadow-neon transition duration-300">
+      <div class="text-5xl mb-4">📍</div>
+      <h3 class="text-xl font-bold mb-1">Destinos</h3>
+      <p class="text-base text-text/75">Conocé nuestros puertos y experiencias.</p>
     </a>
 
-    <a href="{% url 'ofertas' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-6 shadow-neon transition duration-300">
-      <div class="text-4xl mb-3">🔥</div>
-      <h3 class="text-lg font-semibold mb-1">Ofertas</h3>
-      <p class="text-text/75">Promos vigentes y descuentos.</p>
+    <a href="{% url 'ofertas' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-8 shadow-neon transition duration-300">
+      <div class="text-5xl mb-4">🔥</div>
+      <h3 class="text-xl font-bold mb-1">Ofertas</h3>
+      <p class="text-base text-text/75">Promos vigentes y descuentos.</p>
     </a>
-  </section>
-
-  <!-- Próximos cruceros -->
-  <section>
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-2xl font-bold">Próximos cruceros</h2>
-      <a href="{% url 'cruceros' %}" class="text-sm link-secondary">Ver todos</a>
-    </div>
-
-    {% if proximos_cruceros %}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for px in proximos_cruceros %}
-          <article class="card-surface rounded-2xl overflow-hidden shadow-neon transition duration-300 hover:-translate-y-1">
-            <div class="aspect-[16/9] bg-bg/40 flex items-center justify-center text-5xl">🛳</div>
-            <div class="p-5 space-y-2">
-              <h3 class="font-semibold text-lg text-text">{{ px.nombre }}</h3>
-              <p class="text-text/75">{{ px.fecha }}</p>
-              <p class="text-text/80">Navío: {{ px.navio_nombre|default:"(sin asignar)" }}</p>
-
-              {% if px.navio_id %}
-                <a href="{% url 'navio_detail' px.navio_id %}" class="inline-flex items-center gap-2 link-secondary">
-                  Ver detalles <i class="fa fa-arrow-right text-xs"></i>
-                </a>
-              {% else %}
-                <span class="text-text/60 text-sm">Sin navío asignado</span>
-              {% endif %}
-            </div>
-          </article>
-        {% endfor %}
-      </div>
-    {% else %}
-      <p class="text-text/70">No tenés cruceros próximos por ahora.</p>
-    {% endif %}
   </section>
 
 </main>

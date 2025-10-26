@@ -3,14 +3,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.text import slugify
 from django.utils.timezone import now
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch, Q
-from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView, View
+from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, View
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import (
     FormularioCambioContrasenia,
     FormularioCliente,
@@ -267,7 +267,10 @@ class CambiarContraseniaView(LoginRequiredMixin, FormView):
 
 # ===========================
 # Panel de Usuario / Reservas
-# ===========================
+# ===========================from django.utils.timezone import now
+
+
+
 class MenuUserView(LoginRequiredMixin, TemplateView):
     template_name = "menu_user.html"
 
@@ -276,42 +279,19 @@ class MenuUserView(LoginRequiredMixin, TemplateView):
         usuario = self.request.user
         hoy = now().date()
 
-        reservas_usuario = (
-            Reserva.objects.filter(cliente__usuario=usuario)
-            .select_related("estado_reserva", "viaje_navio__viaje", "viaje_navio__navio")
-            .order_by("viaje_navio__viaje__fecha_de_salida")
-        )
-
-        proximos_cruceros = []
-        for reserva in reservas_usuario:
-            viaje = reserva.viaje_navio.viaje
-            if viaje.fecha_de_salida and viaje.fecha_de_salida >= hoy:
-                navio_id = getattr(reserva.viaje_navio, "navio_id", None)
-                navio_nombre = getattr(getattr(reserva.viaje_navio, "navio", None), "nombre", "")
-                proximos_cruceros.append(
-                    {
-                        "nombre": viaje.nombre,
-                        "fecha": viaje.fecha_de_salida,
-                        "estado": reserva.estado_reserva.nombre if reserva.estado_reserva else "",
-                        "navio_id": navio_id,
-                        "navio_nombre": navio_nombre or "(sin asignar)",
-                    }
-                )
-        proximos_cruceros = proximos_cruceros[:3]
-
+        # Solo traer ofertas destacadas activas
         ofertas_destacadas = list(
             ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
             .select_related("viaje", "navio")
             .order_by("precio")[:3]
         )
+
+        # Actividades destacadas si las vas a mostrar en otro lado
         actividades_destacadas = list(ActividadPosible.objects.order_by("nombre")[:3])
 
         context.update({
             "usuario": usuario,
-            "reservas_total": reservas_usuario.count(),
-            "reservas_activas": len(proximos_cruceros),
             "ofertas_destacadas": ofertas_destacadas,
-            "proximos_cruceros": proximos_cruceros,
             "actividades_destacadas": actividades_destacadas,
         })
         return context
@@ -357,13 +337,8 @@ class CrearClienteView(LoginRequiredMixin, CreateView):
         return redirect(self.success_url)
 
 # Crear reserva
-from django.views import View
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.http import JsonResponse, HttpResponseBadRequest
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Cliente, ViajeXNavio, Camarote, OcupacionCamarote, Reserva, Pasajero, EstadoReserva, EstadoPasajero, TipoCamarote
+
+
 
 class ReservaCreateView(LoginRequiredMixin, View):
     template_name = "crear_reserva.html"
@@ -373,14 +348,9 @@ class ReservaCreateView(LoginRequiredMixin, View):
         clientes = Cliente.objects.filter(usuario=request.user)
         viaje_navio_id = request.GET.get("viaje_navio_id")
 
-        if not viaje_navio_id:
-            messages.error(request, "No se ha seleccionado un viaje.")
-            return redirect("ofertas")
-
         try:
             viaje_seleccionado = ViajeXNavio.objects.select_related("viaje", "navio").get(id=viaje_navio_id)
         except ViajeXNavio.DoesNotExist:
-            messages.error(request, "Viaje no encontrado.")
             return redirect("ofertas")
 
         context = {
