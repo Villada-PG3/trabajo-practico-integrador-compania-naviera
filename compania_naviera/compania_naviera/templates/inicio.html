@@ -113,37 +113,6 @@
   </div>
 
 
-
-  <!-- Destinos destacados (los 6 primeros viajes) -->
-  <div class="mt-14 mx-auto max-w-7xl px-6 lg:px-10">
-    <div class="flex items-end justify-between gap-4">
-      <h2 class="text-2xl md:text-3xl font-extrabold">Destinos destacados</h2>
-      <a href="{% url 'cruceros' %}" class="text-sm font-semibold link-secondary">Ver todos</a>
-    </div>
-
-    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {% for viaje in proximos_viajes %}
-        <article class="group relative overflow-hidden rounded-2xl border border-secondary/20 bg-surface/80 shadow-neon">
-          {% if viaje.imagen %}
-            <img src="{{ viaje.imagen }}" alt="{{ viaje.nombre }}" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-          {% else %}
-            <img src="{% static 'default-viaje.jpg' %}" alt="{{ viaje.nombre }}" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-          {% endif %}
-          <div class="absolute inset-0 bg-gradient-to-t from-surface/80 via-transparent to-transparent"></div>
-          <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
-            <div>
-              <h3 class="font-semibold text-text">{{ viaje.nombre }}</h3>
-              <p class="text-xs text-text/70">{{ viaje.lugar_destino }} • {{ viaje.fecha_de_salida }}</p>
-            </div>
-            <a href="{% url 'login' %}?next={% url 'cruceros' %}" class="px-3 py-1 rounded-lg btn-primary text-sm font-semibold">Conocer</a>
-          </div>
-        </article>
-      {% empty %}
-        <p>No hay viajes disponibles por el momento.</p>
-      {% endfor %}
-    </div>
-  </div>
-
   <!-- Experiencias a bordo -->
   <div class="mt-14 mx-auto max-w-7xl px-6 lg:px-10">
     <h2 class="text-2xl md:text-3xl font-extrabold mb-6">Experiencias a bordo</h2>
