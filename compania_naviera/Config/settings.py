@@ -143,9 +143,6 @@ UNFOLD = {
                     # Reservas
                     {"title": "Reservas", "icon": "bookmarks",
                      "link": reverse_lazy("admin:compania_naviera_reserva_changelist")},
-                    # Pagos
-                    {"title": "Pagos", "icon": "credit_card",
-                     "link": reverse_lazy("admin:compania_naviera_pago_changelist")},
                 ],
             },
         ],
