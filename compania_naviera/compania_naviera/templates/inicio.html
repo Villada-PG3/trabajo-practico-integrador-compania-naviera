@@ -4,23 +4,8 @@
 {% block title %}SEA STAR – Tu viaje empieza acá{% endblock %}
 
 {% block content %}
-<style>
-  /* Animaciones suaves */
-  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
-  .animate-float { animation: float 6s ease-in-out infinite }
-  .mask-wave {
-    -webkit-mask-image: radial-gradient(90% 50% at 50% 0%, #000 60%, transparent 100%);
-            mask-image: radial-gradient(90% 50% at 50% 0%, #000 60%, transparent 100%);
-  }
-</style>
 
 <section class="relative overflow-hidden">
-
-  <!-- Burbujas decorativas -->
-  <div class="pointer-events-none absolute -top-24 -left-10 w-80 h-80 rounded-full bg-secondary/10 blur-3xl animate-float"></div>
-  <div class="pointer-events-none absolute -bottom-20 -right-10 w-72 h-72 rounded-full bg-accent/15 blur-3xl animate-float" style="animation-delay:1s"></div>
-
-
 
   <!-- HERO -->
   <div class="mx-auto max-w-7xl px-6 lg:px-10 pt-8 lg:pt-12">
