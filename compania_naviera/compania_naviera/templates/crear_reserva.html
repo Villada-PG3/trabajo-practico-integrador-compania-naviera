@@ -1,27 +1,362 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="max-w-3xl mx-auto bg-white/10 p-6 rounded-lg shadow-md">
-  <h2 class="text-2xl font-bold mb-6 text-center">Crear Reserva</h2>
-
-  <form method="post" class="space-y-4">
-    {% csrf_token %}
-
-    {% for field in form %}
-      <div class="flex flex-col">
-        <label class="mb-1 font-semibold">{{ field.label }}</label>
-        {{ field }}
-        {% if field.errors %}
-          <p class="text-red-400 text-sm mt-1">{{ field.errors|striptags }}</p>
-        {% endif %}
-      </div>
-    {% endfor %}
-
-    <div class="text-center">
-      <button type="submit"
-              class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-lg transition">
-        Guardar Reserva
-      </button>
+<div class="flex items-center justify-center min-h-[80vh] px-4 py-12">
+  <div class="card-surface backdrop-blur-xl rounded-3xl shadow-neon p-8 w-full max-w-2xl space-y-6">
+    <div class="text-center space-y-2">
+      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-[0_12px_30px_rgba(5,24,36,0.15)]">
+        <i class="fa-solid fa-clipboard-list"></i>
+      </span>
+      <h2 class="text-2xl font-bold">Crear reserva</h2>
+      <p class="text-sm text-text/75">Completá los pasos para asignar pasajeros a tu próximo crucero.</p>
     </div>
-  </form>
+
+    <form method="post" id="reservaForm" class="space-y-4">
+      {% csrf_token %}
+
+      <!-- Seleccionar cliente -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Selecciona un cliente</label>
+        <select name="cliente" id="cliente" class="form-control">
+          <option value="">-- Selecciona al tutor de la reserva --</option>
+          {% for c in clientes %}
+            <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellido }}</option>
+          {% endfor %}
+        </select>
+        <a href="{% url 'crear_cliente' %}" class="text-sm link-secondary inline-flex items-center gap-2">
+          <i class="fa-solid fa-user-plus"></i> Crear nuevo cliente
+        </a>
+      </div>
+
+      <!-- Viaje fijo -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1 text-text/80">Viaje seleccionado:</label>
+        <p class="text-text font-medium mb-1">
+          {{ viaje_seleccionado.viaje.nombre }} — {{ viaje_seleccionado.navio.nombre }}
+        </p>
+        <input type="hidden" name="viaje_navio" value="{{ viaje_seleccionado.id }}">
+      </div>
+
+      <!-- Paso 2: Tipo de camarote -->
+      <div id="tipoDiv" style="display:none;">
+        <label class="block text-sm font-medium mb-1">Selecciona tipo de camarote</label>
+        <select name="tipo_camarote" id="tipo_camarote" class="form-control">
+          <option value="">-- Selecciona tipo --</option>
+        </select>
+      </div>
+
+      <!-- Paso 3: Capacidad -->
+      <div id="capacidadDiv" style="display:none;">
+        <label class="block text-sm font-medium mb-1">Selecciona capacidad</label>
+        <select name="capacidad" id="capacidad" class="form-control">
+          <option value="">-- Selecciona capacidad --</option>
+        </select>
+      </div>
+
+      <!-- Paso 4: Camarote -->
+      <div id="camaroteDiv" style="display:none;">
+        <label class="block text-sm font-medium mb-1">Selecciona un camarote</label>
+        <select name="camarote" id="camarote" class="form-control">
+          <option value="">-- Selecciona un camarote --</option>
+        </select>
+      </div>
+
+      <!-- Paso 5: Pasajeros -->
+      <div id="pasajerosDiv" style="display:none;">
+        <label class="block text-sm font-medium mb-1">Agregar pasajeros</label>
+        <div id="pasajerosContainer" class="space-y-2 mt-2"></div>
+        <button type="button" id="agregarPasajeroBtn" class="btn-secondary inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium">
+          <i class="fa-solid fa-user-plus"></i> Agregar pasajero
+        </button>
+      </div>
+
+      <!-- Botón final -->
+      <button type="submit" id="submitBtn" class="w-full btn-primary font-semibold py-3 rounded-xl shadow-lg transition mt-4 hidden">
+        Confirmar Reserva
+      </button>
+    </form>
+  </div>
 </div>
+
+<div id="capacityToast" class="capacity-toast" role="alert" aria-live="assertive">
+  <div class="toast-card">
+    <span class="toast-icon">
+      <i class="fa-solid fa-circle-exclamation"></i>
+    </span>
+    <div class="toast-content">
+      <p class="toast-title">Capacidad alcanzada</p>
+      <p class="toast-message" data-toast-message>Ya alcanzaste la capacidad máxima del camarote.</p>
+    </div>
+    <button type="button" class="toast-close" data-toast-close aria-label="Cerrar alerta">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const viajeId = "{{ viaje_seleccionado.id }}";
+  const tipoSelect = document.getElementById('tipo_camarote');
+  const capacidadSelect = document.getElementById('capacidad');
+  const camaroteSelect = document.getElementById('camarote');
+  const tipoDiv = document.getElementById('tipoDiv');
+  const capacidadDiv = document.getElementById('capacidadDiv');
+  const camaroteDiv = document.getElementById('camaroteDiv');
+  const pasajerosDiv = document.getElementById('pasajerosDiv');
+  const pasajerosContainer = document.getElementById("pasajerosContainer");
+  const agregarPasajeroBtn = document.getElementById("agregarPasajeroBtn");
+  const submitBtn = document.getElementById('submitBtn');
+  const capacityToast = document.getElementById("capacityToast");
+  const capacityToastMessage = capacityToast ? capacityToast.querySelector("[data-toast-message]") : null;
+  const capacityToastClose = capacityToast ? capacityToast.querySelector("[data-toast-close]") : null;
+  let capacityToastTimer;
+
+  let capacidadMax = 0;
+  let contadorPasajeros = 0;
+
+  const hideCapacityToast = () => {
+    if (!capacityToast) return;
+    capacityToast.classList.remove("toast-show");
+    capacityToast.classList.add("toast-hide");
+    clearTimeout(capacityToastTimer);
+    capacityToastTimer = setTimeout(() => {
+      capacityToast.style.display = "none";
+      capacityToast.classList.remove("toast-hide");
+    }, 220);
+  };
+
+  const showCapacityToast = (message) => {
+    if (!capacityToast || !capacityToastMessage) return;
+    capacityToastMessage.textContent = message;
+    clearTimeout(capacityToastTimer);
+    capacityToast.style.display = "flex";
+    capacityToast.classList.remove("toast-show", "toast-hide");
+    void capacityToast.offsetWidth;
+    capacityToast.classList.add("toast-show");
+    capacityToastTimer = setTimeout(hideCapacityToast, 3800);
+  };
+
+  if (capacityToastClose) {
+    capacityToastClose.addEventListener("click", hideCapacityToast);
+  }
+
+  const applyFieldStyles = (element) => {
+  element.classList.add(
+    'w-full','rounded-lg','border','border-secondary/25','bg-bg/40','px-4','py-3','text-text',
+    'placeholder-gray-500','focus:outline-none','focus:ring-2','focus:ring-primary/60'
+  );
+};
+
+  document.querySelectorAll('.form-control').forEach(applyFieldStyles);
+
+  // Función para agregar pasajero
+  function agregarPasajero(){
+    if(contadorPasajeros >= capacidadMax){
+      showCapacityToast("Ya alcanzaste la capacidad máxima del camarote");
+      return;
+    }
+    const div = document.createElement("div");
+    div.classList.add("p-4", "rounded-xl", "border", "border-secondary/25", "bg-bg/40", "space-y-2");
+    div.innerHTML = `
+      <h4 class="font-semibold text-text">Pasajero ${contadorPasajeros + 1}</h4>
+      <input type="text" name="pasajero_nombre_${contadorPasajeros}" placeholder="Nombre" class="pasajero-input" autocomplete="off">
+      <input type="text" name="pasajero_apellido_${contadorPasajeros}" placeholder="Apellido" class="pasajero-input" autocomplete="off">
+      <input type="text" name="pasajero_dni_${contadorPasajeros}" placeholder="DNI" class="pasajero-input" autocomplete="off">
+      <input type="date" name="pasajero_fecha_nacimiento_${contadorPasajeros}" class="pasajero-input">
+    `;
+    pasajerosContainer.appendChild(div);
+    div.querySelectorAll('.pasajero-input').forEach(applyFieldStyles);
+    contadorPasajeros++;
+  }
+  agregarPasajeroBtn.addEventListener("click", agregarPasajero);
+
+  // Cargar tipos de camarote al cargar la página
+  async function cargarTipos() {
+    const res = await fetch(`/ajax/tipos-camarote/?viaje_navio_id=${viajeId}`);
+    const data = await res.json();
+    tipoSelect.innerHTML = `<option value="">-- Selecciona tipo --</option>`;
+    data.forEach(t => tipoSelect.innerHTML += `<option value="${t.id}">${t.nombre}</option>`);
+    tipoDiv.style.display = "block";
+  }
+  cargarTipos();
+
+  tipoSelect.addEventListener('change', async () => {
+    const tipoId = tipoSelect.value;
+    if (!tipoId) {
+      capacidadDiv.style.display = "none";
+      camaroteDiv.style.display = "none";
+      pasajerosDiv.style.display = "none";
+      submitBtn.classList.add("hidden");
+      return;
+    }
+    const res = await fetch(`/ajax/capacidades/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}`);
+    const data = await res.json();
+    capacidadSelect.innerHTML = `<option value="">-- Selecciona capacidad --</option>`;
+    data.forEach(c => capacidadSelect.innerHTML += `<option value="${c.capacidad}">${c.capacidad}</option>`);
+    capacidadDiv.style.display = "block";
+    camaroteDiv.style.display = "none";
+    pasajerosDiv.style.display = "none";
+    submitBtn.classList.add("hidden");
+    capacidadMax = 0;
+    contadorPasajeros = 0;
+    pasajerosContainer.innerHTML = "";
+  });
+
+  capacidadSelect.addEventListener('change', async () => {
+    const tipoId = tipoSelect.value;
+    const capacidad = capacidadSelect.value;
+    if (!capacidad) {
+      camaroteDiv.style.display = "none";
+      pasajerosDiv.style.display = "none";
+      submitBtn.classList.add("hidden");
+      return;
+    }
+    const res = await fetch(`/ajax/camarotes/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}&capacidad=${capacidad}`);
+    const data = await res.json();
+    camaroteSelect.innerHTML = `<option value="">-- Selecciona un camarote --</option>`;
+    data.forEach(c => camaroteSelect.innerHTML += `<option value="${c.id}">N° ${c.numero_de_camarote} (${c.capacidad} pers.) - ${c.tipo}</option>`);
+    camaroteDiv.style.display = "block";
+    pasajerosDiv.style.display = "none";
+    submitBtn.classList.add("hidden");
+    capacidadMax = 0;
+    contadorPasajeros = 0;
+    pasajerosContainer.innerHTML = "";
+  });
+
+  camaroteSelect.addEventListener('change', () => {
+    const camaroteId = camaroteSelect.value;
+    if(!camaroteId){
+      pasajerosDiv.style.display = "none";
+      submitBtn.classList.add("hidden");
+      capacidadMax = 0;
+      contadorPasajeros = 0;
+      pasajerosContainer.innerHTML = "";
+      return;
+    }
+    capacidadMax = parseInt(camaroteSelect.options[camaroteSelect.selectedIndex].text.match(/\((\d+) pers\.\)/)[1]);
+    pasajerosDiv.style.display = "block";
+    submitBtn.classList.remove("hidden");
+    contadorPasajeros = 0;
+    pasajerosContainer.innerHTML = "";
+  });
+
+});
+</script>
+<style>
+  .capacity-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 60;
+    display: none;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  .capacity-toast.toast-show {
+    animation: toast-in 0.25s ease forwards;
+  }
+
+  .capacity-toast.toast-hide {
+    animation: toast-out 0.2s ease forwards;
+  }
+
+  .capacity-toast .toast-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1.25rem;
+    background: rgba(10, 23, 46, 0.95);
+    border: 1px solid rgba(72, 160, 214, 0.35);
+    box-shadow: 0 24px 48px rgba(7, 18, 38, 0.4);
+    color: #e5f6ff;
+    backdrop-filter: blur(10px);
+  }
+
+  .capacity-toast .toast-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(76, 201, 240, 0.18);
+    color: #4cc9f0;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+
+  .capacity-toast .toast-title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e2f1ff;
+  }
+
+  .capacity-toast .toast-message {
+    margin: 0.15rem 0 0;
+    font-size: 0.85rem;
+    color: rgba(226, 241, 255, 0.85);
+  }
+
+  .capacity-toast .toast-close {
+    margin-left: 0.75rem;
+    border: none;
+    background: transparent;
+    color: rgba(226, 241, 255, 0.65);
+    cursor: pointer;
+    padding: 0.35rem;
+    border-radius: 9999px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .capacity-toast .toast-close:hover {
+    background: rgba(76, 201, 240, 0.2);
+    color: #ffffff;
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes toast-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .capacity-toast {
+      left: 1.5rem;
+      right: 1.5rem;
+      bottom: 1.5rem;
+    }
+
+    .capacity-toast .toast-card {
+      width: 100%;
+    }
+  }
+
+  .pasajero-input {
+    background-color: rgba(15, 23, 42, 0.4) !important; /* Fondo oscuro translúcido (ajusta si tu tema usa otro) */
+    color: var(--text-color, #e5e7eb) !important; /* Texto claro (usa el mismo que text-text) */
+  }
+
+  .pasajero-input::placeholder {
+    color: rgba(229, 231, 235, 0.6) !important; /* Gris claro visible */
+    opacity: 1;
+  }
+</style>
 {% endblock %}

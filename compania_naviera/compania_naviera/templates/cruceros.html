@@ -1,55 +1,39 @@
-
 {% extends "base.html" %}
-{% load static %}
-
-{% block title %}SEA STAR – Cruceros{% endblock %}
-
+{% block title %}Cruceros{% endblock %}
 {% block content %}
-<section class="mx-auto max-w-7xl px-6 lg:px-10 pt-8">
-  <div class="rounded-2xl bg-gradient-to-br from-blue-900/70 to-blue-700/40 border border-white/20 p-8 md:p-10 backdrop-blur-xl">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-      <div class="space-y-3">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs tracking-wider">
-          <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-white text-blue-900 font-bold">★</span>
-          Sea Star · Cruceros
+
+<main class="max-w-6xl mx-auto px-4 md:px-6 py-10 space-y-10">
+
+  <header>
+    <h1 class="text-3xl font-extrabold">Cruceros</h1>
+    <p class="text-text/75">Nuestros navíos disponibles.</p>
+  </header>
+
+  <section>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for navio in navios %}
+      <a href="{% url 'navio_detail' navio.pk %}" class="group block relative overflow-hidden rounded-2xl border border-secondary/20 card-surface shadow-neon transition duration-300 hover:-translate-y-1 hover:border-secondary/40">
+        <div class="aspect-[16/9] overflow-hidden rounded-t-2xl">
+          {% if navio.imagen %}
+            <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+          {% else %}
+            <div class="flex items-center justify-center text-5xl bg-bg/40">🛳️</div>
+          {% endif %}
         </div>
-        <h1 class="text-3xl md:text-4xl font-extrabold">Encontrá tu crucero ideal</h1>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Navíos disponibles -->
-<section class="mx-auto max-w-7xl px-6 lg:px-10 py-10">
-  <div class="flex items-end justify-between gap-4">
-    <h2 class="text-2xl md:text-3xl font-extrabold">Nuestros navíos</h2>
-  </div>
-
-  <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for navio in cruceros %}
-      <article class="group relative overflow-hidden rounded-2xl border border-white/20">
-        {% if navio.imagen %}
-          <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-        {% else %}
-          <img src="{% static 'placeholder.jpg' %}" alt="{{ navio.nombre }}" class="w-full h-52 object-cover transition duration-500 group-hover:scale-105">
-        {% endif %}
-
-        <div class="absolute inset-0 bg-gradient-to-t from-blue-900/70 via-transparent to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 p-4 flex items-center justify-between">
-          <div>
-            <h3 class="font-semibold text-lg">{{ navio.nombre }}</h3>
-            <p class="text-xs text-white/80">
-              Tipo: {{ navio.tipo_navio.nombre }}<br>
-              Pasajeros: {{ navio.cantidad_maxima_de_pasajeros }}<br>
-              Autonomía: {{ navio.autonomia_de_viaje }} días
-            </p>
-          </div>
-          <a href="{% url 'navio_detail' navio.pk %}" class="px-3 py-1 rounded-lg bg-orange-500 hover:bg-orange-600 text-sm font-semibold">Ver más</a>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface/90 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100"></div>
+        <div class="relative p-5 space-y-2">
+          <h3 class="font-semibold text-lg text-text">{{ navio.nombre }}</h3>
+          <p class="text-text/80">Tipo: {{ navio.tipo_navio.nombre }}</p>
+          <p class="text-text/80">Capacidad: {{ navio.cantidad_maxima_de_pasajeros }} pasajeros</p>
+          <span class="inline-flex items-center gap-2 text-sm font-semibold link-secondary">
+            Ver detalles <i class="fa fa-arrow-right text-xs"></i>
+          </span>
         </div>
-      </article>
-    {% empty %}
-      <p class="col-span-3 text-center text-white/80">No hay navíos cargados.</p>
+      </a>
     {% endfor %}
   </div>
 </section>
+
+</main>
+
 {% endblock %}

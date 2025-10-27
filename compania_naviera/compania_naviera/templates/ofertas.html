@@ -7,14 +7,14 @@
 
 <!-- ======= HERO ======= -->
 <section class="mx-auto max-w-7xl px-6 lg:px-10 pt-8">
-  <div class="rounded-2xl bg-gradient-to-br from-blue-900/70 to-blue-700/40 border border-white/20 p-8 md:p-10 backdrop-blur-xl">
+  <div class="rounded-3xl bg-gradient-to-br from-gray-800/80 via-gray-900/80 to-gray-800/95 border border-gray-700/40 p-8 md:p-10 backdrop-blur-xl shadow-neon text-gray-100">
     <div class="space-y-3">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs tracking-wider">
-        <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-white text-blue-900 font-bold">★</span>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-700/40 border border-gray-600/50 text-xs tracking-wider">
+        <span class="inline-flex w-5 h-5 items-center justify-center rounded-full bg-indigo-600 text-white font-bold">★</span>
         Sea Star · Ofertas
       </div>
-      <h1 class="text-3xl md:text-4xl font-extrabold text-white">🌊 Ofertas Exclusivas</h1>
-      <p class="text-white/90 max-w-3xl">
+      <h1 class="text-3xl md:text-4xl font-extrabold">🌊 Ofertas</h1>
+      <p class="text-gray-300 max-w-3xl">
         ¡Descubrí escapadas marítimas con precios inigualables! Lujo, confort y paisajes de ensueño.
         Reservá hoy mismo tu crucero ideal.
       </p>
@@ -22,306 +22,152 @@
   </div>
 </section>
 
-<!-- ======= ESTILOS DEL FILTRO ======= -->
-<style>
-  .pill { display:inline-flex; align-items:center; gap:.5rem; padding:.375rem .75rem; border-radius:.75rem;
-          background-color:rgb(255 255 255 / .10); border:1px solid rgb(255 255 255 / .20);
-          font-size:.875rem; transition:background-color .2s; }
-  .pill:hover{ background-color:rgb(255 255 255 / .20); }
-  .pill-active{ background:#f97316; border-color:#f97316; color:white; box-shadow:0 0 0 2px rgb(251 146 60 / .5) }
-  .seg-btn{ padding:.375rem .75rem; font-size:.875rem; border-radius:.5rem; }
-  .seg-active{ background:rgb(255 255 255 / .20); color:white; box-shadow:inset 0 0 0 1px rgb(255 255 255 / .30) }
-  .range-wrap{ height:24px; }
-  input[type="range"]::-webkit-slider-runnable-track { height:6px; border-radius:999px; }
-  input[type="range"]::-webkit-slider-thumb { margin-top:-6px; width:18px; height:18px; border-radius:999px; }
-</style>
+<!-- ======= FILTROS DINÁMICOS ======= -->
+<section class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
+  <div class="rounded-2xl border border-gray-700/40 bg-gray-800/80 backdrop-blur-xl p-6 md:p-8 shadow-lg">
+    <h2 class="text-xl font-semibold text-gray-100 mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-filter text-indigo-600"></i> Filtrar ofertas
+    </h2>
 
-<!-- ======= BARRA DE FILTROS ======= -->
-<section class="mx-auto max-w-7xl px-6 lg:px-10 mt-6">
-  <div class="mb-2 flex items-center justify-between lg:hidden">
-    <span class="text-sm text-white/80">Filtrar ofertas</span>
-    <button id="oToggleFilters" class="px-3 py-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-sm">
-      Mostrar filtros
-    </button>
-  </div>
-
-  <div id="oFilterBar"
-       class="rounded-2xl bg-white/10 border border-white/20 backdrop-blur-xl p-4 md:p-5 shadow-lg lg:sticky lg:top-2">
-    <div id="oFiltersBody" class="grid grid-cols-1 xl:grid-cols-12 gap-3 items-center">
-      <!-- Buscar -->
-      <div class="xl:col-span-4">
-        <label for="oq" class="sr-only">Buscar</label>
-        <div class="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-3 py-2">
-          <i class="fa-solid fa-magnifying-glass text-white/80"></i>
-          <input id="oq" type="text" placeholder="Buscar por destino, tipo..."
-                 class="w-full bg-transparent placeholder-white/60 focus:outline-none" />
-        </div>
+    <form method="get" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <!-- Destino -->
+      <div class="flex flex-col">
+        <label for="destino" class="text-sm font-medium text-gray-300/80 mb-1">Destino</label>
+        <input type="text" name="destino" id="destino"
+               value="{{ request.GET.destino|default:'' }}"
+               placeholder="Ej: Caribe"
+               class="w-full px-3 py-2 rounded-lg bg-gray-700/70 border border-gray-600/50 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
       </div>
 
-      <!-- Categorías -->
-      <div class="xl:col-span-5">
-        <div class="flex flex-wrap gap-2" id="oCatGroup" aria-label="Categorías">
-          <button data-cat="familiar"   class="pill"><i class="fa-solid fa-children"></i> Familiar</button>
-          <button data-cat="aventura"   class="pill"><i class="fa-solid fa-person-hiking"></i> Aventura</button>
-          <button data-cat="lujo"       class="pill"><i class="fa-solid fa-gem"></i> Lujo</button>
-          <button data-cat="tematico"   class="pill"><i class="fa-solid fa-masks-theater"></i> Temático</button>
-          <button data-cat="naturaleza" class="pill"><i class="fa-solid fa-leaf"></i> Naturaleza</button>
-          <button data-cat="cultural"   class="pill"><i class="fa-solid fa-landmark"></i> Cultural</button>
-        </div>
+      <!-- Fecha -->
+      <div class="flex flex-col">
+        <label for="fecha" class="text-sm font-medium text-gray-300/80 mb-1">Fecha de salida</label>
+        <input type="date" name="fecha" id="fecha"
+               value="{{ request.GET.fecha|default:'' }}"
+               class="w-full px-3 py-2 rounded-lg bg-gray-700/70 border border-gray-600/50 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
       </div>
 
-      <!-- Noches -->
-      <div class="xl:col-span-2">
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-white/80 whitespace-nowrap">Noches</span>
-          <div class="flex items-center gap-1">
-            <button data-n="all"  class="seg-btn seg-active">Todas</button>
-            <button data-n="short" class="seg-btn">≤7</button>
-            <button data-n="mid"   class="seg-btn">8–10</button>
-            <button data-n="long"  class="seg-btn">11+</button>
-          </div>
-        </div>
+      <!-- Precio mínimo -->
+      <div class="flex flex-col">
+        <label for="precio_min" class="text-sm font-medium text-gray-300/80 mb-1">Precio mínimo</label>
+        <input type="number" name="precio_min" id="precio_min"
+               value="{{ request.GET.precio_min|default:'' }}"
+               placeholder="USD"
+               min="0"
+               class="w-full px-3 py-2 rounded-lg bg-gray-700/70 border border-gray-600/50 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
       </div>
 
-      <!-- Precio -->
-      <div class="xl:col-span-3 grid grid-cols-12 items-center gap-2">
-        <label for="oprice" class="col-span-3 text-sm whitespace-nowrap">Hasta</label>
-        <div class="col-span-7 range-wrap">
-          <input id="oprice" type="range" min="600" max="1600" step="50" class="w-full accent-orange-500" />
-        </div>
-        <div class="col-span-2 text-right text-sm font-semibold text-orange-400" id="oPriceLabel">USD 1600</div>
+      <!-- Precio máximo -->
+      <div class="flex flex-col">
+        <label for="precio_max" class="text-sm font-medium text-gray-300/80 mb-1">Precio máximo</label>
+        <input type="number" name="precio_max" id="precio_max"
+               value="{{ request.GET.precio_max|default:'' }}"
+               placeholder="USD"
+               min="0"
+               class="w-full px-3 py-2 rounded-lg bg-gray-700/70 border border-gray-600/50 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
       </div>
 
-      <!-- Orden -->
-      <div class="xl:col-span-2">
-        <label for="osort" class="sr-only">Ordenar</label>
-        <select id="osort" class="w-full bg-white/10 border border-white/20 rounded-xl px-2 py-2 text-sm focus:outline-none">
-          <option value="relevance">Orden: Recomendado</option>
-          <option value="price_asc">Precio: menor a mayor</option>
-          <option value="price_desc">Precio: mayor a menor</option>
-          <option value="nights_asc">Noches: menor a mayor</option>
-          <option value="nights_desc">Noches: mayor a menor</option>
-        </select>
+      <!-- Botón -->
+      <div class="flex flex-col justify-end">
+        <button type="submit"
+                class="w-full py-2.5 rounded-lg bg-indigo-600 text-white font-medium shadow-md hover:shadow-lg hover:scale-[1.02] transition">
+          <i class="fa-solid fa-magnifying-glass"></i> Filtrar
+        </button>
       </div>
-
-      <!-- Acciones -->
-      <div class="xl:col-span-2 flex gap-2 justify-end">
-        <button id="oClear" class="px-3 py-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-sm">Limpiar</button>
-      </div>
-    </div>
-
-    <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
-      <div id="oActiveChips" class="flex flex-wrap gap-2"></div>
-      <div class="text-sm text-white/80"><span id="oCount">6</span> resultados</div>
-    </div>
+    </form>
   </div>
 </section>
-<!-- ======= GRID DE OFERTAS (DINÁMICO) ======= -->
-<section class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
-  <div id="oCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-white">
 
-    {% for oferta in ofertas %}
-      <article data-card
-               data-title="{{ oferta.viaje.destino }}"
-               data-cat="{{ oferta.viaje.tipo|default:'otros' }}"
-               data-price="{{ oferta.precio }}"
-               data-nights="{{ oferta.viaje.noches }}"
-               data-dest="{{ oferta.viaje.destino }}"
-               class="group relative">
-        <div class="rounded-2xl p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-          <div class="flex h-full flex-col rounded-2xl bg-white/5 border border-white/20 backdrop-blur-sm shadow-lg
-                      transition transform group-hover:-translate-y-1 group-hover:shadow-2xl">
+<!-- ======= GRID DE OFERTAS ======= -->
+<section class="max-w-7xl mx-auto px-6 lg:px-10 py-8">
+  <div id="oCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-gray-100">
+
+    {% if sin_resultados %}
+      <div class="col-span-3 text-center py-10">
+        <p class="text-gray-300 text-lg font-medium mb-2">
+          No encontramos un viaje con esas especificaciones 😕
+        </p>
+        <p class="text-gray-400 text-sm mb-6">
+          Pero mirá estas otras ofertas que podrían interesarte:
+        </p>
+      </div>
+
+      {% for oferta in recomendadas %}
+        <a href="{% url 'detalle_oferta' oferta.id %}"
+           class="group relative block rounded-2xl p-[1px] bg-gradient-to-br from-gray-700/40 via-gray-800/10 to-transparent shadow-neon hover:shadow-2xl transition transform hover:-translate-y-1 duration-300">
+
+          <div class="flex h-full flex-col rounded-2xl card-surface border border-gray-600/20 backdrop-blur-sm shadow-lg overflow-hidden bg-gray-800">
             <div class="relative">
               {% if oferta.navio.imagen %}
-                <img src="{{ oferta.navio.imagen.url }}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
+                <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover transition duration-500 group-hover:scale-105">
               {% else %}
-                <img src="{% static 'placeholder.jpg' %}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover">
+                <img src="{% static 'placeholder.jpg' %}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover transition duration-500 group-hover:scale-105">
               {% endif %}
-              <div class="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent"></div>
-              <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-black/40">
-                {{ oferta.viaje.tipo|title|default:"Otros" }}
-              </span>
-              <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-orange-500/90 text-white font-bold shadow">
+              <div class="absolute inset-0 bg-gradient-to-t from-gray-900/85 via-transparent to-transparent"></div>
+
+              <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-gray-700/60 text-gray-300">{{ oferta.categoria_nombre }}</span>
+              <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-indigo-600 text-white font-bold shadow-[0_10px_22px_rgba(0,0,0,0.3)]">
                 USD {{ oferta.precio }}
               </span>
             </div>
+
             <div class="p-6 flex flex-col gap-3">
               <h3 class="text-xl font-semibold flex items-center gap-2">
-                <i class="fa-solid fa-ship text-orange-400"></i> {{ oferta.viaje.destino }}
+                <i class="fa-solid fa-ship text-indigo-500"></i> {{ oferta.viaje.nombre }}
               </h3>
-              <p class="text-white/80 text-sm">
-                {{ oferta.viaje.noches }} noches desde {{ oferta.viaje.origen }}. {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
+              <p class="text-gray-300 text-sm">
+                {{ oferta.noches }} noches hacia {{ oferta.viaje.lugar_destino }}.
+                {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
               </p>
-              <div class="mt-auto flex items-center justify-between gap-3 pt-2">
-                <div class="text-xs text-white/70 flex items-center gap-2">
-                  <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> {{ oferta.viaje.noches }} noches</span>
-                  <span class="opacity-50">•</span>
-                  <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.destino }}</span>
-                </div>
-                <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'login' %}?next={% url 'ofertas' %}{% endif %}"
-                   class="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 font-medium shadow">
-                  {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión{% endif %}
-                </a>
+
+              <div class="mt-auto flex items-center justify-between gap-3 pt-2 text-xs text-gray-400">
+                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> {{ oferta.noches }} noches</span>
+                <span class="opacity-50">•</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.lugar_destino }}</span>
               </div>
             </div>
           </div>
-        </div>
-      </article>
-    {% empty %}
-      <p class="col-span-3 text-center text-white/80">No hay ofertas disponibles en este momento.</p>
-    {% endfor %}
+        </a>
+      {% endfor %}
+
+    {% elif ofertas %}
+      {% for oferta in ofertas %}
+        <!-- 🔁 Tu card normal de oferta -->
+        <a href="{% url 'detalle_oferta' oferta.id %}" 
+           class="group relative block rounded-2xl p-[1px] bg-gradient-to-br from-gray-700/40 via-gray-800/10 to-transparent shadow-neon hover:shadow-2xl transition transform hover:-translate-y-1 duration-300">
+          <div class="flex h-full flex-col rounded-2xl card-surface border border-gray-600/20 backdrop-blur-sm shadow-lg overflow-hidden bg-gray-800">
+            <div class="relative">
+              {% if oferta.navio.imagen %}
+                <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover transition duration-500 group-hover:scale-105">
+              {% else %}
+                <img src="{% static 'placeholder.jpg' %}" alt="{{ oferta.navio.nombre }}" class="w-full h-56 object-cover transition duration-500 group-hover:scale-105">
+              {% endif %}
+              <div class="absolute inset-0 bg-gradient-to-t from-gray-900/85 via-transparent to-transparent"></div>
+              <span class="absolute top-3 left-3 text-xs px-2 py-1 rounded-full bg-gray-700/60 text-gray-300">{{ oferta.categoria_nombre }}</span>
+              <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-indigo-600 text-white font-bold shadow-[0_10px_22px_rgba(0,0,0,0.3)]">USD {{ oferta.precio }}</span>
+            </div>
+            <div class="p-6 flex flex-col gap-3">
+              <h3 class="text-xl font-semibold flex items-center gap-2">
+                <i class="fa-solid fa-ship text-indigo-500"></i> {{ oferta.viaje.nombre }}
+              </h3>
+              <p class="text-gray-300 text-sm">
+                {{ oferta.noches }} noches hacia {{ oferta.viaje.lugar_destino }}.
+                {{ oferta.viaje.descripcion|default:"Disfrutá de este viaje único." }}
+              </p>
+              <div class="mt-auto flex items-center justify-between gap-3 pt-2 text-xs text-gray-400">
+                <span class="inline-flex items-center gap-1"><i class="fa-regular fa-moon"></i> {{ oferta.noches }} noches</span>
+                <span class="opacity-50">•</span>
+                <span class="inline-flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ oferta.viaje.lugar_destino }}</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    {% else %}
+      <p class="col-span-3 text-center text-gray-400">No hay ofertas disponibles en este momento.</p>
+    {% endif %}
 
   </div>
 </section>
-
-<!-- ======= JS DEL FILTRADO ======= -->
-<script>
-(function () {
-  const $  = (sel, ctx=document) => ctx.querySelector(sel);
-  const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
-
-  const maxPrice = 1600;
-  const state = { q:"", cats:new Set(), nights:"all", price:maxPrice, sort:"relevance" };
-
-  const cardsWrap   = $("#oCards");
-  const cards       = $$("#oCards [data-card]");
-  const inputQ      = $("#oq");
-  const price       = $("#oprice");
-  const priceLabel  = $("#oPriceLabel");
-  const sortSel     = $("#osort");
-  const clearBtn    = $("#oClear");
-  const catBtns     = $$("#oCatGroup .pill");
-  const segBtns     = $$("#oFilterBar .seg-btn");
-  const activeChips = $("#oActiveChips");
-  const matchCount  = $("#oCount");
-  const toggleBtn   = $("#oToggleFilters");
-  const filtersBody = $("#oFiltersBody");
-
-  function norm(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
-  function inNights(n){
-    n = Number(n);
-    if (state.nights === "all") return true;
-    if (state.nights === "short") return n <= 7;
-    if (state.nights === "mid")   return n >= 8 && n <= 10;
-    if (state.nights === "long")  return n >= 11;
-    return true;
-  }
-  function updatePriceUI(){ priceLabel.textContent = "USD " + state.price; }
-
-  function chip(text, onRemove){
-    const el = document.createElement("button");
-    el.className = "px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-sm flex items-center gap-2 hover:bg-white/20";
-    el.innerHTML = `<span>${text}</span><i class="fa-solid fa-xmark text-white/80"></i>`;
-    el.addEventListener("click", onRemove);
-    activeChips.appendChild(el);
-  }
-  function renderChips(){
-    activeChips.innerHTML = "";
-    if (state.q.trim()){ chip("Búsqueda: " + state.q, () => { state.q=""; inputQ.value=""; apply(); }); }
-    state.cats.forEach(c => {
-      const map = {familiar:"Familiar", aventura:"Aventura", lujo:"Lujo", tematico:"Temático", naturaleza:"Naturaleza", cultural:"Cultural"};
-      chip(map[c]||c, () => {
-        state.cats.delete(c);
-        const btn = catBtns.find(b => b.dataset.cat === c);
-        if (btn) btn.classList.remove("pill-active");
-        apply();
-      });
-    });
-    if (state.nights!=="all"){
-      const map = {short:"≤7 noches", mid:"8–10 noches", long:"11+ noches"};
-      chip(map[state.nights], () => {
-        state.nights="all";
-        segBtns.forEach(b=>b.classList.remove("seg-active"));
-        segBtns[0].classList.add("seg-active");
-        apply();
-      });
-    }
-    if (state.price<maxPrice){
-      chip("≤ USD " + state.price, () => { state.price=maxPrice; price.value=maxPrice; updatePriceUI(); apply(); });
-    }
-  }
-
-  function apply(){
-    const q = norm(state.q);
-    let visible = [];
-    cards.forEach(card => {
-      const title = norm(card.dataset.title);
-      const dest  = norm(card.dataset.dest);
-      const cat   = norm(card.dataset.cat);
-      const p     = Number(card.dataset.price);
-      const n     = Number(card.dataset.nights);
-      const show  = (!q || title.includes(q) || dest.includes(q))
-                 && (state.cats.size===0 || state.cats.has(cat))
-                 && (p <= state.price)
-                 && inNights(n);
-      card.classList.toggle("hidden", !show);
-      if (show) visible.push(card);
-    });
-
-    matchCount.textContent = visible.length;
-
-    if (state.sort!=="relevance"){
-      const s = {
-        price_asc:(a,b)=>a.dataset.price - b.dataset.price,
-        price_desc:(a,b)=>b.dataset.price - a.dataset.price,
-        nights_asc:(a,b)=>a.dataset.nights - b.dataset.nights,
-        nights_desc:(a,b)=>b.dataset.nights - a.dataset.nights,
-      }[state.sort];
-      if (s){
-        const hidden = cards.filter(c=>c.classList.contains("hidden"));
-        visible.sort(s).forEach(c=>cardsWrap.appendChild(c));
-        hidden.forEach(c=>cardsWrap.appendChild(c));
-      }
-    }
-    renderChips();
-  }
-
-  // Eventos
-  inputQ.addEventListener("input", e => { state.q = e.target.value; apply(); });
-  price.addEventListener("input", e => { state.price = Number(e.target.value); updatePriceUI(); apply(); });
-  sortSel.addEventListener("change", e => { state.sort = e.target.value; apply(); });
-  clearBtn.addEventListener("click", () => {
-    state.q=""; state.cats.clear(); state.nights="all"; state.price=maxPrice; state.sort="relevance";
-    inputQ.value=""; price.value=maxPrice; updatePriceUI(); sortSel.value="relevance";
-    catBtns.forEach(b=>b.classList.remove("pill-active"));
-    segBtns.forEach(b=>b.classList.remove("seg-active")); segBtns[0].classList.add("seg-active");
-    apply();
-  });
-
-  catBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const key = btn.dataset.cat;
-      if (state.cats.has(key)){ state.cats.delete(key); btn.classList.remove("pill-active"); }
-      else { state.cats.add(key); btn.classList.add("pill-active"); }
-      apply();
-    });
-  });
-
-  segBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      segBtns.forEach(b=>b.classList.remove("seg-active"));
-      btn.classList.add("seg-active");
-      state.nights = btn.dataset.n;
-      apply();
-    });
-  });
-
-  // Toggle filtros (mobile)
-  const mqDesktop = window.matchMedia("(min-width: 1024px)");
-  let open = mqDesktop.matches;
-  const setBody = () => { const el = document.getElementById("oFiltersBody"); if (el) el.style.display = (mqDesktop.matches || open) ? "grid" : "none"; };
-  setBody();
-  const tgl = document.getElementById("oToggleFilters");
-  if (tgl) {
-    tgl.addEventListener("click", () => {
-      open = !open; setBody(); tgl.textContent = open ? "Ocultar filtros" : "Mostrar filtros";
-    });
-  }
-  window.addEventListener("resize", setBody);
-
-  // init
-  price.value = maxPrice; updatePriceUI(); apply();
-})();
-</script>
 
 {% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="flex flex-col md:flex-row gap-6">
+    
+    <!-- Sección principal del puerto -->
+    <div class="flex-1 space-y-6">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">Detalles del Puerto: {{ puerto.nombre }}</h2>
+        <p class="text-text/75 text-sm">Conocé la información clave para planificar tu visita.</p>
+      </div>
+
+      <div class="card-surface backdrop-blur-xl p-6 rounded-2xl shadow-neon">
+        <p class="mb-2 text-text/85"><strong>🗺️ Itinerario:</strong> {{ puerto.itinerario.categoria.nombre }}</p>
+        <p class="text-text/75"><strong>🔢 Orden:</strong> {{ puerto.orden }}</p>
+      </div>
+
+      {% if puerto.ubicaciones.all %}
+        <div class="card-surface backdrop-blur-xl p-6 rounded-2xl shadow-neon">
+          <h3 class="text-xl font-semibold mb-3">📍 Ubicaciones</h3>
+          <ul class="space-y-2">
+            {% for ubicacion in puerto.ubicaciones.all %}
+              <li class="pl-4 border-l-2 border-primary text-text/80">{{ ubicacion.nombre }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if puerto.actividades.all %}
+        <div class="card-surface backdrop-blur-xl p-6 rounded-2xl shadow-neon">
+          <h3 class="text-xl font-semibold mb-3">🎉 Actividades</h3>
+          <ul class="space-y-2">
+            {% for act in puerto.actividades.all %}
+              <li class="pl-4 border-l-2 border-secondary text-text/80">{{ act.actividad.nombre }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% else %}
+        <div class="card-surface backdrop-blur-xl p-6 rounded-2xl shadow-neon text-text/75">
+          <p>No hay actividades disponibles en este puerto por el momento.</p>
+        </div>
+      {% endif %}
+
+      <a href="{% url 'destinos' %}"
+         class="inline-flex items-center gap-2 btn-secondary px-5 py-3 rounded-xl font-semibold">
+        ← Volver a la lista de destinos
+      </a>
+    </div>
+
+    <!-- Pestaña de acción -->
+    <div class="w-full md:w-1/3">
+      <div class="bg-gradient-to-br from-primary/25 via-secondary/20 to-surface/95 p-6 rounded-3xl shadow-neon sticky top-20 text-text">
+        <h3 class="text-xl font-bold mb-2">¿Listo para explorar?</h3>
+        <p class="mb-4 text-text/80">Descubrí cruceros que incluyen este puerto y reservá tu aventura ideal.</p>
+        <a href="{% url 'cruceros' %}"
+           class="block text-center btn-primary font-semibold px-4 py-2 rounded-xl shadow transition hover:scale-[1.02]">
+          🌊 Ver cruceros disponibles
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

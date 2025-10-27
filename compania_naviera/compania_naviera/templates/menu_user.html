@@ -3,95 +3,57 @@
 {% block title %}Panel de Usuario - SEA STAR{% endblock %}
 
 {% block content %}
-  <!-- PANEL DE USUARIO -->
-  <main class="max-w-6xl mx-auto px-4 py-10">
-    <!-- Tarjetas de funciones -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-      <div class="bg-white/20 rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform cursor-pointer">
-        <div class="text-white text-4xl mb-4">📅</div>
-        <h3 class="text-xl font-semibold mb-2">Mis Reservas</h3>
-        <p class="text-white/80 mb-4 text-center">Revisá y administrá tus reservas de cruceros.</p>
-        <a href="#" class="text-sm text-orange-400 font-semibold hover:underline">Ver más →</a>
-      </div>
-      <div class="bg-white/20 rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform cursor-pointer">
-        <div class="text-white text-4xl mb-4">👤</div>
-        <h3 class="text-xl font-semibold mb-2">Mi Perfil</h3>
-        <p class="text-white/80 mb-4 text-center">Consultá y editá tus datos personales.</p>
-        <a href="#" class="text-sm text-orange-400 font-semibold hover:underline">Editar perfil →</a>
-      </div>
-      <div class="bg-white/20 rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform cursor-pointer">
-        <div class="text-white text-4xl mb-4">💳</div>
-        <h3 class="text-xl font-semibold mb-2">Pagos</h3>
-        <p class="text-white/80 mb-4 text-center">Gestioná tus métodos de pago o abonos.</p>
-        <a href="#" class="text-sm text-orange-400 font-semibold hover:underline">Ver opciones →</a>
-      </div>
-      <div class="bg-white/20 rounded-2xl shadow-lg p-8 flex flex-col items-center hover:scale-105 transition-transform cursor-pointer">
-        <div class="text-white text-4xl mb-4">⚙️</div>
-        <h3 class="text-xl font-semibold mb-2">Configuración</h3>
-        <p class="text-white/80 mb-4 text-center">Personalizá tu experiencia en SEA STAR.</p>
-        <a href="#" class="text-sm text-orange-400 font-semibold hover:underline">Ajustes →</a>
-      </div>
+<main class="max-w-7xl mx-auto px-4 md:px-6 py-10 space-y-10">
+
+  <!-- Encabezado -->
+  <header class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+    <div>
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">¡Hola, {{ user.first_name|default:user.username }}!</h1>
+      <p class="text-text/80">Bienvenido a tu panel. Accedé rápidamente a tus opciones y ofertas.</p>
     </div>
-
-    <!-- Secciones adicionales -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <section class="bg-white/10 rounded-2xl shadow-md p-6">
-        <h2 class="text-xl font-bold mb-4 text-orange-400">🎁 Ofertas Exclusivas</h2>
-        <ul class="space-y-3 text-sm">
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>2x1 en Cruceros Caribe</span>
-            <a href="#" class="text-orange-300 hover:underline">Ver</a>
-          </li>
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>Upgrade cabina gratis</span>
-            <a href="#" class="text-orange-300 hover:underline">Ver</a>
-          </li>
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>Niños gratis (hasta 12)</span>
-            <a href="#" class="text-orange-300 hover:underline">Ver</a>
-          </li>
-        </ul>
-      </section>
-
-      <section class="bg-white/10 rounded-2xl shadow-md p-6">
-        <h2 class="text-xl font-bold mb-4 text-blue-200">🛳️ Próximos Cruceros</h2>
-        <ul class="space-y-3 text-sm">
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>Mediterráneo - 15/09/25</span>
-            <a href="#" class="text-orange-300 hover:underline">Detalles</a>
-          </li>
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>Caribe - 01/11/25</span>
-            <a href="#" class="text-orange-300 hover:underline">Detalles</a>
-          </li>
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>Fiordos - 20/12/25</span>
-            <a href="#" class="text-orange-300 hover:underline">Detalles</a>
-          </li>
-        </ul>
-      </section>
-
-      <section class="bg-white/10 rounded-2xl shadow-md p-6">
-        <h2 class="text-xl font-bold mb-4 text-green-300">🎉 Actividades a Bordo</h2>
-        <ul class="space-y-3 text-sm">
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>Show en vivo cada noche</span>
-            <span class="text-green-200">Incluido</span>
-          </li>
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>Clases de cocina marina</span>
-            <span class="text-green-200">Reservar</span>
-          </li>
-          <li class="bg-white/10 rounded-lg px-4 py-3 flex justify-between items-center">
-            <span>Spa y masajes premium</span>
-            <span class="text-green-200">Desde $25</span>
-          </li>
-        </ul>
-      </section>
+    <div class="flex flex-wrap items-center gap-3">
+      <a href="{% url 'editar_perfil' %}" class="px-4 py-2 rounded-2xl btn-secondary transition text-base">
+        <i class="fa fa-user mr-2"></i> Editar perfil
+      </a>
+      <a href="{% url 'cambiar_contrasenia' %}" class="px-4 py-2 rounded-2xl btn-secondary transition text-base">
+        <i class="fa fa-key mr-2"></i> Cambiar contraseña
+      </a>
+      <a href="{% url 'crear_reserva' %}" class="px-4 py-2 rounded-2xl btn-primary transition font-semibold hover:scale-[1.02] text-base">
+        <i class="fa fa-plus mr-2"></i> Nueva reserva
+      </a>
     </div>
-  </main>
+  </header>
 
-  <footer class="text-center text-sm text-white/60 mt-16 mb-6">
-    &copy; 2025 SEA STAR. Todos los derechos reservados.
-  </footer>
+  <!-- Accesos rápidos (2x2 tamaño moderado) -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <a href="{% url 'mis_reservas' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-8 shadow-neon transition duration-300">
+      <div class="text-5xl mb-4">📅</div>
+      <h3 class="text-xl font-bold mb-1">Mis Reservas</h3>
+      <p class="text-base text-text/75">Revisá y administrá tus reservas de crucero.</p>
+    </a>
+
+    <a href="{% url 'cruceros' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-8 shadow-neon transition duration-300">
+      <div class="text-5xl mb-4">🛳</div>
+      <h3 class="text-xl font-bold mb-1">Cruceros</h3>
+      <p class="text-base text-text/75">Explorá próximos viajes y reservá tu lugar.</p>
+    </a>
+
+    <a href="{% url 'destinos' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-8 shadow-neon transition duration-300">
+      <div class="text-5xl mb-4">📍</div>
+      <h3 class="text-xl font-bold mb-1">Destinos</h3>
+      <p class="text-base text-text/75">Conocé nuestros puertos y experiencias.</p>
+    </a>
+
+    <a href="{% url 'ofertas' %}" class="group card-surface hover:-translate-y-1 rounded-2xl p-8 shadow-neon transition duration-300">
+      <div class="text-5xl mb-4">🔥</div>
+      <h3 class="text-xl font-bold mb-1">Ofertas</h3>
+      <p class="text-base text-text/75">Promos vigentes y descuentos.</p>
+    </a>
+  </section>
+
+</main>
+
+<footer class="text-center text-sm text-text/65 mt-16 mb-6">
+  &copy; {{ now|date:"Y" }} SEA STAR. Todos los derechos reservados.
+</footer>
 {% endblock %}
