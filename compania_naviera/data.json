@@ -115,7 +115,7 @@
     "pk": 2,
     "fields": {
       "numero_de_cubierta": 8,
-      "navio": 1,
+      "navio": 2,
       "descripcion": "Zona premium con piscinas infinitas, bares de autor y solárium privado.",
       "encargado": "Francisco Díaz"
     }
@@ -125,7 +125,7 @@
     "pk": 3,
     "fields": {
       "numero_de_cubierta": 3,
-      "navio": 2,
+      "navio": 3,
       "descripcion": "Centro de expediciones con miradores calefaccionados y laboratorios científicos.",
       "encargado": "Isabella Kowalski"
     }
@@ -137,6 +137,16 @@
       "numero_de_cubierta": 4,
       "navio": 3,
       "descripcion": "Área familiar con piscinas climatizadas, cine 4D y gastronomía casual.",
+      "encargado": "Diego Paredes"
+    }
+  },
+  {
+    "model": "compania_naviera.cubierta",
+    "pk": 5,
+    "fields": {
+      "numero_de_cubierta": 5,
+      "navio": 3,
+      "descripcion": "Cubierta secundaria con camarotes exteriores e interiores.",
       "encargado": "Diego Paredes"
     }
   },
@@ -164,90 +174,7 @@
       "descripcion": "Camarote bloqueado temporalmente por trabajos correctivos."
     }
   },
-  {
-    "model": "compania_naviera.tipocamarote",
-    "pk": 1,
-    "fields": {
-      "nombre": "Suite Panorama",
-      "descripcion": "Suite esquinera con balcón envolvente, mayordomo y amenities premium."
-    }
-  },
-  {
-    "model": "compania_naviera.tipocamarote",
-    "pk": 2,
-    "fields": {
-      "nombre": "Balcón Deluxe",
-      "descripcion": "Camarote con balcón privado, cama king y área de living."
-    }
-  },
-  {
-    "model": "compania_naviera.tipocamarote",
-    "pk": 3,
-    "fields": {
-      "nombre": "Interior Familiar",
-      "descripcion": "Opción económica con iluminación circadiana y literas para 4 personas."
-    }
-  },
-  {
-    "model": "compania_naviera.camarote",
-    "pk": 1,
-    "fields": {
-      "numero_de_camarote": 5021,
-      "cubierta": 1,
-      "estado_camarote": 1,
-      "tipo_camarote": 1,
-      "imagen": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=70",
-      "capacidad": 2
-    }
-  },
-  {
-    "model": "compania_naviera.camarote",
-    "pk": 2,
-    "fields": {
-      "numero_de_camarote": 5035,
-      "cubierta": 1,
-      "estado_camarote": 2,
-      "tipo_camarote": 2,
-      "imagen": "https://images.unsplash.com/photo-1505693497065-60ebeead2be9?auto=format&fit=crop&w=1200&q=70",
-      "capacidad": 4
-    }
-  },
-  {
-    "model": "compania_naviera.camarote",
-    "pk": 3,
-    "fields": {
-      "numero_de_camarote": 8042,
-      "cubierta": 2,
-      "estado_camarote": 1,
-      "tipo_camarote": 3,
-      "imagen": "https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=70",
-      "capacidad": 4
-    }
-  },
-  {
-    "model": "compania_naviera.camarote",
-    "pk": 4,
-    "fields": {
-      "numero_de_camarote": 305,
-      "cubierta": 3,
-      "estado_camarote": 1,
-      "tipo_camarote": 2,
-      "imagen": "https://images.unsplash.com/photo-1505692794403-55b39d64ac70?auto=format&fit=crop&w=1200&q=70",
-      "capacidad": 3
-    }
-  },
-  {
-    "model": "compania_naviera.camarote",
-    "pk": 5,
-    "fields": {
-      "numero_de_camarote": 412,
-      "cubierta": 4,
-      "estado_camarote": 1,
-      "tipo_camarote": 3,
-      "imagen": "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=1200&q=70",
-      "capacidad": 4
-    }
-  },
+
   {
     "model": "compania_naviera.estadopasajero",
     "pk": 1,
@@ -809,5 +736,503 @@
       "fecha_inicio": "2025-02-28",
       "fecha_fin": "2025-03-20"
     }
-  }
+  },
+
+
+  {
+    "model": "compania_naviera.itinerario",
+    "pk": 8,
+    "fields": {
+      "categoria": 1,
+      "imagen": "https://images.unsplash.com/photo-1493558103817-58b2924bce98?auto=format&fit=crop&w=1200&q=70"
+    }
+  },
+  {
+    "model": "compania_naviera.itinerario",
+    "pk": 9,
+    "fields": {
+      "categoria": 2,
+      "imagen": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=70"
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 21,
+    "fields": {
+      "nombre": "Puerto Montevideo",
+      "descripcion": "Recorrido histórico por la rambla y casco antiguo.",
+      "orden": 1,
+      "itinerario": 8
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 22,
+    "fields": {
+      "nombre": "Puerto Punta del Este",
+      "descripcion": "Escala en playas y cena en restaurantes frente al mar.",
+      "orden": 2,
+      "itinerario": 8
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 23,
+    "fields": {
+      "nombre": "Puerto Ushuaia",
+      "descripcion": "Excursión al Canal Beagle y navegación entre glaciares.",
+      "orden": 1,
+      "itinerario": 9
+    }
+  },
+  {
+    "model": "compania_naviera.orden",
+    "pk": 24,
+    "fields": {
+      "nombre": "Puerto Punta Arenas",
+      "descripcion": "Visita al centro histórico y paseo en lancha por fiordos.",
+      "orden": 2,
+      "itinerario": 9
+    }
+  },
+  {
+    "model": "compania_naviera.puerto",
+    "pk": 10,
+    "fields": {
+      "nombre": "Puerto Montevideo",
+      "orden": 6
+    }
+  },
+  {
+    "model": "compania_naviera.puerto",
+    "pk": 11,
+    "fields": {
+      "nombre": "Puerto Punta del Este",
+      "orden": 7
+    }
+  },
+  {
+    "model": "compania_naviera.puerto",
+    "pk": 12,
+    "fields": {
+      "nombre": "Puerto Ushuaia",
+      "orden": 8
+    }
+  },
+  {
+    "model": "compania_naviera.puerto",
+    "pk": 13,
+    "fields": {
+      "nombre": "Puerto Punta Arenas",
+      "orden": 9
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 10,
+    "fields": {
+      "puerto": 10,
+      "nro_muelle": 6,
+      "nombre": "Muelle Central Montevideo"
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 11,
+    "fields": {
+      "puerto": 11,
+      "nro_muelle": 7,
+      "nombre": "Muelle Brava"
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 12,
+    "fields": {
+      "puerto": 12,
+      "nro_muelle": 2,
+      "nombre": "Muelle Ushuaia"
+    }
+  },
+  {
+    "model": "compania_naviera.ubicacionpuerto",
+    "pk": 13,
+    "fields": {
+      "puerto": 13,
+      "nro_muelle": 3,
+      "nombre": "Muelle Punta Arenas"
+    }
+  },
+  {
+    "model": "compania_naviera.actividadposible",
+    "pk": 9,
+    "fields": {
+      "nombre": "Clases de surf",
+      "descripcion": "Aprendé a surfear en playas paradisíacas."
+    }
+  },
+  {
+    "model": "compania_naviera.actividadposible",
+    "pk": 10,
+    "fields": {
+      "nombre": "Visita a viñedos",
+      "descripcion": "Tour y degustación en viñedos locales."
+    }
+  },
+  {
+    "model": "compania_naviera.puertoxactividad",
+    "pk": 7,
+    "fields": {
+      "puerto": 10,
+      "actividad": 9
+    }
+  },
+  {
+    "model": "compania_naviera.puertoxactividad",
+    "pk": 8,
+    "fields": {
+      "puerto": 11,
+      "actividad": 10
+    }
+  },
+  {
+    "model": "compania_naviera.tipocamarote",
+    "pk": 1,
+    "fields": {
+      "nombre": "Interior",
+      "descripcion": "Camarote interior sin ventana al exterior."
+    }
+  },
+  {
+    "model": "compania_naviera.tipocamarote",
+    "pk": 2,
+    "fields": {
+      "nombre": "Exterior",
+      "descripcion": "Camarote con ventana al exterior."
+    }
+  },
+  {
+    "model": "compania_naviera.tipocamarote",
+    "pk": 3,
+    "fields": {
+      "nombre": "Suite",
+      "descripcion": "Suite espaciosa con cama king y amenities premium."
+    }
+  },
+  {
+    "model": "compania_naviera.tipocamarote",
+    "pk": 4,
+    "fields": {
+      "nombre": "Suite Familiar",
+      "descripcion": "Suite familiar con capacidad para 3-4 personas."
+    }
+  },
+
+  {"model":"compania_naviera.camarote","pk":26,"fields":{"numero_de_camarote":26,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":27,"fields":{"numero_de_camarote":27,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":28,"fields":{"numero_de_camarote":28,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":29,"fields":{"numero_de_camarote":29,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":30,"fields":{"numero_de_camarote":30,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":31,"fields":{"numero_de_camarote":31,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":32,"fields":{"numero_de_camarote":32,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":33,"fields":{"numero_de_camarote":33,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":34,"fields":{"numero_de_camarote":34,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":35,"fields":{"numero_de_camarote":35,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":36,"fields":{"numero_de_camarote":36,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":37,"fields":{"numero_de_camarote":37,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":38,"fields":{"numero_de_camarote":38,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":39,"fields":{"numero_de_camarote":39,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":40,"fields":{"numero_de_camarote":40,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":41,"fields":{"numero_de_camarote":41,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":42,"fields":{"numero_de_camarote":42,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":43,"fields":{"numero_de_camarote":43,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":44,"fields":{"numero_de_camarote":44,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":45,"fields":{"numero_de_camarote":45,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":46,"fields":{"numero_de_camarote":46,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":47,"fields":{"numero_de_camarote":47,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":48,"fields":{"numero_de_camarote":48,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":49,"fields":{"numero_de_camarote":49,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":50,"fields":{"numero_de_camarote":50,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":51,"fields":{"numero_de_camarote":51,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":52,"fields":{"numero_de_camarote":52,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":53,"fields":{"numero_de_camarote":53,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":54,"fields":{"numero_de_camarote":54,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":55,"fields":{"numero_de_camarote":55,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":56,"fields":{"numero_de_camarote":56,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":57,"fields":{"numero_de_camarote":57,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":58,"fields":{"numero_de_camarote":58,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":59,"fields":{"numero_de_camarote":59,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":60,"fields":{"numero_de_camarote":60,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":61,"fields":{"numero_de_camarote":61,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":62,"fields":{"numero_de_camarote":62,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":63,"fields":{"numero_de_camarote":63,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":64,"fields":{"numero_de_camarote":64,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":65,"fields":{"numero_de_camarote":65,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":66,"fields":{"numero_de_camarote":66,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":67,"fields":{"numero_de_camarote":67,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":68,"fields":{"numero_de_camarote":68,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":69,"fields":{"numero_de_camarote":69,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":70,"fields":{"numero_de_camarote":70,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":71,"fields":{"numero_de_camarote":71,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":72,"fields":{"numero_de_camarote":72,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":73,"fields":{"numero_de_camarote":73,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":74,"fields":{"numero_de_camarote":74,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":75,"fields":{"numero_de_camarote":75,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":76,"fields":{"numero_de_camarote":76,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":77,"fields":{"numero_de_camarote":77,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":78,"fields":{"numero_de_camarote":78,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":79,"fields":{"numero_de_camarote":79,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":80,"fields":{"numero_de_camarote":80,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":81,"fields":{"numero_de_camarote":81,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":82,"fields":{"numero_de_camarote":82,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":83,"fields":{"numero_de_camarote":83,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":84,"fields":{"numero_de_camarote":84,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":85,"fields":{"numero_de_camarote":85,"cubierta":1,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":86,"fields":{"numero_de_camarote":86,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":87,"fields":{"numero_de_camarote":87,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":88,"fields":{"numero_de_camarote":88,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":89,"fields":{"numero_de_camarote":89,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":90,"fields":{"numero_de_camarote":90,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":91,"fields":{"numero_de_camarote":91,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":92,"fields":{"numero_de_camarote":92,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":93,"fields":{"numero_de_camarote":93,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":94,"fields":{"numero_de_camarote":94,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":95,"fields":{"numero_de_camarote":95,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":96,"fields":{"numero_de_camarote":96,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":97,"fields":{"numero_de_camarote":97,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":98,"fields":{"numero_de_camarote":98,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":99,"fields":{"numero_de_camarote":99,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":100,"fields":{"numero_de_camarote":100,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":101,"fields":{"numero_de_camarote":101,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":102,"fields":{"numero_de_camarote":102,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":103,"fields":{"numero_de_camarote":103,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":104,"fields":{"numero_de_camarote":104,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":105,"fields":{"numero_de_camarote":105,"cubierta":1,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/familiar4.jpg"}},
+   {"model":"compania_naviera.camarote","pk":106,"fields":{"numero_de_camarote":26,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":107,"fields":{"numero_de_camarote":27,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":108,"fields":{"numero_de_camarote":28,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":109,"fields":{"numero_de_camarote":29,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":110,"fields":{"numero_de_camarote":30,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":111,"fields":{"numero_de_camarote":31,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":112,"fields":{"numero_de_camarote":32,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":113,"fields":{"numero_de_camarote":33,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":114,"fields":{"numero_de_camarote":34,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":115,"fields":{"numero_de_camarote":35,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":116,"fields":{"numero_de_camarote":36,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":117,"fields":{"numero_de_camarote":37,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":118,"fields":{"numero_de_camarote":38,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":119,"fields":{"numero_de_camarote":39,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":120,"fields":{"numero_de_camarote":40,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":121,"fields":{"numero_de_camarote":41,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":122,"fields":{"numero_de_camarote":42,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":123,"fields":{"numero_de_camarote":43,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":124,"fields":{"numero_de_camarote":44,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":125,"fields":{"numero_de_camarote":45,"cubierta":1,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":126,"fields":{"numero_de_camarote":46,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":127,"fields":{"numero_de_camarote":47,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":128,"fields":{"numero_de_camarote":48,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":129,"fields":{"numero_de_camarote":49,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":130,"fields":{"numero_de_camarote":50,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":131,"fields":{"numero_de_camarote":51,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":132,"fields":{"numero_de_camarote":52,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":133,"fields":{"numero_de_camarote":53,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":134,"fields":{"numero_de_camarote":54,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":135,"fields":{"numero_de_camarote":55,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":136,"fields":{"numero_de_camarote":56,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":137,"fields":{"numero_de_camarote":57,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":138,"fields":{"numero_de_camarote":58,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":139,"fields":{"numero_de_camarote":59,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":140,"fields":{"numero_de_camarote":60,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":141,"fields":{"numero_de_camarote":61,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":142,"fields":{"numero_de_camarote":62,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":143,"fields":{"numero_de_camarote":63,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":144,"fields":{"numero_de_camarote":64,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":145,"fields":{"numero_de_camarote":65,"cubierta":1,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":146,"fields":{"numero_de_camarote":66,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":147,"fields":{"numero_de_camarote":67,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":148,"fields":{"numero_de_camarote":68,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":149,"fields":{"numero_de_camarote":69,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":150,"fields":{"numero_de_camarote":70,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":151,"fields":{"numero_de_camarote":71,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":152,"fields":{"numero_de_camarote":72,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":153,"fields":{"numero_de_camarote":73,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":154,"fields":{"numero_de_camarote":74,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":155,"fields":{"numero_de_camarote":75,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+   {"model":"compania_naviera.camarote","pk":156,"fields":{"numero_de_camarote":76,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":157,"fields":{"numero_de_camarote":77,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":158,"fields":{"numero_de_camarote":78,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":159,"fields":{"numero_de_camarote":79,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":160,"fields":{"numero_de_camarote":80,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":161,"fields":{"numero_de_camarote":81,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":162,"fields":{"numero_de_camarote":82,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":163,"fields":{"numero_de_camarote":83,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":164,"fields":{"numero_de_camarote":84,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":165,"fields":{"numero_de_camarote":85,"cubierta":2,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":166,"fields":{"numero_de_camarote":86,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":167,"fields":{"numero_de_camarote":87,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":168,"fields":{"numero_de_camarote":88,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":169,"fields":{"numero_de_camarote":89,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":170,"fields":{"numero_de_camarote":90,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":171,"fields":{"numero_de_camarote":91,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":172,"fields":{"numero_de_camarote":92,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":173,"fields":{"numero_de_camarote":93,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":174,"fields":{"numero_de_camarote":94,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":175,"fields":{"numero_de_camarote":95,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suitefamiliar3.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":176,"fields":{"numero_de_camarote":96,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":177,"fields":{"numero_de_camarote":97,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":178,"fields":{"numero_de_camarote":98,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":179,"fields":{"numero_de_camarote":99,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":180,"fields":{"numero_de_camarote":100,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":181,"fields":{"numero_de_camarote":101,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":182,"fields":{"numero_de_camarote":102,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":183,"fields":{"numero_de_camarote":103,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":184,"fields":{"numero_de_camarote":104,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":185,"fields":{"numero_de_camarote":105,"cubierta":2,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suitefamiliar4.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":186,"fields":{"numero_de_camarote":106,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":187,"fields":{"numero_de_camarote":107,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":188,"fields":{"numero_de_camarote":108,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":189,"fields":{"numero_de_camarote":109,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":190,"fields":{"numero_de_camarote":110,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":191,"fields":{"numero_de_camarote":111,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":192,"fields":{"numero_de_camarote":112,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":193,"fields":{"numero_de_camarote":113,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":194,"fields":{"numero_de_camarote":114,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":195,"fields":{"numero_de_camarote":115,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/interior1.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":196,"fields":{"numero_de_camarote":116,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":197,"fields":{"numero_de_camarote":117,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":198,"fields":{"numero_de_camarote":118,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":199,"fields":{"numero_de_camarote":119,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":200,"fields":{"numero_de_camarote":120,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":201,"fields":{"numero_de_camarote":121,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":202,"fields":{"numero_de_camarote":122,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":203,"fields":{"numero_de_camarote":123,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":204,"fields":{"numero_de_camarote":124,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":205,"fields":{"numero_de_camarote":125,"cubierta":2,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/interior2.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":206,"fields":{"numero_de_camarote":126,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":207,"fields":{"numero_de_camarote":127,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":208,"fields":{"numero_de_camarote":128,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":209,"fields":{"numero_de_camarote":129,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":210,"fields":{"numero_de_camarote":130,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":211,"fields":{"numero_de_camarote":131,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":212,"fields":{"numero_de_camarote":132,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":213,"fields":{"numero_de_camarote":133,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":214,"fields":{"numero_de_camarote":134,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":215,"fields":{"numero_de_camarote":135,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/exterior1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":216,"fields":{"numero_de_camarote":136,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":217,"fields":{"numero_de_camarote":137,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":218,"fields":{"numero_de_camarote":138,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":219,"fields":{"numero_de_camarote":139,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":220,"fields":{"numero_de_camarote":140,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":221,"fields":{"numero_de_camarote":141,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":222,"fields":{"numero_de_camarote":142,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":223,"fields":{"numero_de_camarote":143,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":224,"fields":{"numero_de_camarote":144,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":225,"fields":{"numero_de_camarote":145,"cubierta":2,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/exterior2.jpg"}},
+
+
+
+  {"model":"compania_naviera.camarote","pk":226,"fields":{"numero_de_camarote":146,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":227,"fields":{"numero_de_camarote":147,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":228,"fields":{"numero_de_camarote":148,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":229,"fields":{"numero_de_camarote":149,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":230,"fields":{"numero_de_camarote":150,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":231,"fields":{"numero_de_camarote":151,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":232,"fields":{"numero_de_camarote":152,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":233,"fields":{"numero_de_camarote":153,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":234,"fields":{"numero_de_camarote":154,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+  {"model":"compania_naviera.camarote","pk":235,"fields":{"numero_de_camarote":155,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":1,"imagen":"https://example.com/suite1.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":236,"fields":{"numero_de_camarote":156,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":237,"fields":{"numero_de_camarote":157,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":238,"fields":{"numero_de_camarote":158,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":239,"fields":{"numero_de_camarote":159,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":240,"fields":{"numero_de_camarote":160,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":241,"fields":{"numero_de_camarote":161,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":242,"fields":{"numero_de_camarote":162,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":243,"fields":{"numero_de_camarote":163,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":244,"fields":{"numero_de_camarote":164,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+  {"model":"compania_naviera.camarote","pk":245,"fields":{"numero_de_camarote":165,"cubierta":3,"estado_camarote":1,"tipo_camarote":3,"capacidad":2,"imagen":"https://example.com/suite2.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":246,"fields":{"numero_de_camarote":166,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":247,"fields":{"numero_de_camarote":167,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":248,"fields":{"numero_de_camarote":168,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":249,"fields":{"numero_de_camarote":169,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":250,"fields":{"numero_de_camarote":170,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":251,"fields":{"numero_de_camarote":171,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":252,"fields":{"numero_de_camarote":172,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":253,"fields":{"numero_de_camarote":173,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":254,"fields":{"numero_de_camarote":174,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":255,"fields":{"numero_de_camarote":175,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":3,"imagen":"https://example.com/suite_familiar3.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":256,"fields":{"numero_de_camarote":176,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":257,"fields":{"numero_de_camarote":177,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":258,"fields":{"numero_de_camarote":178,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":259,"fields":{"numero_de_camarote":179,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":260,"fields":{"numero_de_camarote":180,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":261,"fields":{"numero_de_camarote":181,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":262,"fields":{"numero_de_camarote":182,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":263,"fields":{"numero_de_camarote":183,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":264,"fields":{"numero_de_camarote":184,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":265,"fields":{"numero_de_camarote":185,"cubierta":4,"estado_camarote":1,"tipo_camarote":4,"capacidad":4,"imagen":"https://example.com/suite_familiar4.jpg"}},
+
+
+  {"model":"compania_naviera.camarote","pk":266,"fields":{"numero_de_camarote":266,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":267,"fields":{"numero_de_camarote":267,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":268,"fields":{"numero_de_camarote":268,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":269,"fields":{"numero_de_camarote":269,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":270,"fields":{"numero_de_camarote":270,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":271,"fields":{"numero_de_camarote":271,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":272,"fields":{"numero_de_camarote":272,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":273,"fields":{"numero_de_camarote":273,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":274,"fields":{"numero_de_camarote":274,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":275,"fields":{"numero_de_camarote":275,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":276,"fields":{"numero_de_camarote":276,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":277,"fields":{"numero_de_camarote":277,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":278,"fields":{"numero_de_camarote":278,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":279,"fields":{"numero_de_camarote":279,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":280,"fields":{"numero_de_camarote":280,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":281,"fields":{"numero_de_camarote":281,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":282,"fields":{"numero_de_camarote":282,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":283,"fields":{"numero_de_camarote":283,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":284,"fields":{"numero_de_camarote":284,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":285,"fields":{"numero_de_camarote":285,"cubierta":5,"estado_camarote":1,"tipo_camarote":2,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  
+  {"model":"compania_naviera.camarote","pk":366,"fields":{"numero_de_camarote":290,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":367,"fields":{"numero_de_camarote":291,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":368,"fields":{"numero_de_camarote":292,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":369,"fields":{"numero_de_camarote":293,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":370,"fields":{"numero_de_camarote":294,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":371,"fields":{"numero_de_camarote":295,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":372,"fields":{"numero_de_camarote":296,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":373,"fields":{"numero_de_camarote":297,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":374,"fields":{"numero_de_camarote":298,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+  {"model":"compania_naviera.camarote","pk":375,"fields":{"numero_de_camarote":299,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":1,"imagen":"https://example.com/suite_familiar3.jpg"}},
+
+  {"model":"compania_naviera.camarote","pk":376,"fields":{"numero_de_camarote":300,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":377,"fields":{"numero_de_camarote":301,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":378,"fields":{"numero_de_camarote":302,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":379,"fields":{"numero_de_camarote":303,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":380,"fields":{"numero_de_camarote":304,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":381,"fields":{"numero_de_camarote":305,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":382,"fields":{"numero_de_camarote":306,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":383,"fields":{"numero_de_camarote":307,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":384,"fields":{"numero_de_camarote":308,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}},
+  {"model":"compania_naviera.camarote","pk":385,"fields":{"numero_de_camarote":309,"cubierta":5,"estado_camarote":1,"tipo_camarote":1,"capacidad":2,"imagen":"https://example.com/suite_familiar4.jpg"}}
+
 ]

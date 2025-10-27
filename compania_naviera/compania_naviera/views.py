@@ -41,15 +41,10 @@ from .models import (
 # ===========================
 
 def main_view(request):
-    """
-    Home público: muestra próximos viajes.
-    """
     logout(request)  # deja la sesión limpia al entrar al home
-    proximos_viajes = (
-        Viaje.objects.filter(fecha_de_salida__gte=now().date())
-        .order_by("fecha_de_salida")[:6]
-    )
-    return render(request, "inicio.html", {"proximos_viajes": proximos_viajes})
+    
+    return render(request, "inicio.html")
+
 class ContactoView(TemplateView):
     template_name = "contacto.html"
 
@@ -300,33 +295,8 @@ class CambiarContraseniaView(LoginRequiredMixin, FormView):
 # Panel de Usuario / Reservas
 # ===========================from django.utils.timezone import now
 
-
-
 class MenuUserView(LoginRequiredMixin, TemplateView):
     template_name = "menu_user.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        usuario = self.request.user
-        hoy = now().date()
-
-        # Solo traer ofertas destacadas activas
-        ofertas_destacadas = list(
-            ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
-            .select_related("viaje", "navio")
-            .order_by("precio")[:3]
-        )
-
-        # Actividades destacadas si las vas a mostrar en otro lado
-        actividades_destacadas = list(ActividadPosible.objects.order_by("nombre")[:3])
-
-        context.update({
-            "usuario": usuario,
-            "ofertas_destacadas": ofertas_destacadas,
-            "actividades_destacadas": actividades_destacadas,
-        })
-        return context
-
 
 class MisReservasView(LoginRequiredMixin, ListView):
     model = Reserva
@@ -375,7 +345,7 @@ class ReservaCreateView(LoginRequiredMixin, View):
     template_name = "crear_reserva.html"
     success_url = reverse_lazy("mis_reservas")
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         clientes = Cliente.objects.filter(usuario=request.user)
         viaje_navio_id = request.GET.get("viaje_navio_id")
 
@@ -390,7 +360,7 @@ class ReservaCreateView(LoginRequiredMixin, View):
         }
         return render(request, self.template_name, context)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         cliente_id = request.POST.get("cliente")
         viaje_id = request.POST.get("viaje_navio")
         camarote_id = request.POST.get("camarote")
