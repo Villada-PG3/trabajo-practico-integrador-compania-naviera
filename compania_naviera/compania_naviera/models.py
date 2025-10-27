@@ -166,6 +166,9 @@ class Orden(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    class Meta:
+        ordering = ['orden']
     
 
 class Puerto(models.Model):
