@@ -12,7 +12,7 @@
   <section>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for navio in navios %}
-      <a href="{% url 'navio_detail' navio.pk %}" class="group block relative overflow-hidden rounded-2xl border border-secondary/20 card-surface shadow-neon transition duration-300 hover:-translate-y-1 hover:border-secondary/40">
+      <a href="{% url 'navio_detail' navio.pk %}" class="group block relative overflow-hidden rounded-2xl border border-primary/35 card-surface shadow-lg transition duration-300 hover:-translate-y-1 hover:border-secondary/45">
         <div class="aspect-[16/9] overflow-hidden rounded-t-2xl">
           {% if navio.imagen %}
             <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="flex items-center justify-center min-h-[80vh] px-4 py-12">
-  <div class="card-surface backdrop-blur-xl rounded-3xl shadow-neon p-8 w-full max-w-2xl space-y-6">
+  <div class="card-surface rounded-3xl shadow-lg p-8 w-full max-w-2xl space-y-6">
     <div class="text-center space-y-2">
-      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-[0_12px_30px_rgba(5,24,36,0.15)]">
+      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-[0_12px_30px_rgba(148,163,235,0.25)]">
         <i class="fa-solid fa-clipboard-list"></i>
       </span>
       <h2 class="text-2xl font-bold">Crear reserva</h2>
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const applyFieldStyles = (element) => {
   element.classList.add(
-    'w-full','rounded-lg','border','border-secondary/25','bg-bg/40','px-4','py-3','text-text',
+    'w-full','rounded-lg','border','border-primary/40','bg-white/80','px-4','py-3','text-text',
     'placeholder-gray-500','focus:outline-none','focus:ring-2','focus:ring-primary/60'
   );
 };
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
     const div = document.createElement("div");
-    div.classList.add("p-4", "rounded-xl", "border", "border-secondary/25", "bg-bg/40", "space-y-2");
+    div.classList.add("p-4", "rounded-xl", "border", "border-primary/40", "bg-white/80", "space-y-2");
     div.innerHTML = `
       <h4 class="font-semibold text-text">Pasajero ${contadorPasajeros + 1}</h4>
       <input type="text" name="pasajero_nombre_${contadorPasajeros}" placeholder="Nombre" class="pasajero-input" autocomplete="off">
@@ -266,11 +266,11 @@ document.addEventListener("DOMContentLoaded", function() {
     gap: 0.75rem;
     padding: 1rem 1.25rem;
     border-radius: 1.25rem;
-    background: rgba(10, 23, 46, 0.95);
-    border: 1px solid rgba(72, 160, 214, 0.35);
-    box-shadow: 0 24px 48px rgba(7, 18, 38, 0.4);
-    color: #e5f6ff;
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(33, 82, 255, 0.42);
+    box-shadow: 0 24px 48px rgba(33, 82, 255, 0.22);
+    color: #1e293b;
+    backdrop-filter: blur(12px);
   }
 
   .capacity-toast .toast-icon {
@@ -280,8 +280,8 @@ document.addEventListener("DOMContentLoaded", function() {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(76, 201, 240, 0.18);
-    color: #4cc9f0;
+    background: rgba(124, 58, 237, 0.2);
+    color: #5b21b6;
     font-size: 1.05rem;
     flex-shrink: 0;
   }
@@ -290,20 +290,20 @@ document.addEventListener("DOMContentLoaded", function() {
     margin: 0;
     font-size: 0.95rem;
     font-weight: 600;
-    color: #e2f1ff;
+    color: #1d4ed8;
   }
 
   .capacity-toast .toast-message {
     margin: 0.15rem 0 0;
     font-size: 0.85rem;
-    color: rgba(226, 241, 255, 0.85);
+    color: rgba(30, 41, 59, 0.7);
   }
 
   .capacity-toast .toast-close {
     margin-left: 0.75rem;
     border: none;
     background: transparent;
-    color: rgba(226, 241, 255, 0.65);
+    color: rgba(30, 41, 59, 0.55);
     cursor: pointer;
     padding: 0.35rem;
     border-radius: 9999px;
@@ -311,8 +311,8 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   .capacity-toast .toast-close:hover {
-    background: rgba(76, 201, 240, 0.2);
-    color: #ffffff;
+    background: rgba(124, 58, 237, 0.16);
+    color: #312e81;
   }
 
   @keyframes toast-in {
@@ -350,12 +350,12 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   .pasajero-input {
-    background-color: rgba(15, 23, 42, 0.4) !important; /* Fondo oscuro translúcido (ajusta si tu tema usa otro) */
-    color: var(--text-color, #e5e7eb) !important; /* Texto claro (usa el mismo que text-text) */
+    background-color: rgba(241, 245, 255, 0.9) !important;
+    color: var(--text, #1E293B) !important;
   }
 
   .pasajero-input::placeholder {
-    color: rgba(229, 231, 235, 0.6) !important; /* Gris claro visible */
+    color: rgba(30, 41, 59, 0.45) !important;
     opacity: 1;
   }
 </style>

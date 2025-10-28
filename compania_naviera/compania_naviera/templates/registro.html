@@ -7,9 +7,7 @@
   <div class="mx-auto w-full max-w-5xl">
     <div class="grid gap-6 lg:grid-cols-[1.15fr,1fr]">
       <!-- Panel informativo -->
-      <div class="relative overflow-hidden rounded-3xl border border-secondary/20 bg-gradient-to-br from-primary/20 via-secondary/20 to-surface/90 p-10 shadow-neon text-text">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(92,225,166,0.35),transparent_60%)] pointer-events-none"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(42,157,244,0.25),transparent_60%)] pointer-events-none"></div>
+      <div class="relative overflow-hidden rounded-3xl border border-primary/35 bg-surface p-10 shadow-lg text-text">
         <div class="relative z-10 space-y-6">
           <div>
             <span class="inline-flex items-center gap-2 rounded-full bg-bg/40 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-text/80 border border-secondary/25">
@@ -26,7 +24,7 @@
 
           <ul class="space-y-4 text-sm lg:text-base">
             <li class="flex items-start gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(5,24,36,0.12)]">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(148,163,235,0.22)]">
                 <i class="fa-solid fa-gift"></i>
               </div>
               <div>
@@ -35,7 +33,7 @@
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(5,24,36,0.12)]">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(148,163,235,0.22)]">
                 <i class="fa-solid fa-passport"></i>
               </div>
               <div>
@@ -44,7 +42,7 @@
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(5,24,36,0.12)]">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary shadow-[0_8px_18px_rgba(148,163,235,0.22)]">
                 <i class="fa-solid fa-headset"></i>
               </div>
               <div>
@@ -57,7 +55,7 @@
       </div>
 
       <!-- Formulario de registro -->
-      <div class="rounded-3xl border border-secondary/20 card-surface p-8 lg:p-10 shadow-neon backdrop-blur-xl space-y-6">
+      <div class="rounded-3xl border border-primary/35 card-surface p-8 lg:p-10 shadow-lg space-y-6">
         {% if messages %}
         <div class="mb-5 space-y-2">
           {% for message in messages %}

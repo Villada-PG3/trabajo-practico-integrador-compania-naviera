@@ -18,7 +18,7 @@
       </div>
     {% endif %}
 
-    <form method="POST" class="w-full max-w-md card-surface rounded-3xl shadow-neon p-8 backdrop-blur-xl space-y-4" novalidate>
+    <form method="POST" class="w-full max-w-md card-surface rounded-3xl shadow-lg p-8 space-y-4" novalidate>
         {% csrf_token %}
 
         {% for field in form %}

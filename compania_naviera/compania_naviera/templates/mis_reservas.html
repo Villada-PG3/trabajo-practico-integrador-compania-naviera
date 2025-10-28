@@ -38,7 +38,7 @@
     
     <!-- PRINCIPAL: Lista de reservas -->
     <div class="space-y-6">
-      <header class="relative overflow-hidden rounded-3xl border border-secondary/25 card-surface p-8 shadow-neon">
+      <header class="relative overflow-hidden rounded-3xl border border-primary/40 card-surface p-8 shadow-lg">
         <div class="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p class="text-xs uppercase tracking-[0.2em] text-text/60">Gestioná tus viajes</p>
@@ -46,11 +46,11 @@
             <p class="mt-2 text-sm text-text/75">Revisá el estado de tus travesías y asegurate de tener toda la documentación lista.</p>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-[220px]">
-            <div class="rounded-2xl bg-secondary/15 border border-secondary/35 px-4 py-3">
+            <div class="rounded-2xl bg-secondary/20 border border-secondary/35 px-4 py-3">
               <p class="text-xs uppercase tracking-wide text-text/65">Reservas activas</p>
               <p class="mt-1 text-2xl font-bold text-secondary">{{ reservas|length }}</p>
             </div>
-            <div class="rounded-2xl bg-primary/15 border border-primary/40 px-4 py-3">
+            <div class="rounded-2xl bg-primary/15 border border-primary/45 px-4 py-3">
               <p class="text-xs uppercase tracking-wide text-text/65">Próximo embarque</p>
               <p class="mt-1 text-sm font-semibold text-primary">
                 {% if reservas %}
@@ -62,14 +62,12 @@
             </div>
           </div>
         </div>
-        <div class="pointer-events-none absolute -top-10 -right-10 h-32 w-32 rounded-full bg-primary/25 blur-3xl"></div>
-        <div class="pointer-events-none absolute -bottom-12 left-10 h-24 w-24 rounded-full bg-secondary/25 blur-3xl"></div>
       </header>
 
       {% if reservas %}
         <div class="space-y-6">
           {% for reserva in reservas %}
-            <article class="relative overflow-hidden rounded-3xl border border-secondary/20 card-surface p-6 shadow-neon transition duration-300 hover:-translate-y-1 hover:border-secondary/40">
+            <article class="relative overflow-hidden rounded-3xl border border-primary/40 card-surface p-6 shadow-lg transition duration-300 hover:-translate-y-1 hover:border-secondary/45">
               <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <div class="flex items-center gap-3 flex-wrap">
@@ -77,28 +75,28 @@
                       #{{ forloop.counter }}
                     </span>
                     <h2 class="text-xl font-semibold">{{ reserva.viaje_navio.viaje.nombre }}</h2>
-                    <span class="flex items-center gap-1 text-xs text-text/70 bg-secondary/10 px-3 py-1 rounded-full border border-secondary/25">
-                      <i class="fa-solid fa-user-group text-secondary"></i>
+                    <span class="flex items-center gap-1 text-xs text-text/70 bg-secondary/15 px-3 py-1 rounded-full border border-secondary/30">
+                      <i class="fa-solid fa-user-group text-secondary-dark"></i>
                       {{ reserva.pasajeros.all|length }} pasajero{% if reserva.pasajeros.all|length != 1 %}s{% endif %}
                     </span>
                   </div>
                   <p class="mt-2 text-text/75 text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-ship text-secondary"></i>
+                    <i class="fa-solid fa-ship text-primary-dark"></i>
                     {{ reserva.viaje_navio.navio.nombre }}
                   </p>
                   <p class="text-text/65 text-sm flex items-center gap-2">
-                    <i class="fa-regular fa-calendar text-secondary"></i>
+                    <i class="fa-regular fa-calendar text-primary-dark"></i>
                     Salida {{ reserva.viaje_navio.viaje.fecha_de_salida|date:"d/m/Y" }}
                   </p>
                   <p class="text-text/65 text-sm flex items-center gap-2">
-                    <i class="fa-regular fa-id-card text-secondary"></i>
+                    <i class="fa-regular fa-id-card text-primary-dark"></i>
                     {{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}
                   </p>
                 </div>
               </div>
 
               <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
-                <div class="rounded-2xl border border-secondary/15 bg-bg/35 p-4">
+                <div class="rounded-2xl border border-primary/35 bg-bg/40 p-4">
                   <p class="text-xs uppercase tracking-wide text-text/60">Crucero</p>
                   <p class="mt-1 font-semibold">{{ reserva.viaje_navio.navio.nombre }}</p>
                   <p class="text-text/70">{{ reserva.viaje_navio.navio.tipo_navio.nombre }}</p>
@@ -120,7 +118,7 @@
                 <p class="text-xs uppercase tracking-wide text-text/60">Pasajeros</p>
                 <ul class="mt-1 text-text/75 text-sm space-y-2">
                   {% for pasajero in reserva.pasajeros.all %}
-                    <li class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-bg/35 border border-secondary/15 rounded-xl px-3 py-2">
+                    <li class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-bg/40 border border-primary/35 rounded-xl px-3 py-2">
                       <div>
                         <span class="font-semibold">{{ pasajero.nombre }} {{ pasajero.apellido }}</span>
                         {% if pasajero.fecha_nacimiento %}
@@ -144,8 +142,8 @@
           {% endfor %}
         </div>
       {% else %}
-        <div class="rounded-3xl border border-dashed border-secondary/30 bg-bg/35 p-10 text-center text-sm text-text/80 shadow-neon">
-          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-secondary/15 text-2xl text-secondary">
+        <div class="rounded-3xl border border-dashed border-primary/40 bg-bg/40 p-10 text-center text-sm text-text/80 shadow-lg">
+          <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/15 text-2xl text-primary-dark border border-primary/40">
             <i class="fa-solid fa-compass"></i>
           </div>
           <h2 class="mt-4 text-2xl font-semibold text-text">Todavía no tenés reservas</h2>
@@ -159,25 +157,25 @@
 
     <!-- ASIDE: Checklist -->
     <aside class="lg:sticky lg:top-24">
-      <div class="relative overflow-hidden rounded-3xl border border-secondary/25 bg-gradient-to-br from-primary/25 via-secondary/20 to-surface/95 p-8 shadow-neon text-text">
+      <div class="relative overflow-hidden rounded-3xl border border-primary/40 bg-surface p-8 shadow-lg text-text">
         <div class="relative z-10 space-y-5">
           <h3 class="text-2xl font-bold">Explorá nuestras ofertas</h3>
           <p class="text-text/80 text-sm">Descubrí los cruceros disponibles y programá tu próximo viaje con anticipación.</p>
           <ul class="space-y-3 text-sm">
             <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/18 text-primary-dark border border-primary/40">
                 <i class="fa-solid fa-compass"></i>
               </span>
               Navegá nuestras rutas y destinos
             </li>
             <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/18 text-primary-dark border border-primary/40">
                 <i class="fa-solid fa-calendar-check"></i>
               </span>
               Programá tu viaje a la fecha que prefieras
             </li>
             <li class="flex items-center gap-3">
-              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-primary">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/18 text-primary-dark border border-primary/40">
                 <i class="fa-solid fa-ticket"></i>
               </span>
               Reservá tus lugares y camarotes
@@ -187,7 +185,6 @@
             <i class="fa-solid fa-ship"></i> Ver ofertas
           </a>
         </div>
-        <div class="pointer-events-none absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-secondary/25 blur-3xl"></div>
       </div>
     </aside>
 

@@ -4,7 +4,7 @@
   <div class="grid gap-8 lg:grid-cols-[1.1fr,0.9fr] items-start">
     <!-- Información del navío -->
     <div class="space-y-6">
-      <div class="card-surface rounded-3xl shadow-neon overflow-hidden">
+      <div class="card-surface rounded-3xl shadow-lg overflow-hidden">
         {% if navio.imagen %}
           <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-64 object-cover">
         {% else %}
@@ -20,12 +20,12 @@
         </div>
       </div>
 
-      <a href="{% url 'ofertas' %}" class="inline-flex items-center gap-3 btn-primary px-6 py-3 rounded-2xl font-semibold shadow-neon hover:scale-[1.02]">
+      <a href="{% url 'ofertas' %}" class="inline-flex items-center gap-3 btn-primary px-6 py-3 rounded-2xl font-semibold shadow-lg hover:scale-[1.02]">
         <i class="fa-solid fa-ticket"></i> Ver ofertas →
       </a>
     </div>
 
-    <aside class="card-surface rounded-3xl shadow-neon p-8 space-y-5">
+    <aside class="card-surface rounded-3xl shadow-lg p-8 space-y-5">
   <h2 class="text-2xl font-semibold">Características destacadas</h2>
   <ul class="space-y-3 text-text/80">
     <li class="flex items-center gap-3">

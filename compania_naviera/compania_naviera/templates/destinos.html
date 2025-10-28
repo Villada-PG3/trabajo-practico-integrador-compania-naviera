@@ -15,17 +15,17 @@
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-16">
     {% for puerto in destinos %}
       <a href="{% url 'destino_detail' puerto.pk %}"
-         class="group block overflow-hidden rounded-3xl border border-secondary/20 bg-surface/70 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md hover:border-secondary/40">
+         class="group block overflow-hidden rounded-3xl border border-primary/35 bg-surface/80 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md hover:border-secondary/45">
         <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold text-text group-hover:text-secondary flex items-center gap-2">
-            <i class="fa-solid fa-location-dot text-secondary"></i>
+          <h2 class="text-xl font-semibold text-text group-hover:text-secondary-dark flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-secondary-dark"></i>
             {{ puerto.nombre }}
           </h2>
           <span class="text-xs text-text/50">#{{ forloop.counter }}</span>
         </div>
 
         {% if puerto.itinerario %}
-          <p class="mt-2 text-xs uppercase tracking-wide text-secondary/80">
+          <p class="mt-2 text-xs uppercase tracking-wide text-secondary-dark/80">
             {{ puerto.itinerario.categoria.nombre }}
           </p>
         {% endif %}
@@ -42,7 +42,7 @@
           <ul class="mt-4 space-y-1 text-sm text-text/75">
             {% for act in puerto.actividades.all|slice:":2" %}
               <li class="flex items-start gap-2">
-                <span class="mt-[6px] h-1.5 w-1.5 rounded-full bg-secondary"></span>
+                <span class="mt-[6px] h-1.5 w-1.5 rounded-full bg-secondary-dark"></span>
                 {{ act.actividad.nombre }}
               </li>
             {% endfor %}
@@ -53,7 +53,7 @@
         {% endif %}
       </a>
     {% empty %}
-      <div class="sm:col-span-2 lg:col-span-3 text-center py-20 border border-dashed border-secondary/25 rounded-3xl bg-bg/35">
+      <div class="sm:col-span-2 lg:col-span-3 text-center py-20 border border-dashed border-primary/35 rounded-3xl bg-bg/40">
         <p class="text-xl font-semibold text-text">No hay destinos disponibles por el momento.</p>
         <p class="mt-2 text-sm text-text/60">Vuelve pronto para descubrir nuevas rutas marítimas.</p>
       </div>
@@ -62,7 +62,7 @@
 
   <!-- Card "Planificá tu recorrido" -->
   <div class="max-w-md mx-auto">
-    <div class="rounded-3xl border border-secondary/20 bg-surface/80 p-6 text-center shadow-sm transition hover:shadow-md">
+    <div class="rounded-3xl border border-primary/35 bg-surface/85 p-6 text-center shadow-sm transition hover:shadow-md">
       <h3 class="text-2xl font-bold text-text mb-2">Planificá tu recorrido</h3>
       <p class="text-sm text-text/70 mb-4">
         Seleccioná los puertos que más te inspiran y explorá los cruceros disponibles.
