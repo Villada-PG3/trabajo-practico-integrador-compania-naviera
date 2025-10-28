@@ -10,69 +10,100 @@
       <p class="text-sm text-text/75">Completá los pasos para asignar pasajeros a tu próximo crucero.</p>
     </div>
 
-    <form method="post" id="reservaForm" class="space-y-4">
+    <form method="post" id="reservaForm" class="space-y-6">
       {% csrf_token %}
 
-      <!-- Seleccionar cliente -->
-      <div>
-        <label class="block text-sm font-medium mb-1">Selecciona un cliente</label>
+      <!-- Paso 1: Cliente y viaje -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">1</span>
+          <div>
+            <h3 class="step-title">Elegí al titular de la reserva</h3>
+            <p class="step-description">Podés seleccionar un cliente existente o crear uno nuevo antes de continuar.</p>
+          </div>
+        </div>
         <select name="cliente" id="cliente" class="form-control">
-          <option value="">-- Selecciona al tutor de la reserva --</option>
+          <option value="">Seleccioná al tutor de la reserva</option>
           {% for c in clientes %}
             <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellido }}</option>
           {% endfor %}
         </select>
-        <a href="{% url 'crear_cliente' %}" class="text-sm link-secondary inline-flex items-center gap-2">
-          <i class="fa-solid fa-user-plus"></i> Crear nuevo cliente
-        </a>
-      </div>
-
-      <!-- Viaje fijo -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1 text-text/80">Viaje seleccionado:</label>
-        <p class="text-text font-medium mb-1">
-          {{ viaje_seleccionado.viaje.nombre }} — {{ viaje_seleccionado.navio.nombre }}
-        </p>
+        <div class="flex flex-wrap items-center gap-3 justify-between">
+          <div class="text-sm text-text/70">
+            <span class="font-medium">Viaje elegido:</span>
+            {{ viaje_seleccionado.viaje.nombre }} — {{ viaje_seleccionado.navio.nombre }}
+          </div>
+          <a href="{% url 'crear_cliente' %}" class="text-sm link-secondary inline-flex items-center gap-2">
+            <i class="fa-solid fa-user-plus"></i> Crear nuevo cliente
+          </a>
+        </div>
         <input type="hidden" name="viaje_navio" value="{{ viaje_seleccionado.id }}">
       </div>
 
       <!-- Paso 2: Tipo de camarote -->
-      <div id="tipoDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Selecciona tipo de camarote</label>
+      <div id="tipoDiv" class="step-card" style="display:none;">
+        <div class="step-header">
+          <span class="step-number">2</span>
+          <div>
+            <h3 class="step-title">Definí el tipo de camarote</h3>
+            <p class="step-description">Elegí la categoría que mejor se adapte a la experiencia del pasajero.</p>
+          </div>
+        </div>
         <select name="tipo_camarote" id="tipo_camarote" class="form-control">
-          <option value="">-- Selecciona tipo --</option>
+          <option value="">Seleccioná un tipo</option>
         </select>
       </div>
 
       <!-- Paso 3: Capacidad -->
-      <div id="capacidadDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Selecciona capacidad</label>
+      <div id="capacidadDiv" class="step-card" style="display:none;">
+        <div class="step-header">
+          <span class="step-number">3</span>
+          <div>
+            <h3 class="step-title">Indicá la capacidad necesaria</h3>
+            <p class="step-description">La capacidad determina cuántos pasajeros pueden asignarse al camarote.</p>
+          </div>
+        </div>
         <select name="capacidad" id="capacidad" class="form-control">
-          <option value="">-- Selecciona capacidad --</option>
+          <option value="">Seleccioná una capacidad</option>
         </select>
       </div>
 
       <!-- Paso 4: Camarote -->
-      <div id="camaroteDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Selecciona un camarote</label>
+      <div id="camaroteDiv" class="step-card" style="display:none;">
+        <div class="step-header">
+          <span class="step-number">4</span>
+          <div>
+            <h3 class="step-title">Seleccioná el camarote disponible</h3>
+            <p class="step-description">Mostramos sólo los camarotes que cumplen con el tipo y la capacidad elegidos.</p>
+          </div>
+        </div>
         <select name="camarote" id="camarote" class="form-control">
-          <option value="">-- Selecciona un camarote --</option>
+          <option value="">Seleccioná un camarote</option>
         </select>
       </div>
 
       <!-- Paso 5: Pasajeros -->
-      <div id="pasajerosDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Agregar pasajeros</label>
-        <div id="pasajerosContainer" class="space-y-2 mt-2"></div>
+      <div id="pasajerosDiv" class="step-card" style="display:none;">
+        <div class="step-header">
+          <span class="step-number">5</span>
+          <div>
+            <h3 class="step-title">Cargá los datos de cada pasajero</h3>
+            <p class="step-description">Agregá a los viajeros uno por uno hasta completar la capacidad del camarote.</p>
+          </div>
+        </div>
+        <div id="pasajerosContainer" class="space-y-3"></div>
         <button type="button" id="agregarPasajeroBtn" class="btn-secondary inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium">
           <i class="fa-solid fa-user-plus"></i> Agregar pasajero
         </button>
+        <p class="text-xs text-text/60">Podés editar los campos de cada pasajero o eliminarlos antes de confirmar.</p>
       </div>
 
       <!-- Botón final -->
-      <button type="submit" id="submitBtn" class="w-full btn-primary font-semibold py-3 rounded-xl shadow-lg transition mt-4 hidden">
-        Confirmar Reserva
-      </button>
+      <div class="flex justify-end">
+        <button type="submit" id="submitBtn" class="btn-primary font-semibold px-6 py-3 rounded-xl transition hidden">
+          Confirmar reserva
+        </button>
+      </div>
     </form>
   </div>
 </div>
@@ -242,6 +273,48 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 <style>
+  .step-card {
+    background: rgba(255, 255, 255, 0.96);
+    border: 2px solid rgba(33, 82, 255, 0.25);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    display: grid;
+    gap: 1rem;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #2152FF, #7C3AED);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(33, 82, 255, 0.25);
+  }
+
+  .step-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .step-description {
+    margin: 0;
+    color: rgba(15, 23, 42, 0.65);
+    font-size: 0.85rem;
+  }
+
   .capacity-toast {
     position: fixed;
     bottom: 2rem;

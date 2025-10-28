@@ -183,12 +183,12 @@
     .nav-link {
       position: relative;
       padding: 0.35rem 0;
-      color: var(--text);
+      color: rgba(255, 255, 255, 0.92);
       font-weight: 600;
       text-transform: uppercase;
       font-size: 0.95rem;
       letter-spacing: 0.12em;
-      transition: color 180ms ease, transform 180ms ease;
+      transition: color 180ms ease;
     }
     .nav-link::after {
       content: "";
@@ -205,54 +205,54 @@
     }
     .nav-link:hover,
     .nav-link:focus-visible {
-      color: var(--primary-dark);
+      color: #FFFFFF;
     }
     .nav-link:hover::after,
     .nav-link:focus-visible::after {
       transform: scaleX(1);
     }
     .nav-link:focus-visible {
-      outline: 2px solid rgba(33, 82, 255, 0.6);
+      outline: 2px solid rgba(255, 255, 255, 0.65);
       outline-offset: 6px;
     }
     .navbar {
-      background: linear-gradient(180deg, rgba(33, 82, 255, 0.16), rgba(239, 243, 255, 0.65));
-      border-bottom: 2px solid rgba(22, 52, 181, 0.45);
+      background: linear-gradient(135deg, rgba(22, 52, 181, 0.95), rgba(33, 82, 255, 0.85));
+      border-bottom: 2px solid rgba(12, 31, 102, 0.55);
       backdrop-filter: blur(12px);
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.2);
     }
   </style>
 </head>
 <body class="min-h-screen font-sans text-text antialiased">
 
   <!-- Navigation -->
-  <nav class="navbar text-text px-6 py-4 flex justify-between items-center">
+  <nav class="navbar text-white px-6 py-4 flex justify-between items-center">
     <div class="flex items-center gap-3">
       <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'home' %}{% endif %}"
          class="flex items-center gap-3 transition hover:text-primary">
-        <div class="w-10 h-10 rounded-full bg-primary text-text flex items-center justify-center font-bold text-lg shadow-[0_12px_22px_rgba(93,169,255,0.28)] border border-primary/40">★</div>
-        <span class="font-bold text-xl tracking-wide text-primary-dark">SEA STAR</span>
+        <div class="w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center font-bold text-lg shadow-[0_12px_22px_rgba(0,0,0,0.25)] border border-white/40">★</div>
+        <span class="font-bold text-xl tracking-wide">SEA STAR</span>
       </a>
     </div>
 
     <div class="hidden md:flex items-center gap-8 font-medium">
 
       {% if user.is_authenticated %}
-        <a href="{% url 'mis_reservas' %}" class="relative transition hover:text-primary-dark font-semibold">Mis reservas</a>
+        <a href="{% url 'mis_reservas' %}" class="nav-link transition">Mis reservas</a>
       {% endif %}
 
-      <a href="{% url 'contacto' %}" class="nav-link transition hover:text-primary-dark font-semibold">Contáctanos</a>
-      <a href="{% url 'cruceros' %}" class="nav-link transition hover:text-primary-dark font-semibold">Cruceros</a>
-      <a href="{% url 'destinos' %}" class="nav-link transition hover:text-primary-dark font-semibold">Destinos</a>
-      <a href="{% url 'ofertas' %}" class="nav-link transition hover:text-primary-dark font-semibold">Ofertas</a>
+      <a href="{% url 'contacto' %}" class="nav-link transition">Contáctanos</a>
+      <a href="{% url 'cruceros' %}" class="nav-link transition">Cruceros</a>
+      <a href="{% url 'destinos' %}" class="nav-link transition">Destinos</a>
+      <a href="{% url 'ofertas' %}" class="nav-link transition">Ofertas</a>
 
       {% if user.is_authenticated %}
         <!-- Dropdown usuario -->
         <div class="relative" x-data="{ open: false }">
           <button @click="open = !open"
-                  class="w-11 h-11 flex items-center justify-center rounded-full bg-white/90 text-text hover:bg-secondary/20 transition shadow-[inset_0_2px_6px_rgba(93,169,255,0.3)] border border-primary/35">
+                  class="w-11 h-11 flex items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30 transition shadow-[inset_0_2px_6px_rgba(255,255,255,0.2)] border border-white/50">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
-                 class="text-text" viewBox="0 0 24 24">
+                 class="text-white" viewBox="0 0 24 24">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
