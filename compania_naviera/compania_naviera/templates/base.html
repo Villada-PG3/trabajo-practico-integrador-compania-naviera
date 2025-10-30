@@ -74,45 +74,45 @@
       font-weight: 700;
     }
     .card-surface {
-      background: var(--surface);
-      border: 2px solid rgba(33, 82, 255, 0.35);
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.1);
+      background: linear-gradient(180deg, rgba(124, 58, 237, 0.08), rgba(255, 255, 255, 0.95));
+      border: 2px solid rgba(124, 58, 237, 0.45);
+      box-shadow: 0 10px 26px rgba(76, 29, 149, 0.16);
     }
     .card-soft {
-      background: var(--surface-soft);
-      border: 2px solid rgba(124, 58, 237, 0.3);
-      box-shadow: 0 10px 26px rgba(76, 29, 149, 0.14);
+      background: linear-gradient(180deg, rgba(124, 58, 237, 0.12), rgba(239, 243, 255, 0.9));
+      border: 2px solid rgba(124, 58, 237, 0.5);
+      box-shadow: 0 12px 28px rgba(76, 29, 149, 0.18);
     }
     .btn-primary {
-      background: linear-gradient(135deg, var(--primary), #3D6BFF);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: #FFFFFF;
-      border: 2px solid rgba(22, 52, 181, 0.75);
-      box-shadow: 0 16px 36px rgba(33, 82, 255, 0.28);
+      border: 2px solid rgba(91, 33, 182, 0.65);
+      box-shadow: 0 16px 34px rgba(124, 58, 237, 0.28);
     }
     .btn-primary:hover {
-      background: linear-gradient(135deg, var(--primary-dark), #2748E8);
+      background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
       color: #FFFFFF;
       transform: translateY(-1px);
-      border-color: rgba(22, 52, 181, 0.85);
+      border-color: rgba(91, 33, 182, 0.72);
     }
     .btn-secondary {
-      background: rgba(124, 58, 237, 0.08);
+      background: rgba(124, 58, 237, 0.12);
       color: var(--secondary-dark);
-      border: 2px solid rgba(124, 58, 237, 0.35);
-      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.16);
+      border: 2px solid rgba(124, 58, 237, 0.4);
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.18);
     }
     .btn-secondary:hover {
-      background: rgba(124, 58, 237, 0.18);
-      border-color: rgba(91, 33, 182, 0.55);
+      background: rgba(124, 58, 237, 0.26);
+      border-color: rgba(91, 33, 182, 0.62);
       color: var(--secondary-dark);
     }
-    .link-secondary { color: var(--primary); text-decoration: underline; text-decoration-color: transparent; font-weight: 600; }
-    .link-secondary:hover { color: var(--primary-dark); text-decoration-color: currentColor; }
+    .link-secondary { color: var(--secondary); text-decoration: underline; text-decoration-color: transparent; font-weight: 600; }
+    .link-secondary:hover { color: var(--secondary-dark); text-decoration-color: currentColor; }
     .badge-accent {
-      background: rgba(223, 231, 255, 0.9);
-      color: var(--primary-dark);
-      border: 2px solid rgba(33, 82, 255, 0.45);
-      box-shadow: inset 0 1px 3px rgba(33, 82, 255, 0.35);
+      background: rgba(124, 58, 237, 0.12);
+      color: var(--secondary-dark);
+      border: 2px solid rgba(124, 58, 237, 0.38);
+      box-shadow: inset 0 1px 3px rgba(124, 58, 237, 0.3);
     }
     .bg-white\/5 { background-color: rgba(255, 255, 255, 0.4) !important; }
     .bg-white\/10 { background-color: rgba(255, 255, 255, 0.65) !important; color: var(--text); }
@@ -230,8 +230,8 @@
     <div class="flex items-center gap-3">
       <a href="{% if user.is_authenticated %}{% url 'menu_user' %}{% else %}{% url 'home' %}{% endif %}"
          class="flex items-center gap-3 transition hover:text-primary">
-        <div class="w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center font-bold text-lg shadow-[0_12px_22px_rgba(0,0,0,0.25)] border border-white/40">★</div>
-        <span class="font-bold text-xl tracking-wide">SEA STAR</span>
+        <div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold text-lg shadow-[0_12px_22px_rgba(124,58,237,0.35)] border border-secondary/40">★</div>
+        <span class="font-bold text-xl tracking-wide text-secondary">SEA STAR</span>
       </a>
     </div>
 
@@ -259,7 +259,7 @@
           </button>
 
           <div x-show="open" @click.away="open = false"
-               class="absolute right-0 mt-3 w-56 rounded-xl border border-primary/40 bg-white/95 backdrop-blur-lg shadow-[0_22px_40px_rgba(93,169,255,0.22)] text-text p-4 z-50">
+               class="absolute right-0 mt-3 w-56 rounded-xl card-surface backdrop-blur-xl text-text p-4 z-50">
             <!-- Nombre de usuario -->
             <p class="mb-3 font-semibold text-primary">{{ user.username }}</p>
 
