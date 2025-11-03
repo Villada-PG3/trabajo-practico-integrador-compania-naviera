@@ -5,11 +5,11 @@
       <stop offset="1" stop-color="#E0E6FF"/>
     </linearGradient>
     <linearGradient id="mark" x1="24" x2="44" y1="12" y2="48" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2152FF"/>
-      <stop offset="1" stop-color="#7C3AED"/>
+      <stop offset="0" stop-color="#1F3A93"/>
+      <stop offset="1" stop-color="#7A3EF2"/>
     </linearGradient>
     <filter id="glow" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#2152FF" flood-opacity="0.3"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#1F3A93" flood-opacity="0.3"/>
     </filter>
   </defs>
   <rect width="64" height="64" rx="14" fill="url(#bg)"/>

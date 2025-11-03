@@ -18,7 +18,7 @@
           {% for message in messages %}
             <li class="flex items-start gap-3 rounded-2xl border px-4 py-3 text-sm md:text-base
                        {% if message.tags == 'error' %}
-                         border-red-400/50 bg-red-500/10 text-red-100
+                         border-secondary/45 bg-secondary/20 text-secondary-dark
                        {% elif message.tags == 'success' %}
                          border-primary/40 bg-primary/15 text-primary
                        {% else %}

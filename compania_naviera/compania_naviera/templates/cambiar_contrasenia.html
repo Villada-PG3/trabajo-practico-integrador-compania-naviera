@@ -15,7 +15,7 @@
     {% if messages %}
     <div class="space-y-2">
       {% for message in messages %}
-        <div class="rounded-lg px-3 py-2 text-sm {% if message.tags == 'success' %}badge-accent{% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-bg/40 border border-secondary/30{% endif %}">
+        <div class="rounded-lg px-3 py-2 text-sm {% if message.tags == 'success' %}badge-accent{% elif message.tags == 'error' %}bg-secondary/20 border border-secondary/40 text-secondary-dark{% else %}bg-bg/40 border border-secondary/30{% endif %}">
           {{ message }}
         </div>
       {% endfor %}
@@ -29,7 +29,7 @@
           <label for="{{ field.id_for_label }}" class="text-sm font-medium text-text/90">{{ field.label }}</label>
           {{ field }}
           {% if field.errors %}
-            <p class="text-xs text-red-600">{{ field.errors|striptags }}</p>
+            <p class="text-xs text-secondary-dark">{{ field.errors|striptags }}</p>
           {% endif %}
         </div>
       {% endfor %}

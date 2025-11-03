@@ -11,7 +11,7 @@
     {% if messages %}
       <div class="w-full max-w-md space-y-2">
           {% for message in messages %}
-              <div class="w-full p-3 rounded {% if message.tags == 'success' %}badge-accent{% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-700{% else %}bg-bg/40 border border-secondary/30{% endif %}">
+              <div class="w-full p-3 rounded {% if message.tags == 'success' %}badge-accent{% elif message.tags == 'error' %}bg-secondary/20 border border-secondary/40 text-secondary-dark{% else %}bg-bg/40 border border-secondary/30{% endif %}">
                   {{ message }}
               </div>
           {% endfor %}
@@ -26,7 +26,7 @@
                 <label for="{{ field.id_for_label }}" class="mb-1 text-sm font-medium text-text/90">{{ field.label }}</label>
                 {{ field }}
                 {% if field.errors %}
-                    <div class="text-red-600 text-sm mt-1">
+                    <div class="text-secondary-dark text-sm mt-1">
                         {% for error in field.errors %}
                             {{ error }}
                         {% endfor %}

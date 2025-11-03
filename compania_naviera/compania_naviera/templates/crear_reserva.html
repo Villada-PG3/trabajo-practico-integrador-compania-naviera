@@ -274,17 +274,17 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 <style>
   .step-card {
-    background: rgba(255, 255, 255, 0.96);
-    border: 2px solid rgba(33, 82, 255, 0.25);
+    background: rgba(255, 255, 255, 0.97);
+    border: 2px solid rgba(31, 58, 147, 0.28);
     border-radius: 1rem;
     padding: 1.25rem;
-    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 6px 16px rgba(15, 30, 99, 0.1);
     display: grid;
     gap: 1rem;
   }
 
   .step-input {
-    background: linear-gradient(180deg, rgba(124, 58, 237, 0.08), rgba(255, 255, 255, 0.98));
+    background: linear-gradient(180deg, rgba(122, 62, 242, 0.14), rgba(255, 255, 255, 0.98));
   }
 
   .step-input:focus {
@@ -292,8 +292,8 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   .pasajero-card {
-    background: linear-gradient(180deg, rgba(124, 58, 237, 0.1), rgba(255, 255, 255, 0.96));
-    box-shadow: 0 6px 18px rgba(76, 29, 149, 0.12);
+    background: linear-gradient(180deg, rgba(122, 62, 242, 0.16), rgba(255, 255, 255, 0.96));
+    box-shadow: 0 6px 18px rgba(15, 30, 99, 0.12);
   }
 
   .step-header {
@@ -309,11 +309,11 @@ document.addEventListener("DOMContentLoaded", function() {
     width: 2.4rem;
     height: 2.4rem;
     border-radius: 9999px;
-    background: linear-gradient(135deg, #2152FF, #7C3AED);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: #FFFFFF;
     font-weight: 700;
     font-size: 1rem;
-    box-shadow: 0 4px 12px rgba(33, 82, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(31, 58, 147, 0.25);
   }
 
   .step-title {
@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   .step-description {
     margin: 0;
-    color: rgba(15, 23, 42, 0.65);
+    color: rgba(11, 19, 48, 0.65);
     font-size: 0.85rem;
   }
 
@@ -352,10 +352,10 @@ document.addEventListener("DOMContentLoaded", function() {
     gap: 0.75rem;
     padding: 1rem 1.25rem;
     border-radius: 1.25rem;
-    background: rgba(255, 255, 255, 0.96);
-    border: 1px solid rgba(33, 82, 255, 0.42);
-    box-shadow: 0 24px 48px rgba(33, 82, 255, 0.22);
-    color: #1e293b;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(31, 58, 147, 0.42);
+    box-shadow: 0 24px 48px rgba(15, 30, 99, 0.18);
+    color: var(--text);
     backdrop-filter: blur(12px);
   }
 
@@ -366,8 +366,8 @@ document.addEventListener("DOMContentLoaded", function() {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(124, 58, 237, 0.2);
-    color: #5b21b6;
+    background: rgba(122, 62, 242, 0.22);
+    color: var(--secondary-dark);
     font-size: 1.05rem;
     flex-shrink: 0;
   }
@@ -376,20 +376,20 @@ document.addEventListener("DOMContentLoaded", function() {
     margin: 0;
     font-size: 0.95rem;
     font-weight: 600;
-    color: #1d4ed8;
+    color: var(--primary);
   }
 
   .capacity-toast .toast-message {
     margin: 0.15rem 0 0;
     font-size: 0.85rem;
-    color: rgba(30, 41, 59, 0.7);
+    color: rgba(11, 19, 48, 0.7);
   }
 
   .capacity-toast .toast-close {
     margin-left: 0.75rem;
     border: none;
     background: transparent;
-    color: rgba(30, 41, 59, 0.55);
+    color: rgba(11, 19, 48, 0.55);
     cursor: pointer;
     padding: 0.35rem;
     border-radius: 9999px;
@@ -397,8 +397,8 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   .capacity-toast .toast-close:hover {
-    background: rgba(124, 58, 237, 0.16);
-    color: #312e81;
+    background: rgba(122, 62, 242, 0.18);
+    color: var(--primary-dark);
   }
 
   @keyframes toast-in {
@@ -436,12 +436,12 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   .pasajero-input {
-    background-color: rgba(241, 245, 255, 0.9) !important;
-    color: var(--text, #1E293B) !important;
+    background-color: rgba(229, 233, 255, 0.9) !important;
+    color: var(--text) !important;
   }
 
   .pasajero-input::placeholder {
-    color: rgba(30, 41, 59, 0.45) !important;
+    color: rgba(11, 19, 48, 0.5) !important;
     opacity: 1;
   }
 </style>

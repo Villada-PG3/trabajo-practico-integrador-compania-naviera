@@ -2,34 +2,29 @@
 {% load static %}
 
 {% block content %}
-<section class="min-h-[80vh] flex items-center justify-center px-6 py-12 lg:px-12">
-  <form method="POST" action="{% url 'contacto' %}"
-        class="relative isolate w-full max-w-3xl overflow-hidden rounded-3xl border border-primary/35 bg-surface/95 p-8 md:p-12 text-text shadow-xl">
-    <div class="relative z-10 space-y-7">
-      {% csrf_token %}
-
-      <!-- Header -->
-      <header class="text-center space-y-3">
-        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/20 text-primary-dark text-2xl shadow-[0_12px_30px_rgba(93,169,255,0.22)] border border-primary/45">
+<section class="contact-wrapper">
+  <div class="contact-card border border-primary/35 shadow-neon text-text">
+    <div class="contact-intro">
+      <div class="contact-intro__badge">
+        <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl text-xl shadow-[0_10px_24px_rgba(31,58,147,0.18)] contact-icon-badge">
           <i class="fa-solid fa-life-ring"></i>
-        </div>
-        <div class="space-y-1">
+        </span>
+        <div>
           <h2 class="text-3xl font-semibold tracking-tight">¿Necesitás ayuda?</h2>
-          <p class="text-text/70 text-sm md:text-base">Escribinos y nuestro equipo de SEA STAR te responderá a la brevedad.</p>
+          <p class="text-text/70 text-sm md:text-base mt-1">Dejanos tu consulta y la tripulación SEA STAR te responde a la brevedad.</p>
         </div>
-      </header>
+      </div>
 
-      <!-- Mensajes Django -->
       {% if messages %}
         <ul class="space-y-3">
           {% for message in messages %}
-            <li class="flex items-start gap-3 rounded-2xl border px-4 py-3 text-sm md:text-base
+            <li class="flex items-start gap-3 rounded-2xl border px-4 py-3 text-sm
                        {% if message.tags == 'error' %}
-                         border-red-400/50 bg-red-500/10 text-red-100
+                         border-secondary/45 bg-secondary/20 text-secondary-dark
                        {% elif message.tags == 'success' %}
-                         border-primary/40 bg-primary/15 text-primary
+                         border-primary/35 bg-primary/12 text-primary-dark
                        {% else %}
-                         border-secondary/45 bg-bg/70 text-text
+                         border-primary/25 bg-bg/70 text-text
                        {% endif %}">
               <span class="mt-0.5 text-lg">
                 {% if message.tags == 'error' %}
@@ -46,76 +41,235 @@
         </ul>
       {% endif %}
 
-      <div class="grid gap-5 md:grid-cols-2">
-        <!-- Nombre -->
-        <div class="space-y-2">
-          <label for="nombre" class="text-sm font-medium uppercase tracking-wide text-text/70">Nombre</label>
-          <div class="relative">
-            <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-text/50"></i>
-            <input id="nombre" name="nombre" type="text" required
-                   class="form-control w-full border border-primary/35 pl-12 pr-4 py-3 focus:ring-primary/60"
-                   placeholder="Tu nombre completo">
-          </div>
-        </div>
-
-        <!-- Email -->
-        <div class="space-y-2">
-          <label for="email" class="text-sm font-medium uppercase tracking-wide text-text/70">Email</label>
-          <div class="relative">
-            <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-text/50"></i>
-            <input id="email" name="email" type="email" required
-                   class="form-control w-full border border-primary/35 pl-12 pr-4 py-3 focus:ring-primary/60"
-                   placeholder="ejemplo@correo.com">
-          </div>
-        </div>
-      </div>
-
-      <!-- Mensaje -->
-      <div class="space-y-2">
-        <label for="mensaje" class="text-sm font-medium uppercase tracking-wide text-text/70">Mensaje</label>
-        <div class="relative">
-          <i class="fa-solid fa-comment-dots absolute left-4 top-5 text-text/50"></i>
-          <textarea id="mensaje" name="mensaje" rows="5" required
-                    class="form-control w-full min-h-[180px] border border-primary/35 pl-12 pr-4 py-3 focus:ring-primary/60 resize-y"
-                    placeholder="Contanos en qué podemos ayudarte..."></textarea>
-        </div>
-      </div>
-
-      <!-- Botón -->
-      <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <p class="text-sm text-text/60 flex items-center gap-2">
-          <i class="fa-solid fa-shield-halved text-secondary"></i>
-          Tus datos están protegidos y sólo se usarán para responder tu consulta.
-        </p>
-        <button type="submit"
-                class="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-semibold tracking-wide btn-primary transition-transform duration-200 hover:scale-[1.02]">
-          <i class="fa-solid fa-paper-plane"></i>
-          Enviar mensaje
-        </button>
-      </div>
-
-      <!-- Datos rápidos -->
-      <div class="grid gap-4 rounded-2xl border border-primary/35 bg-bg/70 p-5 text-sm md:grid-cols-2 md:text-base">
-        <div class="flex items-center gap-3">
-          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary border border-primary/40">
+      <div class="contact-quick grid gap-4 text-sm">
+        <div class="contact-quick__item">
+          <span class="icon">
             <i class="fa-brands fa-whatsapp"></i>
           </span>
           <div>
             <p class="font-semibold">WhatsApp</p>
-            <p class="text-text/60">+54 351 000 0000</p>
+            <p class="text-text/65">+54 351 000 0000</p>
           </div>
         </div>
-        <div class="flex items-center gap-3">
-          <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15 text-primary border border-primary/40">
+        <div class="contact-quick__item">
+          <span class="icon">
             <i class="fa-solid fa-at"></i>
           </span>
           <div>
             <p class="font-semibold">Email</p>
-            <p class="text-text/60">contacto@seastar.com</p>
+            <p class="text-text/65">contacto@seastar.com</p>
+          </div>
+        </div>
+        <div class="contact-quick__item">
+          <span class="icon">
+            <i class="fa-solid fa-clock"></i>
+          </span>
+          <div>
+            <p class="font-semibold">Horario</p>
+            <p class="text-text/65">Lunes a viernes · 9 a 18 h</p>
           </div>
         </div>
       </div>
     </div>
-  </form>
+
+    <form method="POST" action="{% url 'contacto' %}" class="contact-form">
+      {% csrf_token %}
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="flex flex-col gap-2">
+          <label for="nombre" class="text-xs font-medium uppercase tracking-wide text-text/60">Nombre</label>
+          <div class="contact-field">
+            <span class="contact-field__icon"><i class="fa-solid fa-user"></i></span>
+            <input id="nombre" name="nombre" type="text" required
+                   class="contact-field__input"
+                   placeholder="Tu nombre completo">
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="email" class="text-xs font-medium uppercase tracking-wide text-text/60">Email</label>
+          <div class="contact-field">
+            <span class="contact-field__icon"><i class="fa-solid fa-envelope"></i></span>
+            <input id="email" name="email" type="email" required
+                   class="contact-field__input"
+                   placeholder="ejemplo@correo.com">
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 md:col-span-2">
+          <label for="mensaje" class="text-xs font-medium uppercase tracking-wide text-text/60">Mensaje</label>
+          <div class="contact-field contact-field--textarea">
+            <span class="contact-field__icon"><i class="fa-solid fa-comment-dots"></i></span>
+            <textarea id="mensaje" name="mensaje" rows="4" required
+                      class="contact-field__input contact-field__input--textarea"
+                      placeholder="Contanos en qué podemos ayudarte..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form__footer">
+        <p class="text-sm text-text/65 flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-secondary"></i>
+          Tus datos quedan protegidos. Sólo los usamos para responderte.
+        </p>
+        <button type="submit"
+                class="btn-primary inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 font-semibold tracking-wide transition-transform duration-200 hover:scale-[1.02]">
+          <i class="fa-solid fa-paper-plane"></i> Enviar mensaje
+        </button>
+      </div>
+    </form>
+  </div>
 </section>
+
+<style>
+  .contact-wrapper {
+    min-height: calc(100vh - 190px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+  .contact-card {
+    width: min(1100px, 100%);
+    border-radius: 2rem;
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(231, 229, 255, 0.92));
+  }
+  @media (min-width: 1024px) {
+    .contact-card {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      align-items: stretch;
+    }
+  }
+  .contact-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+  .contact-intro__badge {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .contact-intro__badge > span {
+    background: linear-gradient(135deg, rgba(122, 62, 242, 0.25), rgba(31, 58, 147, 0.35));
+    color: #FFFFFF;
+    box-shadow: 0 16px 30px rgba(31, 58, 147, 0.22);
+  }
+  .contact-icon-badge {
+    border: none;
+  }
+  .contact-quick {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+  .contact-quick__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 1.25rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(235, 232, 255, 0.85));
+    border: 1px solid rgba(31, 58, 147, 0.12);
+    box-shadow: 0 10px 20px rgba(15, 30, 99, 0.1);
+  }
+  .contact-quick__item .icon {
+    display: inline-flex;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.9rem;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(122, 62, 242, 0.22), rgba(31, 58, 147, 0.3));
+    color: #FFFFFF;
+    box-shadow: 0 12px 24px rgba(31, 58, 147, 0.18);
+  }
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(235, 238, 255, 0.94));
+    border-radius: 1.5rem;
+    border: 1px solid rgba(31, 58, 147, 0.12);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    box-shadow: 0 16px 34px rgba(15, 30, 99, 0.12);
+  }
+  .contact-field {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 1rem;
+    border-radius: 1.1rem;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(31, 58, 147, 0.2);
+    box-shadow: 0 10px 24px rgba(15, 30, 99, 0.08);
+    transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+  }
+  .contact-field:hover,
+  .contact-field:focus-within {
+    border-color: rgba(31, 58, 147, 0.55);
+    box-shadow: 0 16px 30px rgba(15, 30, 99, 0.16);
+    transform: translateY(-2px);
+  }
+  .contact-field__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.9rem;
+    background: rgba(122, 62, 242, 0.16);
+    color: var(--secondary-dark);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .contact-field__input {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+  .contact-field__input::placeholder {
+    color: rgba(11, 19, 48, 0.45);
+  }
+  .contact-field__input:focus {
+    outline: none;
+  }
+  .contact-field--textarea {
+    align-items: flex-start;
+  }
+  .contact-field__input--textarea {
+    min-height: 140px;
+    resize: none;
+    padding-top: 0.35rem;
+    line-height: 1.55;
+  }
+  .contact-field--textarea .contact-field__icon {
+    margin-top: 0.2rem;
+  }
+  .contact-form__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .contact-form__footer {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  @media (max-width: 768px) {
+    .contact-wrapper {
+      min-height: calc(100vh - 150px);
+    }
+    .contact-card {
+      border-radius: 1.75rem;
+    }
+    .contact-intro__badge {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>
 {% endblock %}

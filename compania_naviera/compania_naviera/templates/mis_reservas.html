@@ -8,13 +8,13 @@
     {% for message in messages %}
       <div class="px-4 py-3 rounded-lg shadow-lg
                   {% if message.tags == 'success' %}
-                    bg-green-500/20 border border-green-400/50 text-green-300
+                    bg-primary/20 border border-primary/40 text-primary
                   {% elif message.tags == 'error' %}
-                    bg-red-500/20 border border-red-400/50 text-red-300
+                    bg-secondary/25 border border-secondary/45 text-secondary-dark
                   {% elif message.tags == 'warning' %}
-                    bg-yellow-500/20 border border-yellow-400/50 text-yellow-300
+                    bg-secondary/15 border border-secondary/30 text-primary-dark
                   {% else %}
-                    bg-blue-500/20 border border-blue-400/50 text-blue-300
+                    bg-bg/50 border border-primary/30 text-primary
                   {% endif %}
                   animate-fade-in">
         {{ message }}
@@ -134,7 +134,7 @@
 
               <!-- BOTÓN CANCELAR -->
               <div class="mt-4">
-                <a href="{% url 'cancelar_reserva' reserva.id %}" class="inline-flex items-center gap-2 rounded-full bg-red-500/90 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500 transition">
+                <a href="{% url 'cancelar_reserva' reserva.id %}" class="inline-flex items-center gap-2 rounded-full bg-secondary-dark px-4 py-2 text-sm font-semibold text-white hover:bg-secondary transition">
                   <i class="fa-solid fa-trash"></i> Cancelar reserva
                 </a>
               </div>
