@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Cargar tipos de camarote al cargar la página
   async function cargarTipos() {
-    const res = await fetch(`/ajax/tipos-camarote/?viaje_navio_id=${viajeId}`);
+    const res = await fetch(`/reservas/opciones/tipos-camarote/?viaje_navio_id=${viajeId}`);
     const data = await res.json();
     tipoSelect.innerHTML = `<option value="">-- Selecciona tipo --</option>`;
     data.forEach(t => tipoSelect.innerHTML += `<option value="${t.id}">${t.nombre}</option>`);
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
       submitBtn.classList.add("hidden");
       return;
     }
-    const res = await fetch(`/ajax/capacidades/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}`);
+    const res = await fetch(`/reservas/opciones/capacidades/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}`);
     const data = await res.json();
     capacidadSelect.innerHTML = `<option value="">-- Selecciona capacidad --</option>`;
     data.forEach(c => capacidadSelect.innerHTML += `<option value="${c.capacidad}">${c.capacidad}</option>`);
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function() {
       submitBtn.classList.add("hidden");
       return;
     }
-    const res = await fetch(`/ajax/camarotes/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}&capacidad=${capacidad}`);
+    const res = await fetch(`/reservas/opciones/camarotes-disponibles/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}&capacidad=${capacidad}`);
     const data = await res.json();
     camaroteSelect.innerHTML = `<option value="">-- Selecciona un camarote --</option>`;
     data.forEach(c => camaroteSelect.innerHTML += `<option value="${c.id}">N° ${c.numero_de_camarote} (${c.capacidad} pers.) - ${c.tipo}</option>`);

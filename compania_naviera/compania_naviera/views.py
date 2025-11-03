@@ -217,12 +217,13 @@ class DetalleOfertaView(DetailView):
 class RegistroUsuario(CreateView):
     form_class = FormularioRegistroPersonalizado
     template_name = "registro.html"
-    success_url = reverse_lazy("login")
+    success_url = reverse_lazy("menu_user")
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, "Usuario registrado correctamente. Inicia sesión.")
-        return response
+        self.object = form.save()
+        login(self.request, self.object)
+        messages.success(self.request, "¡Registro exitoso! Ya estás conectado.")
+        return redirect(self.get_success_url())
 
 
 def login_view(request):
@@ -441,9 +442,9 @@ class ReservaCreateView(LoginRequiredMixin, View):
 
 
 # ======================
-# AJAX
+# Datos dinámicos para reservas
 # ======================
-def ajax_tipos_camarote(request):
+def obtener_tipos_camarote(request):
     viaje_navio_id = request.GET.get("viaje_navio_id")
     if not viaje_navio_id:
         return HttpResponseBadRequest("Falta viaje_navio_id")
@@ -456,7 +457,7 @@ def ajax_tipos_camarote(request):
     return JsonResponse(data, safe=False)
 
 
-def ajax_capacidades(request):
+def obtener_capacidades_camarote(request):
     viaje_navio_id = request.GET.get("viaje_navio_id")
     tipo_id = request.GET.get("tipo_id")
     if not viaje_navio_id or not tipo_id:
@@ -472,7 +473,7 @@ def ajax_capacidades(request):
     return JsonResponse([{"capacidad": c} for c in data], safe=False)
 
 
-def ajax_camarotes(request):
+def obtener_camarotes_disponibles(request):
     viaje_navio_id = request.GET.get("viaje_navio_id")
     tipo_id = request.GET.get("tipo_id")
     capacidad = request.GET.get("capacidad")

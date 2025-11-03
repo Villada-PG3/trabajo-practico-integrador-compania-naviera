@@ -18,9 +18,9 @@ from compania_naviera.views import (
     CrearClienteView,
     CrucerosView,
     NavioDetailView,
-    ajax_tipos_camarote,
-    ajax_capacidades,
-    ajax_camarotes,
+    obtener_tipos_camarote,
+    obtener_capacidades_camarote,
+    obtener_camarotes_disponibles,
     main_view,
     login_view
 )
@@ -65,11 +65,11 @@ urlpatterns = [
     path('cliente/nuevo/', CrearClienteView.as_view(), name='crear_cliente'),
 
     # ----------------------
-    # AJAX
+    # Datos dinámicos para reservas
     # ----------------------
-    path('ajax/tipos-camarote/', ajax_tipos_camarote, name='ajax_tipos_camarote'),
-    path('ajax/capacidades/', ajax_capacidades, name='ajax_capacidades'),
-    path('ajax/camarotes/', ajax_camarotes, name='ajax_camarotes'),
+    path('reservas/opciones/tipos-camarote/', obtener_tipos_camarote, name='reservas_tipos_camarote'),
+    path('reservas/opciones/capacidades/', obtener_capacidades_camarote, name='reservas_capacidades_camarote'),
+    path('reservas/opciones/camarotes-disponibles/', obtener_camarotes_disponibles, name='reservas_camarotes_disponibles'),
 
     # ----------------------
     # Cruceros
