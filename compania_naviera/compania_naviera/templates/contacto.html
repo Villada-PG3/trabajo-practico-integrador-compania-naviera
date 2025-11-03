@@ -133,6 +133,14 @@
     display: grid;
     gap: clamp(1.5rem, 3vw, 2.5rem);
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(231, 229, 255, 0.92));
+    max-height: min(560px, 78vh);
+    overflow: hidden;
+    align-items: stretch;
+  }
+  @media (max-width: 1023px) {
+    .contact-card {
+      max-height: none;
+    }
   }
   @media (min-width: 1024px) {
     .contact-card {
@@ -143,7 +151,7 @@
   .contact-intro {
     display: flex;
     flex-direction: column;
-    gap: 1.75rem;
+    gap: 1.5rem;
   }
   .contact-intro__badge {
     display: flex;
@@ -185,11 +193,11 @@
   .contact-form {
     display: flex;
     flex-direction: column;
-    gap: 1.75rem;
+    gap: 1.5rem;
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(235, 238, 255, 0.94));
     border-radius: 1.5rem;
     border: 1px solid rgba(31, 58, 147, 0.12);
-    padding: clamp(1.25rem, 3vw, 2rem);
+    padding: clamp(1.15rem, 2.6vw, 1.8rem);
     box-shadow: 0 16px 34px rgba(15, 30, 99, 0.12);
   }
   .contact-field {
@@ -265,6 +273,7 @@
     }
     .contact-card {
       border-radius: 1.75rem;
+      max-height: none;
     }
     .contact-intro__badge {
       align-items: flex-start;

@@ -279,43 +279,89 @@
     }
 
     .user-dropdown {
-      background: linear-gradient(180deg, rgba(243, 245, 255, 0.98), rgba(255, 255, 255, 0.98));
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.98), rgba(236, 236, 255, 0.92));
       border: 1px solid rgba(31, 58, 147, 0.14);
-      box-shadow: 0 18px 34px rgba(15, 30, 99, 0.2);
-      border-radius: 1.1rem;
-      padding: 1rem;
+      box-shadow: 0 24px 48px rgba(15, 30, 99, 0.18);
+      border-radius: 1.2rem;
+      padding: 1.1rem;
       color: var(--text);
       backdrop-filter: blur(14px);
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.75rem;
+      min-width: 14rem;
+    }
+    .user-dropdown__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid rgba(31, 58, 147, 0.12);
+    }
+    .user-dropdown__badge {
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, rgba(122, 62, 242, 0.92), rgba(31, 58, 147, 0.92));
+      box-shadow: 0 12px 22px rgba(31, 58, 147, 0.2);
     }
     .user-dropdown__name {
       color: var(--primary);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .user-dropdown__links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
     }
     .user-dropdown__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.85rem;
       color: var(--text);
       font-weight: 500;
+      transition: background 200ms ease, color 200ms ease, transform 200ms ease;
     }
     .user-dropdown__link i {
       color: var(--secondary);
+      font-size: 0.9rem;
     }
     .user-dropdown__link:hover,
     .user-dropdown__link:focus-visible {
-      background: rgba(122, 62, 242, 0.12);
+      background: rgba(122, 62, 242, 0.14);
       color: var(--secondary-dark);
+      transform: translateX(2px);
     }
     .user-dropdown__link:hover i,
     .user-dropdown__link:focus-visible i {
       color: var(--secondary-dark);
     }
     .user-dropdown__action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       background: linear-gradient(135deg, var(--secondary-dark), var(--secondary));
       border: none;
-      box-shadow: 0 12px 22px rgba(31, 58, 147, 0.2);
-      margin-top: 0.35rem;
-      padding: 0.65rem 0.75rem;
-      letter-spacing: 0.04em;
+      box-shadow: 0 12px 24px rgba(31, 58, 147, 0.2);
+      margin-top: 0.1rem;
+      padding: 0.65rem 0.9rem;
+      border-radius: 0.9rem;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    .user-dropdown__action:hover,
+    .user-dropdown__action:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(31, 58, 147, 0.26);
     }
     .user-dropdown__action:hover {
       background: linear-gradient(135deg, var(--secondary), var(--accent-dark));
@@ -359,26 +405,30 @@
 
           <div x-show="open" @click.away="open = false"
                class="absolute right-0 mt-3 w-56 user-dropdown z-50">
-            <!-- Nombre de usuario -->
-            <p class="mb-3 font-semibold user-dropdown__name">{{ user.username }}</p>
+            <div class="user-dropdown__header">
+              <span class="user-dropdown__badge">{{ user.username|slice:":1"|upper }}</span>
+              <div>
+                <p class="user-dropdown__name">{{ user.username }}</p>
+                <small class="text-xs" style="color: rgba(11, 19, 48, 0.55);">Cuenta activa</small>
+              </div>
+            </div>
 
-            <!-- Editar perfil -->
-            <a href="{% url 'editar_perfil' %}" 
-               class="user-dropdown__link flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition focus-visible:outline-none">
-              <i class="fa fa-user mr-2"></i>Editar perfil
-            </a>
+            <div class="user-dropdown__links">
+              <a href="{% url 'editar_perfil' %}" 
+                 class="user-dropdown__link text-sm focus-visible:outline-none">
+                <i class="fa fa-user"></i>Editar perfil
+              </a>
 
-            <!-- Cambiar contraseña -->
-            <a href="{% url 'cambiar_contrasenia' %}" 
-               class="user-dropdown__link flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition focus-visible:outline-none">
-              <i class="fa fa-key mr-2"></i>Cambiar contraseña
-            </a>
+              <a href="{% url 'cambiar_contrasenia' %}" 
+                 class="user-dropdown__link text-sm focus-visible:outline-none">
+                <i class="fa fa-key"></i>Cambiar contraseña
+              </a>
+            </div>
 
-            <!-- Logout -->
-            <form method="POST" action="{% url 'logout' %}">
+            <form method="POST" action="{% url 'logout' %}" class="mt-1">
               {% csrf_token %}
               <button type="submit" 
-                      class="user-dropdown__action w-full rounded-lg py-2 font-semibold text-white transition focus-visible:outline-none">
+                      class="user-dropdown__action w-full text-white focus-visible:outline-none">
                 Cerrar sesión
               </button>
             </form>
