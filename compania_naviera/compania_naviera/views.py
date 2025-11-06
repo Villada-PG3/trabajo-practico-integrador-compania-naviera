@@ -120,13 +120,12 @@ class OfertasView(TemplateView):
         # --- Query principal (ofertas filtradas) ---
         ofertas_qs = (
             ViajeXNavio.objects.filter(filtros)
-            .select_related("navio", "viaje")
-            .prefetch_related(
-                Prefetch(
-                    "viaje__itinerarioviaje_set",
-                    queryset=ItinerarioViaje.objects.select_related("itinerario__categoria"),
-                )
+            .select_related(
+                "navio",
+                "viaje",
+                "viaje__itinerario_viaje__itinerario__categoria",
             )
+            .prefetch_related("viaje__itinerario_viaje__itinerario__ordenes")
             .order_by('precio')
         )
 
@@ -138,17 +137,15 @@ class OfertasView(TemplateView):
             if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
                 noches = max((oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days, 0)
 
-            itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
-            categoria_nombre = ""
-            if itinerarios:
-                itinerario_obj = getattr(itinerarios[0], "itinerario", None)
-                categoria = getattr(itinerario_obj, "categoria", None)
-                if categoria:
-                    categoria_nombre = categoria.nombre
+            itinerario_rel = getattr(oferta.viaje, "itinerario_viaje", None)
+            itinerario_obj = getattr(itinerario_rel, "itinerario", None)
+            categoria = getattr(itinerario_obj, "categoria", None)
+            categoria_nombre = categoria.nombre if categoria else ""
 
             oferta.noches = noches
             oferta.categoria_nombre = categoria_nombre or "Otros"
             oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
+            oferta.itinerario_rel = itinerario_rel
 
         # --- Determinar si hubo búsqueda sin resultados ---
         sin_resultados = len(ofertas) == 0 and any([destino, fecha, precio_min, precio_max])
@@ -158,7 +155,12 @@ class OfertasView(TemplateView):
         if sin_resultados:
             recomendadas = (
                 ViajeXNavio.objects.filter(viaje__fecha_de_salida__gte=hoy)
-                .select_related("navio", "viaje")
+                .select_related(
+                    "navio",
+                    "viaje",
+                    "viaje__itinerario_viaje__itinerario__categoria",
+                )
+                .prefetch_related("viaje__itinerario_viaje__itinerario__ordenes")
                 .order_by('precio')[:6]  # las 6 más baratas
             )
 
@@ -167,15 +169,13 @@ class OfertasView(TemplateView):
                 if oferta.viaje.fecha_de_salida and oferta.viaje.fecha_fin:
                     noches = max((oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days, 0)
                 oferta.noches = noches
-                itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
-                categoria_nombre = ""
-                if itinerarios:
-                    itinerario_obj = getattr(itinerarios[0], "itinerario", None)
-                    categoria = getattr(itinerario_obj, "categoria", None)
-                    if categoria:
-                        categoria_nombre = categoria.nombre
+                itinerario_rel = getattr(oferta.viaje, "itinerario_viaje", None)
+                itinerario_obj = getattr(itinerario_rel, "itinerario", None)
+                categoria = getattr(itinerario_obj, "categoria", None)
+                categoria_nombre = categoria.nombre if categoria else ""
                 oferta.categoria_nombre = categoria_nombre or "Otros"
                 oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
+                oferta.itinerario_rel = itinerario_rel
 
         contexto["ofertas"] = ofertas
         contexto["sin_resultados"] = sin_resultados
@@ -197,17 +197,14 @@ class DetalleOfertaView(DetailView):
             noches = max((oferta.viaje.fecha_fin - oferta.viaje.fecha_de_salida).days, 0)
 
         # Obtener categoría del itinerario
-        itinerarios = list(oferta.viaje.itinerarioviaje_set.all())
-        categoria_nombre = ""
-        if itinerarios:
-            itinerario_obj = getattr(itinerarios[0], "itinerario", None)
-            categoria = getattr(itinerario_obj, "categoria", None)
-            if categoria:
-                categoria_nombre = categoria.nombre
+        itinerario_rel = getattr(oferta.viaje, "itinerario_viaje", None)
+        itinerario_obj = getattr(itinerario_rel, "itinerario", None)
+        categoria = getattr(itinerario_obj, "categoria", None)
+        categoria_nombre = categoria.nombre if categoria else ""
 
         contexto["noches"] = noches
         contexto["categoria_nombre"] = categoria_nombre or "Otros"
-        contexto["itinerarios"] = itinerarios
+        contexto["itinerario"] = itinerario_rel
         return contexto
 
 # ===========================

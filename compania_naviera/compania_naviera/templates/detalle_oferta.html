@@ -39,46 +39,49 @@
   </div>
 
   <!-- ITINERARIO -->
-  {% if itinerarios %}
+  {% if itinerario %}
     <div class="mt-10">
       <h2 class="text-2xl font-semibold mb-6">🗺️ Itinerario del viaje</h2>
-      <div class="space-y-10">
-        {% for item in itinerarios %}
-          <div class="space-y-4">
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">Itinerario {{ forloop.counter }}</p>
-              <h3 class="text-xl font-semibold text-text">{{ item.itinerario.nombre }}</h3>
-              {% if item.itinerario.categoria.descripcion %}
-                <p class="text-sm text-text/65 max-w-2xl">{{ item.itinerario.categoria.descripcion }}</p>
-              {% endif %}
-            </div>
-
-            <div class="relative pl-10">
-              <div class="absolute left-4 top-0 bottom-0 w-px bg-secondary/30"></div>
-              <ul class="space-y-4">
-                {% for parada in item.itinerario.ordenes.all %}
-                  <li class="relative flex gap-5">
-                    <div class="absolute -left-6 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary/20 text-primary">
-                      <i class="fa-solid fa-location-dot text-xs"></i>
-                    </div>
-                    <div class="flex-1 rounded-2xl border border-secondary/25 bg-bg/50 px-6 py-5 shadow-sm backdrop-blur">
-                      <div class="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-text/50 mb-2">
-                        <span>Día {{ forloop.counter }}</span>
-                        <span>Orden {{ parada.orden }}</span>
-                      </div>
-                      <h4 class="text-lg font-semibold text-text mb-1">{{ parada.nombre }}</h4>
-                      <p class="text-sm text-text/70">{{ parada.descripcion }}</p>
-                    </div>
-                  </li>
-                {% empty %}
-                  <li class="rounded-2xl border border-secondary/25 bg-bg/40 px-6 py-5 text-sm text-text/70">
-                    Sin paradas detalladas para este itinerario.
-                  </li>
-                {% endfor %}
-              </ul>
-            </div>
+      <div class="space-y-6">
+        <div class="space-y-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">Itinerario</p>
+            <h3 class="text-xl font-semibold text-text">{{ itinerario.itinerario.nombre }}</h3>
+            {% if itinerario.itinerario.categoria.descripcion %}
+              <p class="text-sm text-text/65 max-w-2xl">{{ itinerario.itinerario.categoria.descripcion }}</p>
+            {% endif %}
           </div>
-        {% endfor %}
+
+          <div class="relative pl-10">
+            <div class="absolute left-4 top-0 bottom-0 w-px bg-secondary/30"></div>
+            <ul class="space-y-4">
+              {% for parada in itinerario.itinerario.ordenes.all %}
+                <li class="relative flex gap-5">
+                  <div class="absolute -left-6 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary/20 text-primary">
+                    <i class="fa-solid fa-location-dot text-xs"></i>
+                  </div>
+                  <div class="flex-1 rounded-2xl border border-secondary/25 bg-bg/50 px-6 py-5 shadow-sm backdrop-blur">
+                    <div class="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-text/50 mb-2">
+                      <span>Día {{ forloop.counter }}</span>
+                      <span>Orden {{ parada.orden }}</span>
+                    </div>
+                    <h4 class="text-lg font-semibold text-text mb-1">{{ parada.nombre }}</h4>
+                    <p class="text-sm text-text/70">{{ parada.descripcion }}</p>
+                    {% if parada.imagen %}
+                      <div class="mt-4">
+                        <img src="{{ parada.imagen }}" alt="Imagen de {{ parada.nombre }}" class="w-full max-h-60 object-cover rounded-xl border border-secondary/20 shadow-sm">
+                      </div>
+                    {% endif %}
+                  </div>
+                </li>
+              {% empty %}
+                <li class="rounded-2xl border border-secondary/25 bg-bg/40 px-6 py-5 text-sm text-text/70">
+                  Sin paradas detalladas para este itinerario.
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   {% endif %}

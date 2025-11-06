@@ -163,6 +163,7 @@ class Orden(models.Model):
     descripcion = models.TextField()
     orden = models.IntegerField()
     itinerario = models.ForeignKey(Itinerario, on_delete=models.CASCADE, related_name='ordenes')
+    imagen = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.nombre
@@ -227,8 +228,19 @@ class ViajeXNavio(models.Model):
         return f"{self.viaje.nombre} - {self.navio.nombre}"
     
 class ItinerarioViaje(models.Model):
-    viaje = models.ForeignKey(Viaje, on_delete=models.CASCADE)
-    itinerario = models.ForeignKey(Itinerario, on_delete=models.CASCADE)
+    viaje = models.OneToOneField(
+        Viaje,
+        on_delete=models.CASCADE,
+        related_name="itinerario_viaje",
+    )
+    itinerario = models.ForeignKey(
+        Itinerario,
+        on_delete=models.CASCADE,
+        related_name="viajes",
+    )
+
+    def __str__(self):
+        return f"{self.viaje} ↔ {self.itinerario}"
 
 class Tripulante(models.Model):
     GENERO_CHOICES = [
