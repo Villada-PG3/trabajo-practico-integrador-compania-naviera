@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.templatetags.static import static
 from .forms import (
     FormularioCambioContrasenia,
     FormularioCliente,
@@ -35,6 +36,147 @@ from .models import (
     Viaje,
     ViajeXNavio,
 )
+
+# ===========================
+# Recursos visuales estáticos
+# ===========================
+
+DEFAULT_DESTINO_IMAGE = "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=80"
+
+DESTINO_IMAGES = {
+    "Puerto Buenos Aires": "https://images.unsplash.com/photo-1526481280695-3c46973e2d1a?auto=format&fit=crop&w=1400&q=80",
+    "Puerto de Río": "https://images.unsplash.com/photo-1469478719058-ff8c8e5e32dd?auto=format&fit=crop&w=1400&q=80",
+    "Terminal Salvador": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80",
+    "Puerto Montevideo": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80",
+    "Puerto Punta del Este": "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1400&q=80",
+    "Puerto Punta Arenas": "https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=1400&q=80",
+    "Puerto Ushuaia": "https://images.unsplash.com/photo-1483193722442-5422d99849f5?auto=format&fit=crop&w=1400&q=80",
+    "Puerto Reykjavík": "https://images.unsplash.com/photo-1476610182048-b716b8518aae?auto=format&fit=crop&w=1400&q=80",
+    "Puerto Qikiqtarjuaq": "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1400&q=80",
+}
+
+DEFAULT_NAVIO_GALLERY = [
+    {
+        "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80",
+        "label": "Sky Deck al amanecer",
+        "type": "exterior",
+    },
+    {
+        "url": "https://images.unsplash.com/photo-1493555170350-1d57ddd49b46?auto=format&fit=crop&w=1600&q=80",
+        "label": "Suite panorámica",
+        "type": "cabin",
+    },
+    {
+        "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
+        "label": "Piscinas infinitas",
+        "type": "exterior",
+    },
+]
+
+CABIN_IMAGE_FALLBACK = static("a.jpg")
+
+NAVIO_GALLERIES = {
+    "SEA Star Aurora": [
+        {
+            "url": "https://images.unsplash.com/photo-1500687834377-1388ec3c5991?auto=format&fit=crop&w=1600&q=80",
+            "label": "Cubierta Horizon Lounge",
+            "type": "exterior",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80",
+            "label": "Vista exterior del casco",
+            "type": "exterior",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1493555170350-1d57ddd49b46?auto=format&fit=crop&w=1600&q=80",
+            "label": "Suites con balcones privados",
+            "type": "cabin",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
+            "label": "Piscinas con borde infinito",
+            "type": "exterior",
+        },
+    ],
+    "SEA Explorer Polaris": [
+        {
+            "url": "https://images.unsplash.com/photo-1599640842225-85d111c60e6b?auto=format&fit=crop&w=1600&q=80",
+            "label": "Cubierta de exploración polar",
+            "type": "exterior",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1504615755583-2916b52192d1?auto=format&fit=crop&w=1600&q=80",
+            "label": "Observatorio acristalado",
+            "type": "exterior",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80",
+            "label": "Atrio central con domo",
+            "type": "cabin",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80",
+            "label": "Zodiac listos para expediciones",
+            "type": "exterior",
+        },
+    ],
+    "SEA Harmony Breeze": [
+        {
+            "url": "https://images.unsplash.com/photo-1554254648-2d58a1bc3fd5?auto=format&fit=crop&w=1600&q=80",
+            "label": "Lounge panorámico Serenity",
+            "type": "exterior",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80",
+            "label": "Restaurante de autor a bordo",
+            "type": "exterior",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
+            "label": "Zona de piscinas y solárium",
+            "type": "exterior",
+        },
+        {
+            "url": "https://images.unsplash.com/photo-1493557159942-2f0279520410?auto=format&fit=crop&w=1600&q=80",
+            "label": "Teatro Ocean Sound",
+            "type": "cabin",
+        },
+    ],
+}
+
+
+def get_navio_gallery(navio_nombre):
+    gallery = NAVIO_GALLERIES.get(navio_nombre, DEFAULT_NAVIO_GALLERY)
+    for image in gallery:
+        image.setdefault("type", "exterior")
+    return gallery
+
+
+def get_navio_cabin_details(navio_nombre):
+    gallery = get_navio_gallery(navio_nombre)
+    for image in gallery:
+        if image.get("type") == "cabin":
+            return image["url"], image["label"]
+    return CABIN_IMAGE_FALLBACK, "Camarote premium"
+
+
+def human_join(labels):
+    labels = [label for label in labels if label]
+    if not labels:
+        return ""
+    if len(labels) == 1:
+        return labels[0]
+    if len(labels) == 2:
+        return f"{labels[0]} y {labels[1]}"
+    return ", ".join(labels[:-1]) + f" y {labels[-1]}"
+
+
+def build_navio_description(navio, feature_labels):
+    base = f"{navio.tipo_navio.nombre} · {navio.cantidad_maxima_de_pasajeros} pasajeros"
+    extras = human_join(feature_labels[:2])
+    if extras:
+        base += f" · {extras}"
+    return base
 
 # ===========================
 # Públicos / generales
@@ -85,11 +227,26 @@ class DestinosView(ListView):
             ),
         ).order_by("orden__itinerario__categoria__nombre", "orden__orden", "nombre")
 
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        destinos = contexto.get("destinos") or []
+        for puerto in destinos:
+            nombre = (puerto.nombre or "").strip()
+            puerto.display_image = DESTINO_IMAGES.get(nombre, DEFAULT_DESTINO_IMAGE)
+        return contexto
 
 class DestinoDetailView(DetailView):
     model = Puerto
     template_name = "destino_detail.html"
     context_object_name = "puerto"
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        puerto = contexto.get("puerto")
+        if puerto:
+            nombre = (puerto.nombre or "").strip()
+            contexto["display_image"] = DESTINO_IMAGES.get(nombre, DEFAULT_DESTINO_IMAGE)
+        return contexto
 
 
 class OfertasView(TemplateView):
@@ -146,6 +303,9 @@ class OfertasView(TemplateView):
             oferta.categoria_nombre = categoria_nombre or "Otros"
             oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
             oferta.itinerario_rel = itinerario_rel
+            cabin_image, cabin_label = get_navio_cabin_details(oferta.navio.nombre)
+            oferta.cabin_image = cabin_image
+            oferta.cabin_label = cabin_label
 
         # --- Determinar si hubo búsqueda sin resultados ---
         sin_resultados = len(ofertas) == 0 and any([destino, fecha, precio_min, precio_max])
@@ -176,6 +336,9 @@ class OfertasView(TemplateView):
                 oferta.categoria_nombre = categoria_nombre or "Otros"
                 oferta.categoria_slug = slugify(categoria_nombre) if categoria_nombre else "otros"
                 oferta.itinerario_rel = itinerario_rel
+                cabin_image, cabin_label = get_navio_cabin_details(oferta.navio.nombre)
+                oferta.cabin_image = cabin_image
+                oferta.cabin_label = cabin_label
 
         contexto["ofertas"] = ofertas
         contexto["sin_resultados"] = sin_resultados
@@ -205,6 +368,9 @@ class DetalleOfertaView(DetailView):
         contexto["noches"] = noches
         contexto["categoria_nombre"] = categoria_nombre or "Otros"
         contexto["itinerario"] = itinerario_rel
+        cabin_image, cabin_label = get_navio_cabin_details(oferta.navio.nombre)
+        contexto["cabin_image"] = cabin_image
+        contexto["cabin_label"] = cabin_label
         return contexto
 
 # ===========================
@@ -503,8 +669,29 @@ class CrucerosView(ListView):
     context_object_name = "navios"
     queryset = Navio.objects.all().order_by("nombre")
 
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        navios = contexto.get("navios") or []
+        for navio in navios:
+            gallery = get_navio_gallery(navio.nombre)
+            navio.gallery = gallery
+            cabin_image, cabin_label = get_navio_cabin_details(navio.nombre)
+            navio.cabin_image = cabin_image
+            navio.cabin_label = cabin_label
+            feature_labels = [item["label"] for item in gallery[:3]]
+            navio.feature_tags = feature_labels
+            navio.descripcion_card = build_navio_description(navio, feature_labels)
+        return contexto
 
 class NavioDetailView(DetailView):
     model = Navio
     template_name = "navio_detail.html"
     context_object_name = "navio"
+
+    def get_context_data(self, **kwargs):
+        contexto = super().get_context_data(**kwargs)
+        navio = contexto.get("navio")
+        if navio:
+            navio.gallery = get_navio_gallery(navio.nombre)
+            contexto["gallery"] = navio.gallery
+        return contexto

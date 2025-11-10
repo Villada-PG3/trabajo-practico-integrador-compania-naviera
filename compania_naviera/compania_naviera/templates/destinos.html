@@ -16,17 +16,30 @@
     {% for puerto in destinos %}
       <a href="{% url 'destino_detail' puerto.pk %}"
          class="group block overflow-hidden rounded-3xl border border-primary/35 bg-surface/80 p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md hover:border-secondary/45">
+        <div class="relative mb-5 h-48 overflow-hidden rounded-2xl bg-bg/50">
+          <img src="{{ puerto.display_image }}" alt="Vista de {{ puerto.nombre }}"
+               class="h-full w-full object-cover transition duration-500 group-hover:scale-110" loading="lazy">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent"></div>
+          {% if puerto.itinerario %}
+            <span class="absolute top-4 left-4 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary-dark shadow-md">
+              {{ puerto.itinerario.categoria.nombre }}
+            </span>
+          {% endif %}
+          <span class="absolute bottom-3 right-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-text/80 shadow-sm">
+            #{% if forloop.counter < 10 %}0{% endif %}{{ forloop.counter }}
+          </span>
+        </div>
+
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold text-text group-hover:text-secondary-dark flex items-center gap-2">
             <i class="fa-solid fa-location-dot text-secondary-dark"></i>
             {{ puerto.nombre }}
           </h2>
-          <span class="text-xs text-text/50">#{{ forloop.counter }}</span>
         </div>
 
         {% if puerto.itinerario %}
           <p class="mt-2 text-xs uppercase tracking-wide text-secondary-dark/80">
-            {{ puerto.itinerario.categoria.nombre }}
+            Categoría: {{ puerto.itinerario.categoria.nombre }}
           </p>
         {% endif %}
 

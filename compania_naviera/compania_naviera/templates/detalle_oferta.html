@@ -9,11 +9,24 @@
   <!-- ENCABEZADO -->
   <div class="flex flex-col md:flex-row gap-8 mb-10">
     <div class="md:w-1/2">
-      {% if oferta.navio.imagen %}
-        <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="w-full h-80 object-cover rounded-2xl shadow-lg">
-      {% else %}
-        <img src="{% static 'placeholder.jpg' %}" alt="Imagen del viaje" class="w-full h-80 object-cover rounded-2xl shadow-lg">
-      {% endif %}
+      <div class="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg">
+        {% if oferta.navio.imagen %}
+          <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="h-full w-full object-cover">
+        {% else %}
+          <img src="{% static 'placeholder.jpg' %}" alt="Imagen del viaje" class="h-full w-full object-cover">
+        {% endif %}
+        {% if cabin_image %}
+          <div class="absolute bottom-4 right-4 flex items-end gap-3">
+            <div class="rounded-2xl border border-white/60 bg-white/85 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-text/70 shadow-lg">
+              Cabina real
+              <p class="mt-1 text-[11px] tracking-normal text-text font-normal">{{ cabin_label }}</p>
+            </div>
+            <div class="h-20 w-28 overflow-hidden rounded-2xl border border-white/70 shadow-xl">
+              <img src="{{ cabin_image }}" alt="Camarote del {{ oferta.navio.nombre }}" class="h-full w-full object-cover" loading="lazy">
+            </div>
+          </div>
+        {% endif %}
+      </div>
     </div>
 
     <div class="md:w-1/2 flex flex-col justify-center">
@@ -27,6 +40,9 @@
         <li><i class="fa-solid fa-ship text-primary"></i> <strong>Navío:</strong> {{ oferta.navio.nombre }}</li>
         <li><i class="fa-solid fa-tag text-primary"></i> <strong>Precio:</strong> USD {{ oferta.precio }}</li>
         <li><i class="fa-solid fa-layer-group text-primary"></i> <strong>Categoría:</strong> {{ categoria_nombre }}</li>
+        {% if cabin_label %}
+          <li><i class="fa-solid fa-bed text-primary"></i> <strong>Camarote destacado:</strong> {{ cabin_label }}</li>
+        {% endif %}
       </ul>
 
       <div class="mt-6">

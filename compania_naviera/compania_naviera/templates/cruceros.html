@@ -4,32 +4,91 @@
 
 <main class="max-w-6xl mx-auto px-4 md:px-6 py-10 space-y-10">
 
-  <header>
-    <h1 class="text-3xl font-extrabold">Cruceros</h1>
-    <p class="text-text/75">Nuestros navíos disponibles.</p>
+  <header class="space-y-3 text-center md:text-left">
+    <p class="text-xs uppercase tracking-[0.4em] text-secondary">Colección exclusiva</p>
+    <h1 class="text-3xl font-extrabold text-text">Cruceros que enamoran</h1>
+    <p class="text-text/75 max-w-3xl mx-auto md:mx-0">
+      Descubrí navíos boutique con gastronomía de autor, terrazas panorámicas y suites luminosas.
+      Cada card te muestra los ambientes reales para que elijas tu próxima travesía con los ojos.
+    </p>
   </header>
 
-  <section>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<section>
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
     {% for navio in navios %}
-      <a href="{% url 'navio_detail' navio.pk %}" class="group block relative overflow-hidden rounded-2xl border border-primary/35 card-surface shadow-lg transition duration-300 hover:-translate-y-1 hover:border-secondary/45">
-        <div class="aspect-[16/9] overflow-hidden rounded-t-2xl">
-          {% if navio.imagen %}
-            <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-          {% else %}
-            <div class="flex items-center justify-center text-5xl bg-bg/40">🛳️</div>
+      <article class="group relative overflow-hidden rounded-2xl border border-primary/35 card-surface shadow-lg transition duration-300 hover:-translate-y-1 hover:border-secondary/45">
+        <div class="relative aspect-[16/9] w-full overflow-hidden" data-slider>
+          <div class="flex h-full w-full transition-transform duration-500" data-slider-track style="transform: translateX(0%);">
+            {% for image in navio.gallery %}
+              <figure class="relative h-full w-full flex-shrink-0">
+                <img src="{{ image.url }}" alt="{{ image.label }}" loading="lazy"
+                     class="h-full w-full object-cover">
+                <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-4 py-4 text-[11px] font-semibold uppercase tracking-wide text-white space-y-1">
+                  <span class="block leading-snug">{{ image.label }}</span>
+                  <span class="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/15 px-3 py-1 text-[10px] tracking-[0.35em]">
+                    {% if image.type == "cabin" %}
+                      Camarote real
+                    {% elif image.type == "exterior" %}
+                      Exterior
+                    {% else %}
+                      {{ image.type|default:"ambiente"|title }}
+                    {% endif %}
+                  </span>
+                </figcaption>
+              </figure>
+            {% endfor %}
+          </div>
+
+          {% if navio.gallery|length > 1 %}
+            <button type="button"
+                    class="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-lg transition hover:bg-white"
+                    data-slider-prev aria-label="Imagen anterior de {{ navio.nombre }}">
+              <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button type="button"
+                    class="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-lg transition hover:bg-white"
+                    data-slider-next aria-label="Imagen siguiente de {{ navio.nombre }}">
+              <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+            <div class="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+              {% for image in navio.gallery %}
+                <span class="h-2 w-2 rounded-full bg-white/50 transition duration-300 {% if forloop.first %}opacity-100{% else %}opacity-40{% endif %}"
+                      data-slider-indicator></span>
+              {% endfor %}
+            </div>
           {% endif %}
+
         </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-surface/90 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100"></div>
-        <div class="relative p-5 space-y-2">
-          <h3 class="font-semibold text-lg text-text">{{ navio.nombre }}</h3>
-          <p class="text-text/80">Tipo: {{ navio.tipo_navio.nombre }}</p>
-          <p class="text-text/80">Capacidad: {{ navio.cantidad_maxima_de_pasajeros }} pasajeros</p>
-          <span class="inline-flex items-center gap-2 text-sm font-semibold link-secondary">
-            Ver detalles <i class="fa fa-arrow-right text-xs"></i>
-          </span>
+
+        <div class="relative space-y-2 p-5">
+          <div class="flex items-center gap-3">
+            <h3 class="text-lg font-semibold text-text">{{ navio.nombre }}</h3>
+            <span class="text-[11px] uppercase tracking-[0.4em] text-secondary/80">{{ navio.tipo_navio.nombre }}</span>
+          </div>
+          <p class="text-sm text-text/75 leading-relaxed">{{ navio.descripcion_card }}</p>
+
+          <div class="flex flex-wrap gap-2 pt-1">
+            {% for label in navio.feature_tags %}
+              <span class="badge-accent text-[11px] uppercase tracking-[0.25em] px-3 py-1">{{ label }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="flex items-center justify-between pt-2 text-xs text-text/60">
+            <span class="inline-flex items-center gap-2">
+              <i class="fa-solid fa-bed text-secondary"></i> Camarote: {{ navio.cabin_label }}
+            </span>
+            <span>{{ navio.gallery|length }} fotos</span>
+          </div>
+
+          <div class="flex items-center justify-between pt-3">
+            <a href="{% url 'navio_detail' navio.pk %}"
+               class="inline-flex items-center gap-2 text-sm font-semibold link-secondary">
+              Ver detalles <i class="fa fa-arrow-right text-xs"></i>
+            </a>
+            <span class="text-sm text-text/70 font-semibold">{{ navio.cantidad_maxima_de_pasajeros }} pasajeros</span>
+          </div>
         </div>
-      </a>
+      </article>
     {% endfor %}
   </div>
 </section>
