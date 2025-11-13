@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -41,6 +43,12 @@ from .models import (
 # Recursos visuales estáticos
 # ===========================
 
+
+def commons_image(filename, width=1600):
+    encoded = quote(filename)
+    return f"https://commons.wikimedia.org/wiki/Special:FilePath/{encoded}?width={width}"
+
+
 DEFAULT_DESTINO_IMAGE = "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=80"
 
 DESTINO_IMAGES = {
@@ -57,19 +65,24 @@ DESTINO_IMAGES = {
 
 DEFAULT_NAVIO_GALLERY = [
     {
-        "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80",
-        "label": "Sky Deck al amanecer",
+        "url": commons_image("Icon_of_the_Seas.jpg"),
+        "label": "Icon of the Seas durante la maniobra de salida",
         "type": "exterior",
     },
     {
-        "url": "https://images.unsplash.com/photo-1493555170350-1d57ddd49b46?auto=format&fit=crop&w=1600&q=80",
-        "label": "Suite panorámica",
+        "url": commons_image("H2OZone.JPG"),
+        "label": "Zona H2O con vista de 360 grados a bordo",
+        "type": "exterior",
+    },
+    {
+        "url": commons_image("Junior_suite,_Radiance_of_the_Seas_03.jpg"),
+        "label": "Suite luminosa con balcón privado",
         "type": "cabin",
     },
     {
-        "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
-        "label": "Piscinas infinitas",
-        "type": "exterior",
+        "url": commons_image("Cruise_Ship_Casino.jpg"),
+        "label": "Casino a bordo con iluminación ambiental",
+        "type": "interior",
     },
 ]
 
@@ -78,68 +91,68 @@ CABIN_IMAGE_FALLBACK = static("a.jpg")
 NAVIO_GALLERIES = {
     "SEA Star Aurora": [
         {
-            "url": "https://images.unsplash.com/photo-1500687834377-1388ec3c5991?auto=format&fit=crop&w=1600&q=80",
-            "label": "Cubierta Horizon Lounge",
+            "url": commons_image("Icon_of_the_Seas.jpg"),
+            "label": "Icon of the Seas con casco iluminado",
             "type": "exterior",
         },
         {
-            "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80",
-            "label": "Vista exterior del casco",
+            "url": commons_image("Oasis_of_the_Seas.jpg"),
+            "label": "Cubierta superior del Oasis of the Seas",
             "type": "exterior",
         },
         {
-            "url": "https://images.unsplash.com/photo-1493555170350-1d57ddd49b46?auto=format&fit=crop&w=1600&q=80",
-            "label": "Suites con balcones privados",
+            "url": commons_image("Overall_room_view_of_Sky_Suite_1198_aboard_the_Celebrity_Equinox_(6686283819).jpg"),
+            "label": "Sky Suite con ventanal al Atlántico",
             "type": "cabin",
         },
         {
-            "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
-            "label": "Piscinas con borde infinito",
-            "type": "exterior",
+            "url": commons_image("Promenade_on_the_Allure_od_the_Seas_(7710182244).jpg"),
+            "label": "Promenade central con cúpula de cristal",
+            "type": "interior",
         },
     ],
     "SEA Explorer Polaris": [
         {
-            "url": "https://images.unsplash.com/photo-1599640842225-85d111c60e6b?auto=format&fit=crop&w=1600&q=80",
-            "label": "Cubierta de exploración polar",
+            "url": commons_image("Celebrity_Solstice_in_Port_Melbourne,_Australia_Dec_2012_(01).jpg"),
+            "label": "Celebrity Solstice listo para expediciones",
             "type": "exterior",
         },
         {
-            "url": "https://images.unsplash.com/photo-1504615755583-2916b52192d1?auto=format&fit=crop&w=1600&q=80",
-            "label": "Observatorio acristalado",
+            "url": commons_image("Carnival_Sunshine_Curacao_2014_(cropped).jpg"),
+            "label": "Carnival Sunshine atracado en Curazao",
             "type": "exterior",
         },
         {
-            "url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80",
-            "label": "Atrio central con domo",
-            "type": "cabin",
+            "url": commons_image("Bridge_of_a_Modern_Cruise_Ship.jpg"),
+            "label": "Puente de mando con navegación digital",
+            "type": "interior",
         },
         {
-            "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80",
-            "label": "Zodiac listos para expediciones",
-            "type": "exterior",
+            "url": commons_image("Oasis_of_the_Seas_Boardwalk.jpg"),
+            "label": "Boardwalk interior con carrusel",
+            "type": "interior",
         },
     ],
     "SEA Harmony Breeze": [
         {
-            "url": "https://images.unsplash.com/photo-1554254648-2d58a1bc3fd5?auto=format&fit=crop&w=1600&q=80",
-            "label": "Lounge panorámico Serenity",
+            "url": commons_image("Symphony_of_the_Seas.jpg"),
+            "label": "Symphony of the Seas rodeado de agua turquesa",
             "type": "exterior",
         },
         {
-            "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80",
-            "label": "Restaurante de autor a bordo",
+            "url": commons_image("DisneyMagicdepartsCanaveral.JPG"),
+            "label": "Disney Magic saliendo de Cabo Cañaveral",
             "type": "exterior",
         },
         {
-            "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
-            "label": "Zona de piscinas y solárium",
-            "type": "exterior",
+            "url": commons_image("Molecular_Bar_Aboard_the_Celebrity_Equinox_before_Christmas_(6690335041).jpg"),
+            "label": "Molecular Bar con ambientación nocturna",
+            "type": "interior",
         },
         {
-            "url": "https://images.unsplash.com/photo-1493557159942-2f0279520410?auto=format&fit=crop&w=1600&q=80",
-            "label": "Teatro Ocean Sound",
-            "type": "cabin",
+            "url": commons_image("Cruise_Ship_Casino.jpg"),
+            "label": "Casino del Norwegian Bliss con detalles dorados",
+            "type": "interior",
         },
     ],
 }

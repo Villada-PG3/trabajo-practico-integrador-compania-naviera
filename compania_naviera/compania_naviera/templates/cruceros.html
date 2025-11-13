@@ -67,19 +67,6 @@
           </div>
           <p class="text-sm text-text/75 leading-relaxed">{{ navio.descripcion_card }}</p>
 
-          <div class="flex flex-wrap gap-2 pt-1">
-            {% for label in navio.feature_tags %}
-              <span class="badge-accent text-[11px] uppercase tracking-[0.25em] px-3 py-1">{{ label }}</span>
-            {% endfor %}
-          </div>
-
-          <div class="flex items-center justify-between pt-2 text-xs text-text/60">
-            <span class="inline-flex items-center gap-2">
-              <i class="fa-solid fa-bed text-secondary"></i> Camarote: {{ navio.cabin_label }}
-            </span>
-            <span>{{ navio.gallery|length }} fotos</span>
-          </div>
-
           <div class="flex items-center justify-between pt-3">
             <a href="{% url 'navio_detail' navio.pk %}"
                class="inline-flex items-center gap-2 text-sm font-semibold link-secondary">
