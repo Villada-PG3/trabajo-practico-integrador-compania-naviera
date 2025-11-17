@@ -43,27 +43,6 @@
           </p>
         {% endif %}
 
-        {% if puerto.ubicaciones.all %}
-          <p class="mt-3 text-sm text-text/70">
-            {% for ubicacion in puerto.ubicaciones.all %}
-              {{ ubicacion.nombre }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-          </p>
-        {% endif %}
-
-        {% if puerto.actividades.all %}
-          <ul class="mt-4 space-y-1 text-sm text-text/75">
-            {% for act in puerto.actividades.all|slice:":2" %}
-              <li class="flex items-start gap-2">
-                <span class="mt-[6px] h-1.5 w-1.5 rounded-full bg-secondary-dark"></span>
-                {{ act.actividad.nombre }}
-              </li>
-            {% endfor %}
-            {% if puerto.actividades.count > 2 %}
-              <li class="text-text/50 text-xs italic">+ más actividades...</li>
-            {% endif %}
-          </ul>
-        {% endif %}
       </a>
     {% empty %}
       <div class="sm:col-span-2 lg:col-span-3 text-center py-20 border border-dashed border-primary/35 rounded-3xl bg-bg/40">
