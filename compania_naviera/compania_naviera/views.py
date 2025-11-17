@@ -58,95 +58,113 @@ DESTINO_IMAGES = {
 
 CABIN_IMAGE_FALLBACK = static("a.jpg")
 
-DEFAULT_NAVIO_GALLERY = [
+AURORA_GALLERY = [
     {
-        "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80",
-        "label": "Sky Deck al amanecer",
+        "url": static("crucero1.1"),
+        "label": "Cubierta principal del SEA Star Aurora",
         "type": "exterior",
     },
     {
-        "url": "https://images.unsplash.com/photo-1493555170350-1d57ddd49b46?auto=format&fit=crop&w=1600&q=80",
-        "label": "Suite panorámica",
+        "url": static("crucero1.2"),
+        "label": "Piscinas con horizonte infinito",
+        "type": "exterior",
+    },
+    {
+        "url": static("crucero1.3"),
+        "label": "Lobby panorámico luminoso",
+        "type": "interior",
+    },
+    {
+        "url": static("crucero1.4.jpg"),
+        "label": "Suites con balcones privados",
         "type": "cabin",
     },
     {
-        "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
-        "label": "Piscinas infinitas",
+        "url": static("crucero1.5.jpg"),
+        "label": "Restaurante Signature a bordo",
+        "type": "interior",
+    },
+    {
+        "url": static("crucero1.6.webp"),
+        "label": "Puente de mando del Aurora",
+        "type": "exterior",
+    },
+]
+
+POLARIS_GALLERY = [
+    {
+        "url": static("crucero2.1"),
+        "label": "Cubierta reforzada para expediciones",
+        "type": "exterior",
+    },
+    {
+        "url": static("crucero2.2"),
+        "label": "Pasarelas calefaccionadas",
+        "type": "exterior",
+    },
+    {
+        "url": static("crucero2.3"),
+        "label": "Observatorio polar de 270°",
+        "type": "interior",
+    },
+    {
+        "url": static("crucero2.4.webp"),
+        "label": "Camarote polar con ventanal",
+        "type": "cabin",
+    },
+    {
+        "url": static("crucero2.5.webp"),
+        "label": "Lounge de briefing científico",
+        "type": "interior",
+    },
+    {
+        "url": static("crucero2.6.webp"),
+        "label": "Zodiac listos para desembarcos",
+        "type": "exterior",
+    },
+]
+
+HARMONY_GALLERY = [
+    {
+        "url": static("crucero3.1"),
+        "label": "Harmony navegando en aguas turquesa",
+        "type": "exterior",
+    },
+    {
+        "url": static("crucero3.2"),
+        "label": "Solárium familiar con toboganes",
+        "type": "exterior",
+    },
+    {
+        "url": static("crucero3.3"),
+        "label": "Atrio central con jardines verticales",
+        "type": "interior",
+    },
+    {
+        "url": static("crucero3.4.jpg"),
+        "label": "Camarote Harmony Breeze Club",
+        "type": "cabin",
+    },
+    {
+        "url": static("crucero3.5.jpg"),
+        "label": "Teatro Ocean Sound en función",
+        "type": "interior",
+    },
+    {
+        "url": static("crucero3.6.jpg"),
+        "label": "Mirador Sunset en popa",
         "type": "exterior",
     },
 ]
 
 NAVIO_GALLERIES = {
-    "SEA Star Aurora": [
-        {
-            "url": "https://images.unsplash.com/photo-1500687834377-1388ec3c5991?auto=format&fit=crop&w=1600&q=80",
-            "label": "Cubierta Horizon Lounge",
-            "type": "exterior",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1600&q=80",
-            "label": "Vista exterior del casco",
-            "type": "exterior",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1493555170350-1d57ddd49b46?auto=format&fit=crop&w=1600&q=80",
-            "label": "Suites con balcones privados",
-            "type": "cabin",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
-            "label": "Piscinas con borde infinito",
-            "type": "exterior",
-        },
-    ],
-    "SEA Explorer Polaris": [
-        {
-            "url": "https://images.unsplash.com/photo-1599640842225-85d111c60e6b?auto=format&fit=crop&w=1600&q=80",
-            "label": "Cubierta de exploración polar",
-            "type": "exterior",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1504615755583-2916b52192d1?auto=format&fit=crop&w=1600&q=80",
-            "label": "Observatorio acristalado",
-            "type": "exterior",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1600&q=80",
-            "label": "Atrio central con domo",
-            "type": "cabin",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80",
-            "label": "Zodiac listos para expediciones",
-            "type": "exterior",
-        },
-    ],
-    "SEA Harmony Breeze": [
-        {
-            "url": "https://images.unsplash.com/photo-1554254648-2d58a1bc3fd5?auto=format&fit=crop&w=1600&q=80",
-            "label": "Lounge panorámico Serenity",
-            "type": "exterior",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80",
-            "label": "Restaurante de autor a bordo",
-            "type": "exterior",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
-            "label": "Zona de piscinas y solárium",
-            "type": "exterior",
-        },
-        {
-            "url": "https://images.unsplash.com/photo-1493557159942-2f0279520410?auto=format&fit=crop&w=1600&q=80",
-            "label": "Teatro Ocean Sound",
-            "type": "cabin",
-        },
-    ],
+    "SEA Star Aurora": AURORA_GALLERY,
+    "SEA Explorer Polaris": POLARIS_GALLERY,
+    "SEA Harmony Breeze": HARMONY_GALLERY,
 }
 
 def get_navio_gallery(navio_nombre):
-    gallery = NAVIO_GALLERIES.get(navio_nombre, DEFAULT_NAVIO_GALLERY)
+    gallery = NAVIO_GALLERIES.get(navio_nombre, [])
     return [image.copy() for image in gallery]
 
 def get_navio_cabin_details(navio_nombre):
@@ -254,12 +272,11 @@ def build_oferta_gallery(oferta):
         )
 
     if not gallery:
-        for image in get_navio_gallery(navio_nombre):
-            append_image(
-                image.get("url"),
-                image.get("label"),
-                image.get("type", "exterior"),
-            )
+        backup_gallery = get_navio_gallery(navio_nombre)
+        if not backup_gallery:
+            backup_gallery = [{"url": CABIN_IMAGE_FALLBACK, "label": "Camarote premium", "type": "cabin"}]
+        for image in backup_gallery:
+            append_image(image.get("url"), image.get("label"), image.get("type", "exterior"))
 
     return gallery
 
