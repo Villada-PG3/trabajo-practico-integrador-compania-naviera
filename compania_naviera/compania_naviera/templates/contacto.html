@@ -4,55 +4,58 @@
 {% block content %}
 <section class="contact-hero">
   <div class="contact-card">
-    <div class="contact-card__header">
-      <div class="contact-card__badge">
-        <i class="fa-solid fa-headset"></i>
+    <div class="contact-card__info">
+      <div class="contact-card__header">
+        <div class="contact-card__badge">
+          <i class="fa-solid fa-headset"></i>
+        </div>
+        <div>
+          <p class="contact-card__eyebrow">Crew Concierge</p>
+          <h1 class="contact-card__title">¿Necesitás ayuda antes de embarcar?</h1>
+        </div>
       </div>
-      <div>
-        <p class="contact-card__eyebrow">Crew Concierge</p>
-        <h1 class="contact-card__title">¿Necesitás ayuda antes de embarcar?</h1>
+      <p class="contact-card__subtitle">
+        Un agente te responde en menos de 12 hs hábiles. Escribinos y coordinemos tu próximo viaje.
+      </p>
+      <div class="contact-direct">
+        <p><i class="fa-brands fa-whatsapp"></i> +54 351 000 0000</p>
+        <p><i class="fa-solid fa-envelope"></i> contacto@seastar.com</p>
+        <p><i class="fa-solid fa-headphones"></i> 0800 000 7711 · 24/7</p>
       </div>
     </div>
-    <p class="contact-card__subtitle">
-      Un agente te responde en menos de 12 hs hábiles. Escribinos y coordinemos tu próximo viaje.
-    </p>
 
-    <form method="POST" action="{% url 'contacto' %}" class="contact-form">
-      {% csrf_token %}
-      <div class="contact-form__row">
-        <label class="contact-field">
-          <span>Nombre</span>
-          <div class="contact-field__control">
-            <i class="fa-solid fa-user"></i>
-            <input type="text" name="nombre" placeholder="Ej: Milagros Dávila" required>
-          </div>
-        </label>
-        <label class="contact-field">
-          <span>Email</span>
-          <div class="contact-field__control">
-            <i class="fa-solid fa-envelope"></i>
-            <input type="email" name="email" placeholder="tu@email.com" required>
-          </div>
-        </label>
-      </div>
-
-      <label class="contact-field">
-        <span>Mensaje</span>
-        <div class="contact-field__control contact-field__control--textarea">
-          <i class="fa-solid fa-comment"></i>
-          <textarea name="mensaje" rows="4" placeholder="Contanos cómo podemos ayudarte" required></textarea>
+    <div class="contact-card__form">
+      <form method="POST" action="{% url 'contacto' %}" class="contact-form">
+        {% csrf_token %}
+        <div class="contact-form__row">
+          <label class="contact-field">
+            <span>Nombre</span>
+            <div class="contact-field__control">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" name="nombre" placeholder="Ej: Milagros Dávila" required>
+            </div>
+          </label>
+          <label class="contact-field">
+            <span>Email</span>
+            <div class="contact-field__control">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" name="email" placeholder="tu@email.com" required>
+            </div>
+          </label>
         </div>
-      </label>
 
-      <button type="submit" class="contact-btn">
-        <i class="fa-solid fa-paper-plane"></i> Enviar mensaje
-      </button>
-    </form>
+        <label class="contact-field">
+          <span>Mensaje</span>
+          <div class="contact-field__control contact-field__control--textarea">
+            <i class="fa-solid fa-comment"></i>
+            <textarea name="mensaje" rows="4" placeholder="Contanos cómo podemos ayudarte" required></textarea>
+          </div>
+        </label>
 
-    <div class="contact-direct">
-      <p><i class="fa-brands fa-whatsapp"></i> +54 351 000 0000</p>
-      <p><i class="fa-solid fa-envelope"></i> contacto@seastar.com</p>
-      <p><i class="fa-solid fa-headphones"></i> 0800 000 7711 · 24/7</p>
+        <button type="submit" class="contact-btn">
+          <i class="fa-solid fa-paper-plane"></i> Enviar mensaje
+        </button>
+      </form>
     </div>
   </div>
 </section>
@@ -63,19 +66,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.5rem;
+    padding: 2.5rem 1.5rem;
     background: radial-gradient(circle at top right, rgba(122, 62, 242, 0.15), transparent 45%), #eef1ff;
   }
   .contact-card {
     width: 100%;
-    max-width: 760px;
+    max-width: 1160px;
     background: white;
-    border-radius: 1.8rem;
-    padding: 2.2rem;
-    box-shadow: 0 25px 60px rgba(15, 30, 99, 0.15);
+    border-radius: 2.2rem;
+    padding: 2.8rem;
+    box-shadow: 0 45px 90px rgba(15, 30, 99, 0.12);
+    display: grid;
+    grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1fr);
+    gap: 2.8rem;
+    align-items: stretch;
+  }
+  .contact-card__info {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.2rem;
+    padding-right: 1rem;
+    border-right: 1px solid rgba(31, 58, 147, 0.08);
+  }
+  .contact-card__form {
+    display: flex;
+    align-items: stretch;
   }
   .contact-card__header {
     display: flex;
@@ -105,18 +120,25 @@
     color: #0b1330;
   }
   .contact-card__subtitle {
-    color: rgba(11, 19, 48, 0.7);
+    color: rgba(11, 19, 48, 0.75);
     margin: 0;
+    line-height: 1.7;
   }
   .contact-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    background: rgba(247, 248, 255, 0.95);
+    border: 1px solid rgba(31, 58, 147, 0.08);
+    border-radius: 1.5rem;
+    padding: 2.3rem;
+    box-shadow: 0 20px 50px rgba(15, 30, 99, 0.15);
+    width: 100%;
   }
   .contact-form__row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1rem;
-    flex-wrap: wrap;
   }
   .contact-field {
     flex: 1;
@@ -138,14 +160,15 @@
     border: 1px solid rgba(31, 58, 147, 0.12);
     background: rgba(247, 248, 255, 0.9);
     transition: box-shadow 0.2s ease, background 0.2s ease;
+    align-items: center;
   }
   .contact-field__control:focus-within {
-    box-shadow: 0 0 0 3px rgba(122, 62, 242, 0.18);
+    box-shadow: 0 0 0 3px rgba(122, 62, 242, 0.2);
     background: white;
   }
   .contact-field__control i {
     color: rgba(31, 58, 147, 0.5);
-    margin-top: 0.35rem;
+    margin-top: 0;
   }
   .contact-field__control input,
   .contact-field__control textarea {
@@ -155,9 +178,21 @@
     font-size: 1.05rem;
     color: #0b1330;
     resize: none;
+    font-family: inherit;
+  }
+  .contact-field__control input::placeholder,
+  .contact-field__control textarea::placeholder {
+    color: rgba(11, 19, 48, 0.4);
   }
   .contact-field__control--textarea {
     align-items: flex-start;
+  }
+  .contact-field__control--textarea i {
+    margin-top: 0.4rem;
+  }
+  .contact-field__control--textarea textarea {
+    min-height: 180px;
+    line-height: 1.5;
   }
   .contact-btn {
     display: inline-flex;
@@ -174,13 +209,55 @@
     cursor: pointer;
     box-shadow: 0 18px 40px rgba(15, 30, 99, 0.25);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+  }
+  .contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 25px 50px rgba(15, 30, 99, 0.3);
   }
   .contact-direct {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
     font-size: 0.95rem;
-    color: rgba(11, 19, 48, 0.65);
+    color: rgba(11, 19, 48, 0.75);
+    margin-top: auto;
+    padding: 1.4rem;
+    border-radius: 1.5rem;
+    background: linear-gradient(120deg, rgba(31, 58, 147, 0.07), rgba(122, 62, 242, 0.1));
+    border: 1px solid rgba(31, 58, 147, 0.1);
+  }
+  .contact-direct p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .contact-direct i {
+    color: rgba(31, 58, 147, 0.75);
+  }
+  @media (max-width: 1024px) {
+    .contact-card {
+      grid-template-columns: 1fr;
+      padding: 2.2rem;
+    }
+    .contact-card__info {
+      border-right: none;
+      border-bottom: 1px solid rgba(31, 58, 147, 0.08);
+      padding-right: 0;
+      padding-bottom: 1.5rem;
+    }
+  }
+  @media (max-width: 640px) {
+    .contact-hero {
+      padding: 1.8rem 1.2rem;
+    }
+    .contact-form {
+      padding: 1.6rem;
+    }
+    .contact-card {
+      border-radius: 1.5rem;
+    }
   }
 </style>
 {% endblock %}
