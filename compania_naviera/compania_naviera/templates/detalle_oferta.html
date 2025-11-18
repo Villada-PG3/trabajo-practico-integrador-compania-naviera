@@ -15,17 +15,6 @@
         {% else %}
           <img src="{% static 'placeholder.jpg' %}" alt="Imagen del viaje" class="h-full w-full object-cover">
         {% endif %}
-        {% if cabin_image %}
-          <div class="absolute bottom-4 right-4 flex items-end gap-3">
-            <div class="rounded-2xl border border-white/60 bg-white/85 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-text/70 shadow-lg">
-              Cabina real
-              <p class="mt-1 text-[11px] tracking-normal text-text font-normal">{{ cabin_label }}</p>
-            </div>
-            <div class="h-20 w-28 overflow-hidden rounded-2xl border border-white/70 shadow-xl">
-              <img src="{{ cabin_image }}" alt="Camarote del {{ oferta.navio.nombre }}" class="h-full w-full object-cover" loading="lazy">
-            </div>
-          </div>
-        {% endif %}
       </div>
     </div>
 
