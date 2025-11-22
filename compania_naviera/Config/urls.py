@@ -14,66 +14,55 @@ from compania_naviera.views import (
     MenuUserView,
     MisReservasView,
     cancelar_reserva_view,
-    ReservaCreateView,
+
     CrearClienteView,
     CrucerosView,
     NavioDetailView,
-    obtener_tipos_camarote,
-    obtener_capacidades_camarote,
-    obtener_camarotes_disponibles,
     main_view,
-    login_view
+    login_view,
+    ReservaWizardStep1View,
+    ReservaWizardStep2View,
+    ReservaWizardConfirmView,
 )
+
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
 
-    # ----------------------
-    # Home y páginas públicas
-    # ----------------------
+    # Home
     path('', main_view, name='home'),
     path('contacto/', ContactoView.as_view(), name='contacto'),
     path('destinos/', DestinosView.as_view(), name='destinos'),
     path('destino/<int:pk>/', DestinoDetailView.as_view(), name='destino_detail'),
     path('ofertas/', OfertasView.as_view(), name='ofertas'),
-    path('<int:pk>/', DetalleOfertaView.as_view(), name='detalle_oferta'),
 
-    # ----------------------
-    # Login / Logout / Registro
-    # ----------------------
+    # Oferta → detalle
+    path('ofertas/<int:pk>/', DetalleOfertaView.as_view(), name='detalle_oferta'),
+
+    # Login / Registro
     path('login/', login_view, name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('registro/', RegistroUsuario.as_view(), name='registro'),
 
-    # ----------------------
-    # Perfil de usuario
-    # ----------------------
+    # Perfil
     path('perfil/editar/', EditarPerfilView.as_view(), name='editar_perfil'),
     path('perfil/cambiar-contrasenia/', CambiarContraseniaView.as_view(), name='cambiar_contrasenia'),
 
-    # ----------------------
-    # Panel de usuario / Reservas
-    # ----------------------
+    # Reservas Wizard
+    path('reservas/nueva/', ReservaWizardStep1View.as_view(), name='reserva_step1'),
+    path('reservas/nueva/step2/', ReservaWizardStep2View.as_view(), name='reserva_step2'),
+    
+    path('reservas/nueva/confirmar/', ReservaWizardConfirmView.as_view(), name='reserva_confirm'),
+    
+    # Panel usuario
     path('menu/', MenuUserView.as_view(), name='menu_user'),
     path('mis-reservas/', MisReservasView.as_view(), name='mis_reservas'),
     path('reserva/<int:reserva_id>/cancelar/', cancelar_reserva_view, name='cancelar_reserva'),
-    path('reservas/nueva/', ReservaCreateView.as_view(), name='crear_reserva'),
 
-    # ----------------------
-    # Cliente
-    # ----------------------
+    # Cliente (CRM)
     path('cliente/nuevo/', CrearClienteView.as_view(), name='crear_cliente'),
 
-    # ----------------------
-    # Datos dinámicos para reservas
-    # ----------------------
-    path('reservas/opciones/tipos-camarote/', obtener_tipos_camarote, name='reservas_tipos_camarote'),
-    path('reservas/opciones/capacidades/', obtener_capacidades_camarote, name='reservas_capacidades_camarote'),
-    path('reservas/opciones/camarotes-disponibles/', obtener_camarotes_disponibles, name='reservas_camarotes_disponibles'),
-
-    # ----------------------
     # Cruceros
-    # ----------------------
     path('cruceros/', CrucerosView.as_view(), name='cruceros'),
     path('cruceros/<int:pk>/', NavioDetailView.as_view(), name='navio_detail'),
 ]

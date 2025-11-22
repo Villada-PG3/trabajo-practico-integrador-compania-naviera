@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- LEFT: formulario -->
+  <div class="lg:col-span-2">
+    <h1 class="text-2xl font-bold">Tutor y Pasajeros</h1>
+    <p class="text-sm text-muted">Revisá el tutor (tu perfil) y agregá pasajeros. Podés autocompletar el primer pasajero con tus datos.</p>
+
+    <form method="post" id="form-tutor-pasajeros" class="mt-6">
+      {% csrf_token %}
+
+      <!-- Tutor (mostrar, no pedir de nuevo) -->
+      <div class="mb-4 p-4 border rounded bg-white">
+        <h3 class="font-semibold">Tutor (responsable)</h3>
+        <p class="text-sm text-muted mt-2">
+          {{ cliente.nombre }} {{ cliente.apellido }} • DNI: {{ cliente.dni }}<br>
+          {{ cliente.direccion }} • {{ cliente.nacionalidad }} • {{ cliente.fecha_nacimiento }}
+        </p>
+      </div>
+
+      <!-- Controles pasajeros -->
+      <div id="pasajeros-area" class="space-y-4"></div>
+
+      <div class="mt-4 flex items-center gap-3">
+        <button type="button" id="btn-copy-tutor" class="px-3 py-2 rounded bg-secondary text-white">Copiar tutor como pasajero 1</button>
+        <button type="button" id="btn-add-passenger" class="px-3 py-2 rounded border">Agregar pasajero</button>
+        <input type="hidden" name="total_pasajeros_submitted" id="total_pasajeros_submitted" value="0">
+      </div>
+
+      <div class="mt-6 flex items-center gap-3">
+        <a href="{% url 'reserva_step1' %}?viaje_navio_id={{ viaje_navio.id }}" class="px-4 py-2 rounded bg-gray-100">Volver</a>
+        <button type="submit" class="px-4 py-2 rounded bg-primary text-white">Siguiente (Confirmar)</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- RIGHT: carrito -->
+  <aside class="lg:col-span-1">
+    <div class="p-4 border rounded bg-white sticky top-24">
+      <h3 class="font-semibold">Resumen</h3>
+      <div class="mt-3 text-sm">
+        <p><strong>Viaje:</strong><br>{{ carrito.viaje_display }}</p>
+        <p class="mt-2"><strong>Tipo:</strong><br>{{ carrito.tipo_display }}</p>
+        <p class="mt-2"><strong>Capacidad máx:</strong> {{ carrito.capacidad_max }}</p>
+        <p class="mt-2"><strong>Precio:</strong> ${{ carrito.precio }}</p>
+
+        <div class="mt-3">
+          <strong>Pasajeros:</strong>
+          <ul id="carrito-pasajeros-list" class="mt-1 pl-4 text-sm">
+            {% for p in carrito.pasajeros %}
+              <li>{{ p.nombre }} {{ p.apellido }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- JS: dinámico -->
+<script>
+  const capacidadMax = parseInt("{{ carrito.capacidad_max|default:1 }}") || 1;
+  const pasajerosArea = document.getElementById('pasajeros-area');
+  const totalInput = document.getElementById('total_pasajeros_submitted');
+  const carritoList = document.getElementById('carrito-pasajeros-list');
+
+  let pasajerosCount = 0;
+
+  function renderPasajeroForm(index, data = {}) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'p-4 border rounded bg-white';
+    wrapper.innerHTML = `
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm">Nombre</label>
+          <input name="pasajero_${index}_nombre" class="w-full border rounded p-2" value="${data.nombre || ''}" required>
+        </div>
+        <div>
+          <label class="text-sm">Apellido</label>
+          <input name="pasajero_${index}_apellido" class="w-full border rounded p-2" value="${data.apellido || ''}" required>
+        </div>
+        <div>
+          <label class="text-sm">DNI</label>
+          <input name="pasajero_${index}_dni" class="w-full border rounded p-2" value="${data.dni || ''}">
+        </div>
+        <div>
+          <label class="text-sm">Fecha de nacimiento</label>
+          <input type="date" name="pasajero_${index}_fecha_nac" class="w-full border rounded p-2" value="${data.fecha_nacimiento || ''}">
+        </div>
+      </div>
+      <div class="mt-3 text-right">
+        <button type="button" class="btn-remove text-sm text-red-500">Eliminar</button>
+      </div>
+    `;
+    pasajerosArea.appendChild(wrapper);
+
+    // actualizar contadores
+    pasajerosCount++;
+    totalInput.value = pasajerosCount;
+    updateCarritoList();
+
+    // eliminar
+    wrapper.querySelector('.btn-remove').addEventListener('click', function(){
+      wrapper.remove();
+      pasajerosCount--;
+      totalInput.value = pasajerosCount;
+      updateCarritoList();
+    });
+  }
+
+  function updateCarritoList(){
+    carritoList.innerHTML = '';
+    // buscamos todos los forms de pasajeros y listamos nombre/apellido
+    const inputsNombre = pasajerosArea.querySelectorAll('[name^="pasajero_"][name$="_nombre"]');
+    inputsNombre.forEach((input, idx) => {
+      const apellido = pasajerosArea.querySelector(`[name="pasajero_${idx}_apellido"]`);
+      if(input.value || (apellido && apellido.value)) {
+        const li = document.createElement('li');
+        li.textContent = `${input.value} ${apellido ? apellido.value : ''}`;
+        carritoList.appendChild(li);
+      }
+    });
+  }
+
+  // agregar pasajero (hasta capacidadMax)
+  document.getElementById('btn-add-passenger').addEventListener('click', function(){
+    if (pasajerosCount >= capacidadMax) {
+      alert('Has alcanzado la capacidad máxima para este tipo de camarote.');
+      return;
+    }
+    renderPasajeroForm(pasajerosCount);
+  });
+
+  // copiar tutor como pasajero 1
+  document.getElementById('btn-copy-tutor').addEventListener('click', function(){
+    if (pasajerosCount >= capacidadMax) {
+      alert('No se puede copiar, la capacidad máxima ya está completa.');
+      return;
+    }
+    // extraemos datos del panel tutor (renderizados desde servidor)
+    const tutorText = `{{ cliente.nombre|escapejs }}`;
+    const tutorApellido = `{{ cliente.apellido|escapejs }}`;
+    const tutorDNI = `{{ cliente.dni|default:''|escapejs }}`;
+    const tutorFN = `{{ cliente.fecha_nacimiento|default:'' }}`;
+
+    renderPasajeroForm(pasajerosCount, {
+      nombre: tutorText,
+      apellido: tutorApellido,
+      dni: tutorDNI,
+      fecha_nacimiento: tutorFN
+    });
+  });
+
+  // inicio: si en sesión ya hay pasajeros pre-guardados, los renderizamos
+  (function initFromSession(){
+    const existing = JSON.parse(document.getElementById("pasajeros-data").textContent);
+
+    if(Array.isArray(existing) && existing.length){
+      existing.forEach((p, idx) => renderPasajeroForm(idx, p));
+    } else {
+      // por defecto, agregamos 1 form para facilitar
+      renderPasajeroForm(0);
+    }
+  })();
+
+  // actualizar carrito cuando el usuario escribe
+  pasajerosArea.addEventListener('input', updateCarritoList);
+</script>
+{% endblock %}

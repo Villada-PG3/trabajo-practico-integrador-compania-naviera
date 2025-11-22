@@ -35,7 +35,7 @@
       </ul>
 
       <div class="mt-6">
-        <a href="{% if user.is_authenticated %}{% url 'crear_reserva' %}?viaje_navio_id={{ oferta.id }}{% else %}{% url 'login' %}?next={% url 'detalle_oferta' oferta.id %}{% endif %}"
+        <a href="{% if user.is_authenticated %}{% url 'reserva_step1' %}?viaje_navio_id={{ oferta.id }}{% else %}{% url 'login' %}?next={% url 'detalle_oferta' oferta.id %}{% endif %}"
           class="btn-primary px-6 py-3 rounded-lg font-medium text-white shadow-md hover:scale-[1.03] transition">
           {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
         </a>

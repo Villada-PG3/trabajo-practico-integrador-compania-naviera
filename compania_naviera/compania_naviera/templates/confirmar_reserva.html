@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 space-y-6">
+  <h1 class="text-2xl font-bold">Confirmar reserva</h1>
+
+  <div class="p-4 border rounded bg-white">
+    <h3 class="font-semibold">Viaje</h3>
+    <p class="text-sm">{{ viaje_navio.viaje.nombre }} — {{ viaje_navio.navio.nombre }}</p>
+    <p class="text-sm">Salida: {{ viaje_navio.viaje.fecha_de_salida }} - Llegada: {{ viaje_navio.viaje.fecha_fin }}</p>
+  </div>
+
+  <div class="p-4 border rounded bg-white">
+    <h3 class="font-semibold">Camarote</h3>
+    <p class="text-sm">{{ tipo.nombre }} • Capacidad máx: {{ capacidad_max }}</p>
+    <p class="text-sm">Precio por viaje: ${{ viaje_navio.precio }}</p>
+  </div>
+
+  <div class="p-4 border rounded bg-white">
+    <h3 class="font-semibold">Tutor</h3>
+    <p class="text-sm">{{ cliente.nombre }} {{ cliente.apellido }} — DNI: {{ cliente.dni }}</p>
+  </div>
+
+  <div class="p-4 border rounded bg-white">
+    <h3 class="font-semibold">Pasajeros</h3>
+    <ul class="pl-4">
+      {% for p in pasajeros %}
+        <li>{{ p.nombre }} {{ p.apellido }} {% if p.dni %}- DNI: {{ p.dni }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <form method="post" class="flex gap-3">
+    {% csrf_token %}
+    <a href="{% url 'reserva_step2' %}" class="px-4 py-2 rounded border">Volver</a>
+    <button type="submit" class="px-4 py-2 rounded bg-primary text-white">Confirmar reserva</button>
+  </form>
+</div>
+{% endblock %}

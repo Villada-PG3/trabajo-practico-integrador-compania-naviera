@@ -12,84 +12,104 @@
       Cada card te muestra los ambientes reales para que elijas tu próxima travesía con los ojos.
     </p>
   </header>
-
 <section>
   <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
     {% for navio in navios %}
-      <article class="cruise-card group relative overflow-hidden rounded-3xl border border-primary/35 bg-white/95 shadow-[0_25px_60px_rgba(15,30,99,0.12)] transition duration-300 hover:-translate-y-1.5 hover:border-secondary/40">
-        <div class="relative aspect-[16/9] w-full overflow-hidden" data-slider>
-          <div class="flex h-full w-full transition-transform duration-500" data-slider-track style="transform: translateX(0%);">
-            {% for image in navio.gallery %}
-              <figure class="relative h-full w-full flex-shrink-0">
-                <img src="{{ image.url }}" alt="{{ image.label }}" loading="lazy"
-                     class="h-full w-full object-cover">
-                <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-4 py-4 text-[11px] font-semibold uppercase tracking-wide text-white space-y-1">
-                  <span class="block leading-snug">{{ image.label }}</span>
-                  <span class="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/15 px-3 py-1 text-[10px] tracking-[0.35em]">
-                    {% if image.type == "cabin" %}
-                      Camarote real
-                    {% elif image.type == "exterior" %}
-                      Exterior
-                    {% else %}
-                      {{ image.type|default:"ambiente"|title }}
-                    {% endif %}
-                  </span>
-                </figcaption>
-              </figure>
-            {% endfor %}
-          </div>
 
-          {% if navio.gallery|length > 1 %}
-            <button type="button"
-                    class="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-lg transition hover:bg-white"
-                    data-slider-prev aria-label="Imagen anterior de {{ navio.nombre }}">
-              <i class="fa-solid fa-chevron-left text-sm"></i>
-            </button>
-            <button type="button"
-                    class="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-lg transition hover:bg-white"
-                    data-slider-next aria-label="Imagen siguiente de {{ navio.nombre }}">
-              <i class="fa-solid fa-chevron-right text-sm"></i>
-            </button>
-            <div class="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+      <a href="{% url 'navio_detail' navio.pk %}" 
+         class="group block cursor-pointer">
+
+        <article 
+          class="relative overflow-hidden rounded-3xl border border-primary/35 bg-white/95 shadow-[0_25px_60px_rgba(15,30,99,0.10)] transition-all duration-300 
+                 group-hover:-translate-y-2 group-hover:shadow-[0_35px_70px_rgba(15,30,99,0.18)] group-hover:border-secondary/50">
+
+          <!-- Overlay invisible para mejorar la usabilidad -->
+          <span class="absolute inset-0 z-10"></span>
+
+          <!-- GALERÍA / SLIDER -->
+          <div class="relative aspect-[16/9] w-full overflow-hidden" data-slider>
+            <div class="flex h-full w-full transition-transform duration-500" 
+                 data-slider-track style="transform: translateX(0%);">
               {% for image in navio.gallery %}
-                <span class="h-2 w-2 rounded-full bg-white/50 transition duration-300 {% if forloop.first %}opacity-100{% else %}opacity-40{% endif %}"
-                      data-slider-indicator></span>
+                <figure class="relative h-full w-full flex-shrink-0">
+                  <img src="{{ image.url }}" alt="{{ image.label }}" loading="lazy"
+                       class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]">
+                  <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-4 py-4 text-[11px] font-semibold uppercase tracking-wide text-white space-y-1">
+                    <span class="block leading-snug">{{ image.label }}</span>
+                    <span class="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/15 px-3 py-1 text-[10px] tracking-[0.35em]">
+                      {% if image.type == "cabin" %}
+                        Camarote real
+                      {% elif image.type == "exterior" %}
+                        Exterior
+                      {% else %}
+                        {{ image.type|default:"ambiente"|title }}
+                      {% endif %}
+                    </span>
+                  </figcaption>
+                </figure>
               {% endfor %}
             </div>
-          {% endif %}
 
-        </div>
+            {% if navio.gallery|length > 1 %}
+              <!-- FLECHA IZQ -->
+              <button type="button"
+                class="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-md transition hover:bg-white"
+                data-slider-prev
+                onclick="event.stopPropagation();"
+                aria-label="Imagen anterior de {{ navio.nombre }}">
+                <i class="fa-solid fa-chevron-left text-sm"></i>
+              </button>
 
-        <div class="cruise-card__info relative space-y-4 p-6">
-          <div>
-            <p class="cruise-card__eyebrow">Colección Sea Star</p>
-            <div class="flex items-center justify-between gap-2">
-              <h3 class="cruise-card__title">{{ navio.nombre }}</h3>
-              <span class="cruise-card__tag">{{ navio.tipo_navio.nombre }}</span>
+              <!-- FLECHA DER -->
+              <button type="button"
+                class="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-md transition hover:bg-white"
+                data-slider-next
+                onclick="event.stopPropagation();"
+                aria-label="Imagen siguiente de {{ navio.nombre }}">
+                <i class="fa-solid fa-chevron-right text-sm"></i>
+              </button>
+
+              <!-- INDICADORES -->
+              <div class="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+                {% for image in navio.gallery %}
+                  <span class="h-2 w-2 rounded-full bg-white/50 transition duration-300 
+                               {% if forloop.first %}opacity-100{% else %}opacity-40{% endif %}"
+                        data-slider-indicator></span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- INFO CARD -->
+          <div class="relative z-20 space-y-4 p-6">
+            <div>
+              <p class="cruise-card__eyebrow opacity-80">Colección Sea Star</p>
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="cruise-card__title">{{ navio.nombre }}</h3>
+                <span class="cruise-card__tag">{{ navio.tipo_navio.nombre }}</span>
+              </div>
             </div>
-          </div>
-          <p class="cruise-card__description">{{ navio.descripcion_card }}</p>
 
-          {% if navio.feature_tags %}
-            <ul class="cruise-card__highlights">
-              {% for tag in navio.feature_tags %}
-                <li>{{ tag }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+            <p class="cruise-card__description line-clamp-3">{{ navio.descripcion_card }}</p>
 
-          <div class="cruise-card__footer">
-            <a href="{% url 'navio_detail' navio.pk %}"
-               class="cruise-card__cta">
-              Ver detalles <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-            <span class="cruise-card__capacity">{{ navio.cantidad_maxima_de_pasajeros }} pasajeros</span>
+            {% if navio.feature_tags %}
+              <ul class="cruise-card__highlights space-y-1">
+                {% for tag in navio.feature_tags %}
+                  <li>{{ tag }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+
           </div>
-        </div>
-      </article>
+
+        </article>
+
+      </a>
+
     {% endfor %}
   </div>
 </section>
+
 
 </main>
 

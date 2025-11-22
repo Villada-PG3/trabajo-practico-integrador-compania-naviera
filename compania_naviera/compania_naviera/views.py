@@ -5,13 +5,15 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Prefetch, Q
+from django.db import transaction
+from django.db.models import Prefetch, Q, Max
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, View
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.templatetags.static import static
+
 from .forms import (
     FormularioCambioContrasenia,
     FormularioCliente,
@@ -615,7 +617,7 @@ def cancelar_reserva_view(request, reserva_id):
 class CrearClienteView(LoginRequiredMixin, CreateView):
     form_class = FormularioCliente
     template_name = "crear_cliente.html"
-    success_url = reverse_lazy("crear_reserva")
+    success_url = reverse_lazy("reserva_step1")
 
     def form_valid(self, form):
         cliente = form.save(commit=False)
@@ -625,165 +627,6 @@ class CrearClienteView(LoginRequiredMixin, CreateView):
         return redirect(self.success_url)
 
 # Crear reserva
-
-
-
-class ReservaCreateView(LoginRequiredMixin, View):
-    template_name = "crear_reserva.html"
-    success_url = reverse_lazy("mis_reservas")
-
-    def get(self, request):
-        clientes = Cliente.objects.filter(usuario=request.user)
-        viaje_navio_id = request.GET.get("viaje_navio_id")
-
-        try:
-            viaje_seleccionado = ViajeXNavio.objects.select_related("viaje", "navio").get(id=viaje_navio_id)
-        except ViajeXNavio.DoesNotExist:
-            return redirect("ofertas")
-
-        context = {
-            "clientes": clientes,
-            "viaje_seleccionado": viaje_seleccionado,
-        }
-        return render(request, self.template_name, context)
-
-    def post(self, request):
-        cliente_id = request.POST.get("cliente")
-        viaje_id = request.POST.get("viaje_navio")
-        camarote_id = request.POST.get("camarote")
-
-        if not cliente_id or not viaje_id or not camarote_id:
-            messages.error(request, "Debes seleccionar cliente y camarote.")
-            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
-
-        try:
-            cliente = Cliente.objects.get(id=cliente_id, usuario=request.user)
-            viaje_navio = ViajeXNavio.objects.get(id=viaje_id)
-            camarote = Camarote.objects.get(id=camarote_id)
-        except (Cliente.DoesNotExist, ViajeXNavio.DoesNotExist, Camarote.DoesNotExist):
-            messages.error(request, "Datos seleccionados inválidos.")
-            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
-
-        # Verificar ocupación
-        if OcupacionCamarote.objects.filter(camarote=camarote, viaje_navio=viaje_navio).exists():
-            messages.error(request, f"El camarote #{camarote.numero_de_camarote} ya está ocupado en este viaje.")
-            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
-
-        # Recoger pasajeros
-        pasajeros = []
-        for i in range(camarote.capacidad):
-            nombre = request.POST.get(f"pasajero_nombre_{i}")
-            apellido = request.POST.get(f"pasajero_apellido_{i}")
-            dni = request.POST.get(f"pasajero_dni_{i}")
-            fecha_nac = request.POST.get(f"pasajero_fecha_nacimiento_{i}")
-            if nombre and apellido and dni and fecha_nac:
-                pasajeros.append({
-                    "nombre": nombre,
-                    "apellido": apellido,
-                    "dni": dni,
-                    "fecha_nacimiento": fecha_nac,
-                })
-
-        if len(pasajeros) == 0:
-            messages.error(request, "Debes agregar al menos un pasajero con todos los datos obligatorios.")
-            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
-        if len(pasajeros) > camarote.capacidad:
-            messages.error(request, f"La cantidad de pasajeros excede la capacidad ({camarote.capacidad}).")
-            return redirect(request.path + f"?viaje_navio_id={viaje_id}")
-
-        # Crear reserva
-        estado_reserva, _ = EstadoReserva.objects.get_or_create(nombre="Pendiente", defaults={"descripcion": "Pendiente"})
-        reserva = Reserva.objects.create(
-            descripcion="Reserva creada desde formulario",
-            viaje_navio=viaje_navio,
-            estado_reserva=estado_reserva,
-            cliente=cliente,
-            camarote=camarote
-        )
-
-        # Crear pasajeros y ocupación
-        estado_pasajero, _ = EstadoPasajero.objects.get_or_create(nombre="Activo", defaults={"descripcion": "Activo"})
-        for p in pasajeros:
-            pasajero = Pasajero.objects.create(
-                reserva=reserva,
-                nombre=p["nombre"],
-                apellido=p["apellido"],
-                dni=p["dni"],
-                fecha_nacimiento=p["fecha_nacimiento"],
-                fecha_inicio=viaje_navio.viaje.fecha_de_salida,
-                fecha_fin=viaje_navio.viaje.fecha_fin,
-                estado_pasajero=estado_pasajero
-            )
-            OcupacionCamarote.objects.create(
-                reserva=reserva,
-                camarote=camarote,
-                pasajero=pasajero,
-                viaje_navio=viaje_navio,
-                fecha_inicio=viaje_navio.viaje.fecha_de_salida,
-                fecha_fin=viaje_navio.viaje.fecha_fin
-            )
-
-        messages.success(request, "Reserva creada correctamente.")
-        return redirect(self.success_url)
-
-
-# ======================
-# Datos dinámicos para reservas
-# ======================
-def obtener_tipos_camarote(request):
-    viaje_navio_id = request.GET.get("viaje_navio_id")
-    if not viaje_navio_id:
-        return HttpResponseBadRequest("Falta viaje_navio_id")
-    try:
-        viaje_navio = ViajeXNavio.objects.select_related("navio").get(id=viaje_navio_id)
-    except ViajeXNavio.DoesNotExist:
-        return JsonResponse([], safe=False)
-    tipos = TipoCamarote.objects.filter(camarote__cubierta__navio=viaje_navio.navio).distinct()
-    data = [{"id": t.id, "nombre": t.nombre} for t in tipos]
-    return JsonResponse(data, safe=False)
-
-
-def obtener_capacidades_camarote(request):
-    viaje_navio_id = request.GET.get("viaje_navio_id")
-    tipo_id = request.GET.get("tipo_id")
-    if not viaje_navio_id or not tipo_id:
-        return HttpResponseBadRequest("Faltan parámetros")
-    try:
-        viaje_navio = ViajeXNavio.objects.select_related("navio").get(id=viaje_navio_id)
-    except ViajeXNavio.DoesNotExist:
-        return JsonResponse([], safe=False)
-    capacidades = Camarote.objects.filter(
-        cubierta__navio=viaje_navio.navio, tipo_camarote_id=tipo_id
-    ).values_list("capacidad", flat=True).distinct()
-    data = sorted(list(set(capacidades)))
-    return JsonResponse([{"capacidad": c} for c in data], safe=False)
-
-
-def obtener_camarotes_disponibles(request):
-    viaje_navio_id = request.GET.get("viaje_navio_id")
-    tipo_id = request.GET.get("tipo_id")
-    capacidad = request.GET.get("capacidad")
-    if not viaje_navio_id:
-        return HttpResponseBadRequest("Falta viaje_navio_id")
-    try:
-        viaje_navio = ViajeXNavio.objects.select_related("navio").get(id=viaje_navio_id)
-    except ViajeXNavio.DoesNotExist:
-        return JsonResponse([], safe=False)
-
-    qs = Camarote.objects.filter(cubierta__navio=viaje_navio.navio)
-    if tipo_id:
-        qs = qs.filter(tipo_camarote_id=tipo_id)
-    if capacidad:
-        qs = qs.filter(capacidad=capacidad)
-
-    ocupados = OcupacionCamarote.objects.filter(viaje_navio=viaje_navio).values_list("camarote_id", flat=True)
-    qs = qs.exclude(id__in=ocupados)
-
-    data = [
-        {"id": c.id, "numero_de_camarote": c.numero_de_camarote, "capacidad": c.capacidad, "tipo": c.tipo_camarote.nombre}
-        for c in qs
-    ]
-    return JsonResponse(data, safe=False)
 
 
 class CrucerosView(ListView):
@@ -818,3 +661,304 @@ class NavioDetailView(DetailView):
             navio.gallery = get_navio_gallery(navio.nombre)
             contexto["gallery"] = navio.gallery
         return contexto
+
+# --- Wizard session key and helpers ---
+WIZARD_SESSION_KEY = "reserva_wizard"
+
+def get_reserva_preview(request):
+    session = request.session.get(WIZARD_SESSION_KEY, {})
+    # devolvemos info compacta para el carrito
+    preview = {
+        "viaje_navio_id": session.get("viaje_navio_id"),
+        "viaje_display": session.get("viaje_display"),   # string
+        "tipo_id": session.get("tipo_id"),
+        "tipo_display": session.get("tipo_display"),
+        "tipo_imagen": session.get("tipo_imagen"),
+        "precio": session.get("precio"),
+        "capacidad_max": session.get("capacidad_max"),
+        "pasajeros": session.get("pasajeros", []),
+    }
+    return preview
+
+def clear_wizard_session(request):
+    if WIZARD_SESSION_KEY in request.session:
+        del request.session[WIZARD_SESSION_KEY]
+        request.session.modified = True
+
+# -------------------------
+# STEP 1: elegir tipo (cards)
+# -------------------------
+class ReservaWizardStep1View(LoginRequiredMixin, View):
+    template_name = "step1_tipo_camarote.html"
+
+    def get(self, request):
+        viaje_navio_id = request.GET.get("viaje_navio_id")
+        if not viaje_navio_id:
+            messages.error(request, "Falta información del viaje (viaje_navio_id).")
+            return redirect("ofertas")
+
+        viaje_navio = get_object_or_404(ViajeXNavio.objects.select_related("viaje", "navio"), id=viaje_navio_id)
+
+        tipos = TipoCamarote.objects.filter(camarote__cubierta__navio=viaje_navio.navio).distinct()
+
+        # inicializamos sesión del wizard (sobrescribimos para iniciar nuevo flujo)
+        request.session[WIZARD_SESSION_KEY] = {
+            "viaje_navio_id": viaje_navio.id,
+            "viaje_display": f"{viaje_navio.viaje.nombre} — {viaje_navio.navio.nombre}",
+            "tipo_id": None,
+            "tipo_display": None,
+            "tipo_imagen": None,
+            "precio": viaje_navio.precio,
+            "capacidad_max": None,
+            "pasajeros": [],
+        }
+        request.session.modified = True
+
+        context = {
+            "viaje_navio": viaje_navio,
+            "tipos": tipos,
+            "carrito": get_reserva_preview(request),
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        tipo_id = request.POST.get("tipo_id")
+        wizard = request.session.get(WIZARD_SESSION_KEY)
+        if not wizard:
+            messages.error(request, "Sesión de reserva vencida. Volvé a intentarlo.")
+            return redirect("ofertas")
+
+        try:
+            tipo = TipoCamarote.objects.get(id=tipo_id)
+        except TipoCamarote.DoesNotExist:
+            messages.error(request, "Tipo de camarote inválido.")
+            return redirect(request.path + f"?viaje_navio_id={wizard.get('viaje_navio_id')}")
+
+        viaje_navio = get_object_or_404(ViajeXNavio.objects.select_related("navio","viaje"), id=wizard["viaje_navio_id"])
+
+        # calculamos la capacidad máxima disponible para ese tipo en ese navío
+        max_cap = Camarote.objects.filter(
+            cubierta__navio=viaje_navio.navio,
+            tipo_camarote=tipo
+        ).aggregate(max_cap=Max('capacidad'))['max_cap'] or 1
+
+        # guardamos info legible para el carrito
+        wizard["tipo_id"] = int(tipo_id)
+        wizard["tipo_display"] = tipo.nombre
+        # si TipoCamarote tuviera imagen, la guardamos; si no, la tomamos de un camarote ejemplo
+        sample_camarote = Camarote.objects.filter(cubierta__navio=viaje_navio.navio, tipo_camarote=tipo).first()
+        img = None
+        if hasattr(tipo, 'imagen') and tipo.imagen:
+            img = getattr(tipo, 'imagen', None)
+        elif sample_camarote and sample_camarote.imagen:
+            img = sample_camarote.imagen
+        wizard["tipo_imagen"] = img if img else None
+
+        wizard["capacidad_max"] = int(max_cap)
+        # precio lo sacamos del viaje_navio (guardado antes)
+        wizard["precio"] = viaje_navio.precio
+
+        request.session[WIZARD_SESSION_KEY] = wizard
+        request.session.modified = True
+
+        return redirect("reserva_step2")
+
+
+# -------------------------
+# STEP 2: Tutor + Pasajeros
+# -------------------------
+class ReservaWizardStep2View(LoginRequiredMixin, View):
+    template_name = "step2_tutor_pasajeros.html"
+
+    def get(self, request):
+        wizard = request.session.get(WIZARD_SESSION_KEY)
+        if not wizard or not wizard.get("tipo_id"):
+            messages.error(request, "Debés seleccionar un tipo de camarote primero.")
+            return redirect("reserva_step1")
+
+        viaje_navio = get_object_or_404(ViajeXNavio.objects.select_related("viaje","navio"), id=wizard["viaje_navio_id"])
+        tipo = get_object_or_404(TipoCamarote, id=wizard["tipo_id"])
+
+        # Intentamos obtener el Cliente vinculado al usuario (si existe)
+        cliente_qs = Cliente.objects.filter(usuario=request.user)
+        cliente = cliente_qs.first() if cliente_qs.exists() else None
+
+        # Validamos campos obligatorios del tutor (según tu modelo)
+        missing = []
+        # campos que pediste obligatorios (siempre que existan en el modelo)
+        required_fields = ["dni", "direccion", "fecha_nacimiento", "nacionalidad", "genero"]
+        # teléfono: sólo si el modelo Cliente tiene ese atributo lo exigimos
+        if hasattr(Cliente, "telefono"):
+            required_fields.append("telefono")
+
+        if cliente:
+            for f in required_fields:
+                val = getattr(cliente, f, None)
+                # CountryField (nacionalidad) puede ser '' o None cuando no está seleccionado
+                if val in (None, ""):
+                    missing.append(f)
+        else:
+            # si no existe Cliente asociado → pedimos crear uno
+            missing.append("cliente_no_creado")
+
+        if missing:
+            # Si falta cliente o datos del cliente, redirigimos a editar_perfil o crear cliente
+            if "cliente_no_creado" in missing:
+                messages.warning(request, "Necesitás crear tu ficha (Cliente) antes de reservar.")
+                return redirect("crear_cliente")
+            else:
+                messages.warning(request, "Completá tus datos personales antes de continuar (DNI, dirección, fecha de nacimiento, nacionalidad, género).")
+                return redirect("editar_perfil")
+
+        # Si llegamos acá, cliente está y tiene datos obligatorios
+        capacidad_max = int(wizard.get("capacidad_max") or 1)
+
+        context = {
+            "viaje_navio": viaje_navio,
+            "tipo": tipo,
+            "cliente": cliente,
+            "capacidad_max": capacidad_max,
+            "carrito": get_reserva_preview(request),
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        wizard = request.session.get(WIZARD_SESSION_KEY)
+        if not wizard:
+            messages.error(request, "Sesión de reserva vencida.")
+            return redirect("ofertas")
+
+        # tutor será el cliente vinculado (ya validado en GET)
+        cliente = Cliente.objects.filter(usuario=request.user).first()
+        if not cliente:
+            messages.error(request, "No se pudo identificar al tutor. Creá tu perfil de cliente.")
+            return redirect("crear_cliente")
+
+        capacidad_max = int(wizard.get("capacidad_max") or 1)
+
+        # recoger pasajeros desde POST: esperamos pasajero_0_nombre, pasajero_0_apellido, etc.
+        pasajeros = []
+        # el formulario permite indicar cuántos pasajeros se cargaron; si no, iteramos hasta capacidad_max
+        total_fields = int(request.POST.get("total_pasajeros_submitted", capacidad_max))
+        total = min(total_fields, capacidad_max)
+        for i in range(total):
+            nombre = request.POST.get(f"pasajero_{i}_nombre")
+            apellido = request.POST.get(f"pasajero_{i}_apellido")
+            dni = request.POST.get(f"pasajero_{i}_dni")
+            fecha_nac = request.POST.get(f"pasajero_{i}_fecha_nac")
+
+            # aceptamos filas vacías (si el usuario decidió no completar todos)
+            if nombre and apellido:
+                pasajeros.append({
+                    "nombre": nombre.strip(),
+                    "apellido": apellido.strip(),
+                    "dni": dni.strip() if dni else "",
+                    "fecha_nacimiento": fecha_nac if fecha_nac else None
+                })
+
+        if len(pasajeros) == 0:
+            messages.error(request, "Debes ingresar al menos un pasajero.")
+            return redirect("reserva_step2")
+
+        # Guardamos tutor y pasajeros en la sesión (temporal)
+        wizard["tutor_cliente_id"] = cliente.id
+        wizard["pasajeros"] = pasajeros
+        request.session[WIZARD_SESSION_KEY] = wizard
+        request.session.modified = True
+
+        return redirect("reserva_confirm")
+
+
+# -------------------------
+# CONFIRM: revisar y crear
+# -------------------------
+class ReservaWizardConfirmView(LoginRequiredMixin, View):
+    template_name = "confirmar_reserva.html"
+    success_url = reverse_lazy("mis_reservas")
+
+    def get(self, request):
+        wizard = request.session.get(WIZARD_SESSION_KEY)
+        if not wizard:
+            messages.error(request, "Sesión de reserva vencida.")
+            return redirect("ofertas")
+
+        viaje_navio = get_object_or_404(ViajeXNavio.objects.select_related("viaje","navio"), id=wizard["viaje_navio_id"])
+        tipo = get_object_or_404(TipoCamarote, id=wizard["tipo_id"])
+        cliente = get_object_or_404(Cliente, id=wizard.get("tutor_cliente_id"))
+
+        context = {
+            "viaje_navio": viaje_navio,
+            "tipo": tipo,
+            "cliente": cliente,
+            "pasajeros": wizard.get("pasajeros", []),
+            "capacidad_max": wizard.get("capacidad_max"),
+            "carrito": get_reserva_preview(request),
+        }
+        return render(request, self.template_name, context)
+
+    @transaction.atomic
+    def post(self, request):
+        wizard = request.session.get(WIZARD_SESSION_KEY)
+        if not wizard:
+            messages.error(request, "Sesión de reserva vencida.")
+            return redirect("ofertas")
+
+        viaje_navio = get_object_or_404(ViajeXNavio.objects.select_related("viaje","navio"), id=wizard["viaje_navio_id"])
+        tipo = get_object_or_404(TipoCamarote, id=wizard["tipo_id"])
+        cliente = get_object_or_404(Cliente, id=wizard.get("tutor_cliente_id"))
+        pasajeros_data = wizard.get("pasajeros", [])
+
+        # Validación final
+        if not pasajeros_data:
+            messages.error(request, "No hay pasajeros para reservar.")
+            return redirect("reserva_step2")
+
+        # Encontrar camarote libre (tipo y capacidad)
+        ocupados_ids = OcupacionCamarote.objects.filter(viaje_navio=viaje_navio).values_list("camarote_id", flat=True)
+        camarote_libre = Camarote.objects.filter(
+            cubierta__navio=viaje_navio.navio,
+            tipo_camarote=tipo,
+            capacidad__gte=len(pasajeros_data)
+        ).exclude(id__in=ocupados_ids).order_by('numero_de_camarote').first()
+
+        if not camarote_libre:
+            messages.error(request, "Lo sentimos, no hay camarotes disponibles con ese tipo y capacidad.")
+            return redirect("reserva_step1")
+
+        # Crear Reserva
+        estado_reserva, _ = EstadoReserva.objects.get_or_create(nombre="Pendiente", defaults={"descripcion": "Pendiente"})
+        reserva = Reserva.objects.create(
+            descripcion=f"Reserva automática por {request.user.username}",
+            viaje_navio=viaje_navio,
+            estado_reserva=estado_reserva,
+            cliente=cliente,
+            camarote=camarote_libre
+        )
+
+        # Crear pasajeros y ocupaciones
+        estado_pasajero, _ = EstadoPasajero.objects.get_or_create(nombre="Activo", defaults={"descripcion":"Activo"})
+        for p in pasajeros_data:
+            pasajero = Pasajero.objects.create(
+                reserva=reserva,
+                nombre=p.get("nombre"),
+                apellido=p.get("apellido"),
+                dni=p.get("dni") or "",
+                fecha_nacimiento=p.get("fecha_nacimiento") or None,
+                fecha_inicio=viaje_navio.viaje.fecha_de_salida,
+                fecha_fin=viaje_navio.viaje.fecha_fin,
+                estado_pasajero=estado_pasajero
+            )
+            OcupacionCamarote.objects.create(
+                reserva=reserva,
+                camarote=camarote_libre,
+                pasajero=pasajero,
+                viaje_navio=viaje_navio,
+                fecha_inicio=viaje_navio.viaje.fecha_de_salida,
+                fecha_fin=viaje_navio.viaje.fecha_fin
+            )
+
+        # limpiamos wizard
+        clear_wizard_session(request)
+
+        messages.success(request, "Reserva creada correctamente.")
+        return redirect(self.success_url)
