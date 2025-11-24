@@ -1,6 +1,6 @@
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.utils.text import slugify
 from django.utils.timezone import now
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
@@ -613,19 +613,39 @@ def cancelar_reserva_view(request, reserva_id):
     return redirect(reverse_lazy("mis_reservas"))
 
 
-
 class CrearClienteView(LoginRequiredMixin, CreateView):
     form_class = FormularioCliente
     template_name = "crear_cliente.html"
-    success_url = reverse_lazy("reserva_step1")
+
+    def get_success_url(self):
+        viaje_navio_id = (
+            self.request.POST.get("viaje_navio_id")
+            or self.request.GET.get("viaje_navio_id")
+        )
+
+    # si es vacío o "None", entonces retornamos a ofertas
+        if not viaje_navio_id or viaje_navio_id == "None":
+            return reverse("ofertas")
+
+        return reverse("reserva_step1") + f"?viaje_navio_id={viaje_navio_id}"
+
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # tomar el id del viaje si venía en GET/POST
+        ctx["viaje_navio_id"] = (
+            self.request.GET.get("viaje_navio_id")
+            or self.request.POST.get("viaje_navio_id")
+        )
+        return ctx
 
     def form_valid(self, form):
         cliente = form.save(commit=False)
         cliente.usuario = self.request.user
         cliente.save()
-        messages.success(self.request, "Cliente creado correctamente.")
-        return redirect(self.success_url)
 
+        messages.success(self.request, "Cliente creado correctamente.")
+        return redirect(self.get_success_url())
 # Crear reserva
 
 
@@ -692,10 +712,12 @@ class ReservaWizardStep1View(LoginRequiredMixin, View):
     template_name = "step1_tipo_camarote.html"
 
     def get(self, request):
-        viaje_navio_id = request.GET.get("viaje_navio_id")
-        if not viaje_navio_id:
-            messages.error(request, "Falta información del viaje (viaje_navio_id).")
+        viaje_navio_id = self.request.GET.get("viaje_navio_id")
+
+        if not viaje_navio_id or viaje_navio_id == "None":
+            messages.error(self.request, "Debes elegir una oferta antes de continuar.")
             return redirect("ofertas")
+
 
         viaje_navio = get_object_or_404(ViajeXNavio.objects.select_related("viaje", "navio"), id=viaje_navio_id)
 
