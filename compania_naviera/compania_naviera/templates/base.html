@@ -246,6 +246,13 @@
       border-bottom: 2px solid rgba(10, 21, 71, 0.55);
       backdrop-filter: blur(12px);
       box-shadow: 0 8px 18px rgba(15, 30, 99, 0.2);
+      position: relative;
+      z-index: 9000;
+    }
+
+    .nav-user {
+      position: relative;
+      z-index: 11000;
     }
 
     .nav-avatar {
@@ -305,6 +312,7 @@
       flex-direction: column;
       gap: 0.75rem;
       min-width: 14rem;
+      z-index: 12000;
     }
     .user-dropdown__header {
       display: flex;
@@ -408,7 +416,7 @@
 
       {% if user.is_authenticated %}
         <!-- Dropdown usuario -->
-        <div class="relative" x-data="{ open: false }">
+        <div class="relative nav-user" x-data="{ open: false }">
           <button @click="open = !open"
                   class="nav-avatar" aria-label="Abrir menú de usuario">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
