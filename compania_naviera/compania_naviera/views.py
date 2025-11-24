@@ -59,6 +59,18 @@ DESTINO_IMAGES = {
 }
 
 CABIN_IMAGE_FALLBACK = static("a.jpg")
+CABIN_FALLBACK_IMAGES = [
+    static("camarote1.jpg"),
+    static("camarote2.jpg"),
+    static("camarote3.jpg"),
+    static("camarote4.jpg"),
+]
+BATH_FALLBACK_IMAGES = [
+    static("baño_camarote2.jpg"),
+    static("baño_camarote3.jpg"),
+    static("baño_camarote4.jpg"),
+    static("baño_camarote2.jpg"),  # reutilizamos para completar el set
+]
 
 AURORA_GALLERY = [
     {
@@ -699,7 +711,11 @@ class ReservaWizardStep1View(LoginRequiredMixin, View):
 
         viaje_navio = get_object_or_404(ViajeXNavio.objects.select_related("viaje", "navio"), id=viaje_navio_id)
 
-        tipos = TipoCamarote.objects.filter(camarote__cubierta__navio=viaje_navio.navio).distinct()
+        tipos = list(TipoCamarote.objects.filter(camarote__cubierta__navio=viaje_navio.navio).distinct())
+        # Imágenes fallback coherentes por tipo de camarote (cabina + baño)
+        for idx, tipo in enumerate(tipos):
+            tipo.fallback_cabin_img = CABIN_FALLBACK_IMAGES[idx % len(CABIN_FALLBACK_IMAGES)]
+            tipo.fallback_bath_img = BATH_FALLBACK_IMAGES[idx % len(BATH_FALLBACK_IMAGES)]
 
         # inicializamos sesión del wizard (sobrescribimos para iniciar nuevo flujo)
         request.session[WIZARD_SESSION_KEY] = {
