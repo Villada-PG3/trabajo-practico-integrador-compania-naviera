@@ -35,9 +35,11 @@
               <img src="{{ tipo.fallback_cabin_img }}" alt="{{ tipo.nombre }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
             {% endif %}
             <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/15 to-transparent"></div>
-            <div class="absolute top-3 left-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/85 text-primary-dark text-xs font-semibold shadow-md border border-white/60">
-              <i class="fa-solid fa-people-group text-secondary"></i> {{ tipo.capacidad_max|default:"?" }} pax
-            </div>
+            {% if tipo.capacidad_max %}
+              <div class="absolute top-3 left-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/85 text-primary-dark text-xs font-semibold shadow-md border border-white/60">
+                <i class="fa-solid fa-people-group text-secondary"></i> {{ tipo.capacidad_max }} pax
+              </div>
+            {% endif %}
             <div class="absolute bottom-3 right-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-white text-sm font-semibold shadow-lg">
               <i class="fa-solid fa-tag"></i> Desde ${{ tipo.precio_base|default:0 }}
             </div>
