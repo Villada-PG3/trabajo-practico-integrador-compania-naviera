@@ -849,7 +849,10 @@ class ReservaWizardStep2View(LoginRequiredMixin, View):
             # Si falta cliente o datos del cliente, redirigimos a editar_perfil o crear cliente
             if "cliente_no_creado" in missing:
                 messages.warning(request, "Necesitás crear tu ficha (Cliente) antes de reservar.")
-                return redirect("crear_cliente")
+                # preservamos el viaje en el flujo para que al volver siga en la reserva
+                return redirect(
+                    reverse("crear_cliente") + f"?viaje_navio_id={wizard.get('viaje_navio_id')}"
+                )
             else:
                 messages.warning(request, "Completá tus datos personales antes de continuar (DNI, dirección, fecha de nacimiento, nacionalidad, género).")
                 return redirect("editar_perfil")
