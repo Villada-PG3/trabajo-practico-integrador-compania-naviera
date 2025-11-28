@@ -626,6 +626,10 @@ class MisReservasView(LoginRequiredMixin, ListView):
 def cancelar_reserva_view(request, reserva_id):
     reserva = get_object_or_404(Reserva, id=reserva_id, cliente__usuario=request.user)
 
+    if request.method != "POST":
+        messages.error(request, "Acción inválida.")
+        return redirect(reverse_lazy("mis_reservas"))
+
     reserva.delete()
     messages.success(request, f"La reserva #{reserva_id} se ha eliminado correctamente.")
     return redirect(reverse_lazy("mis_reservas"))
@@ -907,9 +911,38 @@ class ReservaWizardStep2View(LoginRequiredMixin, View):
             messages.error(request, "Debes ingresar al menos un pasajero.")
             return redirect("reserva_step2")
 
+        # Evitar duplicar al tutor como pasajero más de una vez
+        tutor_signature = (
+            (cliente.nombre or "").strip().lower(),
+            (cliente.apellido or "").strip().lower(),
+            (cliente.dni or "").strip(),
+        )
+        filtered = []
+        tutor_seen = False
+        tutor_duplicado = False
+        for p in pasajeros:
+            signature = (
+                (p.get("nombre") or "").strip().lower(),
+                (p.get("apellido") or "").strip().lower(),
+                (p.get("dni") or "").strip(),
+            )
+            if signature == tutor_signature:
+                if tutor_seen:
+                    tutor_duplicado = True
+                    continue
+                tutor_seen = True
+            filtered.append(p)
+
+        if tutor_duplicado:
+            wizard["pasajeros"] = filtered
+            request.session[WIZARD_SESSION_KEY] = wizard
+            request.session.modified = True
+            messages.error(request, "El tutor solo puede cargarse una vez como pasajero en este camarote.")
+            return redirect("reserva_step2")
+
         # Guardamos tutor y pasajeros en la sesión (temporal)
         wizard["tutor_cliente_id"] = cliente.id
-        wizard["pasajeros"] = pasajeros
+        wizard["pasajeros"] = filtered
         request.session[WIZARD_SESSION_KEY] = wizard
         request.session.modified = True
 

@@ -134,9 +134,12 @@
 
               <!-- BOTÓN CANCELAR -->
               <div class="mt-4">
-                <a href="{% url 'cancelar_reserva' reserva.id %}" class="inline-flex items-center gap-2 rounded-full bg-secondary-dark px-4 py-2 text-sm font-semibold text-white hover:bg-secondary transition">
+                <button type="button"
+                        class="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-md border border-red-700 hover:bg-red-700 hover:shadow-lg transition js-open-cancel"
+                        data-action="{% url 'cancelar_reserva' reserva.id %}"
+                        data-label="Reserva #{{ reserva.id }} · {{ reserva.viaje_navio.viaje.nombre }}">
                   <i class="fa-solid fa-trash"></i> Cancelar reserva
-                </a>
+                </button>
               </div>
             </article>
           {% endfor %}
@@ -190,4 +193,69 @@
 
   </div>
 </section>
+
+<!-- Modal cancelar reserva -->
+<div id="cancel-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 px-4">
+  <div class="w-full max-w-md rounded-2xl bg-white shadow-2xl border border-primary/20 overflow-hidden">
+    <div class="px-5 py-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-primary/15">
+      <h3 class="text-lg font-bold text-primary-dark flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-red-100 text-red-600 border border-red-200">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </span>
+        Confirmar cancelación
+      </h3>
+    </div>
+    <div class="p-5 space-y-3 text-text/80">
+      <p id="cancel-modal-text" class="text-sm leading-relaxed"></p>
+      <p class="text-xs text-text/60">Esta acción elimina la reserva y sus pasajeros asociados.</p>
+    </div>
+    <div class="px-5 pb-5 flex items-center justify-end gap-3">
+      <button type="button" id="cancel-modal-close"
+              class="px-4 py-2 rounded-xl border border-primary/20 text-primary-dark bg-white hover:bg-primary/5 font-semibold transition">
+        Volver
+      </button>
+      <form id="cancel-modal-form" method="post" class="inline-flex">
+        {% csrf_token %}
+        <button type="submit"
+                class="px-4 py-2 rounded-xl bg-red-600 text-white font-semibold shadow-md hover:bg-red-700 transition">
+          Sí, cancelar
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const modal = document.getElementById('cancel-modal');
+    const modalForm = document.getElementById('cancel-modal-form');
+    const modalText = document.getElementById('cancel-modal-text');
+    const closeBtn = document.getElementById('cancel-modal-close');
+
+    function openModal(action, label) {
+      modalForm.setAttribute('action', action);
+      modalText.textContent = `¿Seguro que querés cancelar ${label}?`;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    document.querySelectorAll('.js-open-cancel').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        const label = btn.dataset.label || 'esta reserva';
+        openModal(action, label);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  })();
+</script>
 {% endblock %}

@@ -152,6 +152,7 @@
   function renderPasajeroForm(index, data = {}) {
     const wrapper = document.createElement('div');
     wrapper.className = 'p-4 rounded-2xl border border-primary/12 bg-white shadow-[0_12px_28px_rgba(15,30,99,0.08)]';
+    wrapper.dataset.isTutor = isTutorData(data) ? '1' : '';
     wrapper.innerHTML = `
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
@@ -184,9 +185,14 @@
 
     // eliminar
     wrapper.querySelector('.btn-remove').addEventListener('click', function(){
+      const wasTutor = wrapper.dataset.isTutor === '1';
       wrapper.remove();
       pasajerosCount--;
       totalInput.value = pasajerosCount;
+      if (wasTutor) {
+        tutorAdded = false;
+        copyBtn.removeAttribute('disabled');
+      }
       updateCarritoList();
     });
   }
@@ -215,23 +221,33 @@
   });
 
   // copiar tutor como pasajero 1
-  document.getElementById('btn-copy-tutor').addEventListener('click', function(){
+  const copyBtn = document.getElementById('btn-copy-tutor');
+  const tutorData = {
+    nombre: `{{ cliente.nombre|escapejs }}`,
+    apellido: `{{ cliente.apellido|escapejs }}`,
+    dni: `{{ cliente.dni|default:''|escapejs }}`,
+    fecha_nacimiento: `{{ cliente.fecha_nacimiento|default:'' }}`
+  };
+  let tutorAdded = false;
+
+  function isTutorData(data) {
+    return (data.nombre || '').trim().toLowerCase() === tutorData.nombre.trim().toLowerCase()
+        && (data.apellido || '').trim().toLowerCase() === tutorData.apellido.trim().toLowerCase()
+        && (data.dni || '').trim() === tutorData.dni.trim();
+  }
+
+  copyBtn.addEventListener('click', function(){
+    if (tutorAdded) {
+      alert('El tutor solo puede agregarse una vez como pasajero.');
+      return;
+    }
     if (pasajerosCount >= capacidadMax) {
       alert('Capacidad completa: ya usaste todos los lugares de este camarote.');
       return;
     }
-    // extraemos datos del panel tutor (renderizados desde servidor)
-    const tutorText = `{{ cliente.nombre|escapejs }}`;
-    const tutorApellido = `{{ cliente.apellido|escapejs }}`;
-    const tutorDNI = `{{ cliente.dni|default:''|escapejs }}`;
-    const tutorFN = `{{ cliente.fecha_nacimiento|default:'' }}`;
-
-    renderPasajeroForm(pasajerosCount, {
-      nombre: tutorText,
-      apellido: tutorApellido,
-      dni: tutorDNI,
-      fecha_nacimiento: tutorFN
-    });
+    renderPasajeroForm(pasajerosCount, tutorData);
+    tutorAdded = true;
+    copyBtn.setAttribute('disabled', 'disabled');
   });
 
   // inicio: si en sesión ya hay pasajeros pre-guardados, los renderizamos
@@ -239,7 +255,13 @@
     const existing = JSON.parse(document.getElementById("pasajeros-data").textContent);
 
     if(Array.isArray(existing) && existing.length){
-      existing.forEach((p, idx) => renderPasajeroForm(idx, p));
+      existing.forEach((p, idx) => {
+        renderPasajeroForm(idx, p);
+        if (isTutorData(p)) {
+          tutorAdded = true;
+          copyBtn.setAttribute('disabled', 'disabled');
+        }
+      });
     } else {
       // por defecto, agregamos 1 form para facilitar
       renderPasajeroForm(0);
