@@ -502,12 +502,18 @@ class DetalleOfertaView(DetailView):
         categoria = getattr(itinerario_obj, "categoria", None)
         categoria_nombre = categoria.nombre if categoria else ""
 
+        oferta.itinerario_rel = itinerario_rel
         contexto["noches"] = noches
         contexto["categoria_nombre"] = categoria_nombre or "Otros"
         contexto["itinerario"] = itinerario_rel
         cabin_image, cabin_label = get_navio_cabin_details(oferta.navio.nombre)
+        oferta.cabin_image = cabin_image
+        oferta.cabin_label = cabin_label
         contexto["cabin_image"] = cabin_image
         contexto["cabin_label"] = cabin_label
+        oferta.gallery = build_oferta_gallery(oferta)
+        contexto["gallery"] = oferta.gallery
+        contexto["oferta"] = oferta
         return contexto
 
 # ===========================

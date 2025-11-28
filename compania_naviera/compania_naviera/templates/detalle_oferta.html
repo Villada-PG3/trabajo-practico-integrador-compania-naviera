@@ -9,13 +9,68 @@
   <!-- ENCABEZADO -->
   <div class="flex flex-col md:flex-row gap-8 mb-10">
     <div class="md:w-1/2">
-      <div class="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg">
-        {% if oferta.navio.imagen %}
+      {% with gallery=oferta.gallery|default:gallery %}
+      {% if gallery|length %}
+        <div class="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg bg-bg/60" data-slider aria-label="Postales de {{ oferta.viaje.nombre }}">
+          <div class="flex h-full w-full transition-transform duration-500" data-slider-track style="transform: translateX(0%);">
+            {% for image in gallery %}
+              <figure class="relative h-full w-full flex-shrink-0">
+                <img src="{{ image.url }}" alt="{{ oferta.viaje.nombre }} - {{ image.label }}"
+                     class="h-full w-full object-cover" loading="lazy">
+                <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent px-5 py-4 text-xs font-semibold uppercase tracking-wide text-white space-y-1">
+                  <span class="block leading-snug">{{ image.label }}</span>
+                  <span class="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/15 px-3 py-1 text-[10px] tracking-[0.35em]">
+                    {% if image.type == "destino" %}
+                      Destino
+                    {% elif image.type == "cabin" %}
+                      Camarote
+                    {% elif image.type == "interior" %}
+                      Interior
+                    {% elif image.type == "exterior" %}
+                      Exterior
+                    {% else %}
+                      {{ image.type|default:"Ambiente"|title }}
+                    {% endif %}
+                  </span>
+                </figcaption>
+              </figure>
+            {% endfor %}
+          </div>
+
+          {% if gallery|length > 1 %}
+            <button type="button"
+                    class="absolute left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-lg transition hover:bg-white"
+                    data-slider-prev aria-label="Imagen anterior de {{ oferta.viaje.nombre }}">
+              <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button type="button"
+                    class="absolute right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-lg transition hover:bg-white"
+                    data-slider-next aria-label="Imagen siguiente de {{ oferta.viaje.nombre }}">
+              <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+
+            <div class="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+              {% for image in gallery %}
+                <span class="h-2.5 w-2.5 rounded-full bg-white/55 transition duration-300 {% if forloop.first %}opacity-100{% else %}opacity-40{% endif %}"
+                      data-slider-indicator></span>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <span class="absolute top-3 right-3 inline-flex items-center rounded-full bg-gradient-to-br from-primary to-secondary px-3 py-1 text-white text-sm font-semibold shadow-lg">
+            USD {{ oferta.precio }}
+          </span>
+        </div>
+      {% elif oferta.navio.imagen %}
+        <div class="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg">
           <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="h-full w-full object-cover">
-        {% else %}
+        </div>
+      {% else %}
+        <div class="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg">
           <img src="{% static 'placeholder.jpg' %}" alt="Imagen del viaje" class="h-full w-full object-cover">
-        {% endif %}
-      </div>
+        </div>
+      {% endif %}
+      {% endwith %}
     </div>
 
     <div class="md:w-1/2 flex flex-col justify-center">
