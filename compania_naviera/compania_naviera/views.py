@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash  
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LogoutView
 from django.db import transaction
 from django.db.models import Prefetch, Q, Max
 from django.views.generic import CreateView, TemplateView, ListView, DetailView, FormView, UpdateView, View
@@ -317,10 +318,13 @@ def build_navio_description(navio, feature_labels):
 # Públicos / generales
 # ===========================
 
-def main_view(request):
-    logout(request)  # deja la sesión limpia al entrar al home
-    
-    return render(request, "inicio.html")
+class MainView(TemplateView):
+    template_name = "inicio.html"
+
+    def get(self, request, *args, **kwargs):
+        # Limpiamos cualquier sesión previa al ingresar al home.
+        logout(request)
+        return super().get(request, *args, **kwargs)
 
 class ContactoView(TemplateView):
     template_name = "contacto.html"
@@ -532,15 +536,21 @@ class RegistroUsuario(CreateView):
         return redirect(self.get_success_url())
 
 
-def login_view(request):
-    if request.method == "POST":
+class LoginView(View):
+    template_name = "inicio_sesion.html"
+    success_url = reverse_lazy("menu_user")
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs):
         username_or_email = request.POST.get("username") or request.POST.get("email")
         password = request.POST.get("password")
 
         user = authenticate(request, username=username_or_email, password=password)
 
-        if user is None:
-            # login por email si el username no coincide
+        if user is None and username_or_email:
+            # Permitir autenticación por correo si no coincide el username.
             try:
                 usuario = UsuarioPersonalizado.objects.get(email=username_or_email)
                 user = authenticate(request, username=usuario.username, password=password)
@@ -549,16 +559,18 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect("menu_user")
+            return redirect(self.success_url)
+
         messages.error(request, "Usuario o contraseña incorrectos.")
+        return render(request, self.template_name)
 
-    return render(request, "inicio_sesion.html")
 
+class LogoutViewWithMessage(LogoutView):
+    next_page = "home"
 
-def logout_view(request):
-    logout(request)
-    messages.success(request, "Has cerrado sesión correctamente.")
-    return redirect("home")
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "Has cerrado sesión correctamente.")
+        return super().dispatch(request, *args, **kwargs)
 
 
 class EditarPerfilView(LoginRequiredMixin, UpdateView):
@@ -622,17 +634,16 @@ class MisReservasView(LoginRequiredMixin, ListView):
             .order_by("-created_at")
         )
 
-@login_required
-def cancelar_reserva_view(request, reserva_id):
-    reserva = get_object_or_404(Reserva, id=reserva_id, cliente__usuario=request.user)
-
-    if request.method != "POST":
+class CancelarReservaView(LoginRequiredMixin, View):
+    def get(self, request, reserva_id):
         messages.error(request, "Acción inválida.")
         return redirect(reverse_lazy("mis_reservas"))
 
-    reserva.delete()
-    messages.success(request, f"La reserva #{reserva_id} se ha eliminado correctamente.")
-    return redirect(reverse_lazy("mis_reservas"))
+    def post(self, request, reserva_id):
+        reserva = get_object_or_404(Reserva, id=reserva_id, cliente__usuario=request.user)
+        reserva.delete()
+        messages.success(request, f"La reserva #{reserva_id} se ha eliminado correctamente.")
+        return redirect(reverse_lazy("mis_reservas"))
 
 
 class CrearClienteView(LoginRequiredMixin, CreateView):
