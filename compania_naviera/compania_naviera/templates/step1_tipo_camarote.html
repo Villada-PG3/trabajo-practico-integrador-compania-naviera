@@ -40,9 +40,6 @@
                 <i class="fa-solid fa-people-group text-secondary"></i> {{ tipo.capacidad_max }} pax
               </div>
             {% endif %}
-            <div class="absolute bottom-3 right-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary text-white text-sm font-semibold shadow-lg">
-              <i class="fa-solid fa-tag"></i> Desde ${{ tipo.precio_base|default:0 }}
-            </div>
             <div class="absolute bottom-3 left-3 inline-flex items-center gap-2 px-2 py-1.5 rounded-2xl bg-white/90 shadow-md border border-white/70">
               <span class="relative block h-12 w-16 overflow-hidden rounded-xl">
                 <img src="{{ tipo.fallback_bath_img }}" alt="Baño {{ tipo.nombre }}" class="h-full w-full object-cover">
