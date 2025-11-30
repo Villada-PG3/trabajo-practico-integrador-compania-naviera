@@ -1,78 +1,109 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="flex items-center justify-center min-h-[80vh] px-4 py-12">
-  <div class="card-surface backdrop-blur-xl rounded-3xl shadow-neon p-8 w-full max-w-2xl space-y-6">
+  <div class="card-surface rounded-3xl shadow-lg p-8 w-full max-w-2xl space-y-6">
     <div class="text-center space-y-2">
-      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-[0_12px_30px_rgba(5,24,36,0.15)]">
+      <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-[0_12px_30px_rgba(148,163,235,0.25)]">
         <i class="fa-solid fa-clipboard-list"></i>
       </span>
       <h2 class="text-2xl font-bold">Crear reserva</h2>
       <p class="text-sm text-text/75">Completá los pasos para asignar pasajeros a tu próximo crucero.</p>
     </div>
 
-    <form method="post" id="reservaForm" class="space-y-4">
+    <form method="post" id="reservaForm" class="space-y-6">
       {% csrf_token %}
 
-      <!-- Seleccionar cliente -->
-      <div>
-        <label class="block text-sm font-medium mb-1">Selecciona un cliente</label>
+      <!-- Paso 1: Cliente y viaje -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">1</span>
+          <div>
+            <h3 class="step-title">Elegí al titular de la reserva</h3>
+            <p class="step-description">Podés seleccionar un cliente existente o crear uno nuevo antes de continuar.</p>
+          </div>
+        </div>
         <select name="cliente" id="cliente" class="form-control">
-          <option value="">-- Selecciona al tutor de la reserva --</option>
+          <option value="">Seleccioná al tutor de la reserva</option>
           {% for c in clientes %}
             <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellido }}</option>
           {% endfor %}
         </select>
-        <a href="{% url 'crear_cliente' %}" class="text-sm link-secondary inline-flex items-center gap-2">
-          <i class="fa-solid fa-user-plus"></i> Crear nuevo cliente
-        </a>
-      </div>
-
-      <!-- Viaje fijo -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium mb-1 text-text/80">Viaje seleccionado:</label>
-        <p class="text-text font-medium mb-1">
-          {{ viaje_seleccionado.viaje.nombre }} — {{ viaje_seleccionado.navio.nombre }}
-        </p>
+        <div class="flex flex-wrap items-center gap-3 justify-between">
+          <div class="text-sm text-text/70">
+            <span class="font-medium">Viaje elegido:</span>
+            {{ viaje_seleccionado.viaje.nombre }} — {{ viaje_seleccionado.navio.nombre }}
+          </div>
+          <a href="{% url 'crear_cliente' %}" class="text-sm link-secondary inline-flex items-center gap-2">
+            <i class="fa-solid fa-user-plus"></i> Crear nuevo cliente
+          </a>
+        </div>
         <input type="hidden" name="viaje_navio" value="{{ viaje_seleccionado.id }}">
       </div>
 
       <!-- Paso 2: Tipo de camarote -->
-      <div id="tipoDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Selecciona tipo de camarote</label>
+      <div id="tipoDiv" class="step-card" style="display:none;">
+        <div class="step-header">
+          <span class="step-number">2</span>
+          <div>
+            <h3 class="step-title">Definí el tipo de camarote</h3>
+            <p class="step-description">Elegí la categoría que mejor se adapte a la experiencia del pasajero.</p>
+          </div>
+        </div>
         <select name="tipo_camarote" id="tipo_camarote" class="form-control">
-          <option value="">-- Selecciona tipo --</option>
+          <option value="">Seleccioná un tipo</option>
         </select>
       </div>
 
       <!-- Paso 3: Capacidad -->
-      <div id="capacidadDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Selecciona capacidad</label>
+      <div id="capacidadDiv" class="step-card" style="display:none;">
+        <div class="step-header">
+          <span class="step-number">3</span>
+          <div>
+            <h3 class="step-title">Indicá la capacidad necesaria</h3>
+            <p class="step-description">La capacidad determina cuántos pasajeros pueden asignarse al camarote.</p>
+          </div>
+        </div>
         <select name="capacidad" id="capacidad" class="form-control">
-          <option value="">-- Selecciona capacidad --</option>
+          <option value="">Seleccioná una capacidad</option>
         </select>
       </div>
 
       <!-- Paso 4: Camarote -->
-      <div id="camaroteDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Selecciona un camarote</label>
+      <div id="camaroteDiv" class="step-card" style="display:none;">
+        <div class="step-header">
+          <span class="step-number">4</span>
+          <div>
+            <h3 class="step-title">Seleccioná el camarote disponible</h3>
+            <p class="step-description">Mostramos sólo los camarotes que cumplen con el tipo y la capacidad elegidos.</p>
+          </div>
+        </div>
         <select name="camarote" id="camarote" class="form-control">
-          <option value="">-- Selecciona un camarote --</option>
+          <option value="">Seleccioná un camarote</option>
         </select>
       </div>
 
       <!-- Paso 5: Pasajeros -->
-      <div id="pasajerosDiv" style="display:none;">
-        <label class="block text-sm font-medium mb-1">Agregar pasajeros</label>
-        <div id="pasajerosContainer" class="space-y-2 mt-2"></div>
+      <div id="pasajerosDiv" class="step-card" style="display:none;">
+        <div class="step-header">
+          <span class="step-number">5</span>
+          <div>
+            <h3 class="step-title">Cargá los datos de cada pasajero</h3>
+            <p class="step-description">Agregá a los viajeros uno por uno hasta completar la capacidad del camarote.</p>
+          </div>
+        </div>
+        <div id="pasajerosContainer" class="space-y-3"></div>
         <button type="button" id="agregarPasajeroBtn" class="btn-secondary inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium">
           <i class="fa-solid fa-user-plus"></i> Agregar pasajero
         </button>
+        <p class="text-xs text-text/60">Podés editar los campos de cada pasajero o eliminarlos antes de confirmar.</p>
       </div>
 
       <!-- Botón final -->
-      <button type="submit" id="submitBtn" class="w-full btn-primary font-semibold py-3 rounded-xl shadow-lg transition mt-4 hidden">
-        Confirmar Reserva
-      </button>
+      <div class="flex justify-end">
+        <button type="submit" id="submitBtn" class="btn-primary font-semibold px-6 py-3 rounded-xl transition hidden">
+          Confirmar reserva
+        </button>
+      </div>
     </form>
   </div>
 </div>
@@ -141,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const applyFieldStyles = (element) => {
   element.classList.add(
-    'w-full','rounded-lg','border','border-secondary/25','bg-bg/40','px-4','py-3','text-text',
+    'w-full','rounded-lg','border','border-primary/40','step-input','px-4','py-3','text-text',
     'placeholder-gray-500','focus:outline-none','focus:ring-2','focus:ring-primary/60'
   );
 };
@@ -155,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
     const div = document.createElement("div");
-    div.classList.add("p-4", "rounded-xl", "border", "border-secondary/25", "bg-bg/40", "space-y-2");
+    div.classList.add("p-4", "rounded-xl", "border", "border-primary/40", "pasajero-card", "space-y-2");
     div.innerHTML = `
       <h4 class="font-semibold text-text">Pasajero ${contadorPasajeros + 1}</h4>
       <input type="text" name="pasajero_nombre_${contadorPasajeros}" placeholder="Nombre" class="pasajero-input" autocomplete="off">
@@ -171,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Cargar tipos de camarote al cargar la página
   async function cargarTipos() {
-    const res = await fetch(`/ajax/tipos-camarote/?viaje_navio_id=${viajeId}`);
+    const res = await fetch(`/reservas/opciones/tipos-camarote/?viaje_navio_id=${viajeId}`);
     const data = await res.json();
     tipoSelect.innerHTML = `<option value="">-- Selecciona tipo --</option>`;
     data.forEach(t => tipoSelect.innerHTML += `<option value="${t.id}">${t.nombre}</option>`);
@@ -188,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function() {
       submitBtn.classList.add("hidden");
       return;
     }
-    const res = await fetch(`/ajax/capacidades/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}`);
+    const res = await fetch(`/reservas/opciones/capacidades/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}`);
     const data = await res.json();
     capacidadSelect.innerHTML = `<option value="">-- Selecciona capacidad --</option>`;
     data.forEach(c => capacidadSelect.innerHTML += `<option value="${c.capacidad}">${c.capacidad}</option>`);
@@ -210,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function() {
       submitBtn.classList.add("hidden");
       return;
     }
-    const res = await fetch(`/ajax/camarotes/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}&capacidad=${capacidad}`);
+    const res = await fetch(`/reservas/opciones/camarotes-disponibles/?viaje_navio_id=${viajeId}&tipo_id=${tipoId}&capacidad=${capacidad}`);
     const data = await res.json();
     camaroteSelect.innerHTML = `<option value="">-- Selecciona un camarote --</option>`;
     data.forEach(c => camaroteSelect.innerHTML += `<option value="${c.id}">N° ${c.numero_de_camarote} (${c.capacidad} pers.) - ${c.tipo}</option>`);
@@ -242,6 +273,61 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 <style>
+  .step-card {
+    background: rgba(255, 255, 255, 0.97);
+    border: 2px solid rgba(31, 58, 147, 0.28);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 6px 16px rgba(15, 30, 99, 0.1);
+    display: grid;
+    gap: 1rem;
+  }
+
+  .step-input {
+    background: linear-gradient(180deg, rgba(122, 62, 242, 0.14), rgba(255, 255, 255, 0.98));
+  }
+
+  .step-input:focus {
+    background: rgba(255, 255, 255, 1);
+  }
+
+  .pasajero-card {
+    background: linear-gradient(180deg, rgba(122, 62, 242, 0.16), rgba(255, 255, 255, 0.96));
+    box-shadow: 0 6px 18px rgba(15, 30, 99, 0.12);
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(31, 58, 147, 0.25);
+  }
+
+  .step-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .step-description {
+    margin: 0;
+    color: rgba(11, 19, 48, 0.65);
+    font-size: 0.85rem;
+  }
+
   .capacity-toast {
     position: fixed;
     bottom: 2rem;
@@ -266,11 +352,11 @@ document.addEventListener("DOMContentLoaded", function() {
     gap: 0.75rem;
     padding: 1rem 1.25rem;
     border-radius: 1.25rem;
-    background: rgba(10, 23, 46, 0.95);
-    border: 1px solid rgba(72, 160, 214, 0.35);
-    box-shadow: 0 24px 48px rgba(7, 18, 38, 0.4);
-    color: #e5f6ff;
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(31, 58, 147, 0.42);
+    box-shadow: 0 24px 48px rgba(15, 30, 99, 0.18);
+    color: var(--text);
+    backdrop-filter: blur(12px);
   }
 
   .capacity-toast .toast-icon {
@@ -280,8 +366,8 @@ document.addEventListener("DOMContentLoaded", function() {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(76, 201, 240, 0.18);
-    color: #4cc9f0;
+    background: rgba(122, 62, 242, 0.22);
+    color: var(--secondary-dark);
     font-size: 1.05rem;
     flex-shrink: 0;
   }
@@ -290,20 +376,20 @@ document.addEventListener("DOMContentLoaded", function() {
     margin: 0;
     font-size: 0.95rem;
     font-weight: 600;
-    color: #e2f1ff;
+    color: var(--primary);
   }
 
   .capacity-toast .toast-message {
     margin: 0.15rem 0 0;
     font-size: 0.85rem;
-    color: rgba(226, 241, 255, 0.85);
+    color: rgba(11, 19, 48, 0.7);
   }
 
   .capacity-toast .toast-close {
     margin-left: 0.75rem;
     border: none;
     background: transparent;
-    color: rgba(226, 241, 255, 0.65);
+    color: rgba(11, 19, 48, 0.55);
     cursor: pointer;
     padding: 0.35rem;
     border-radius: 9999px;
@@ -311,8 +397,8 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   .capacity-toast .toast-close:hover {
-    background: rgba(76, 201, 240, 0.2);
-    color: #ffffff;
+    background: rgba(122, 62, 242, 0.18);
+    color: var(--primary-dark);
   }
 
   @keyframes toast-in {
@@ -350,12 +436,12 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   .pasajero-input {
-    background-color: rgba(15, 23, 42, 0.4) !important; /* Fondo oscuro translúcido (ajusta si tu tema usa otro) */
-    color: var(--text-color, #e5e7eb) !important; /* Texto claro (usa el mismo que text-text) */
+    background-color: rgba(229, 233, 255, 0.9) !important;
+    color: var(--text) !important;
   }
 
   .pasajero-input::placeholder {
-    color: rgba(229, 231, 235, 0.6) !important; /* Gris claro visible */
+    color: rgba(11, 19, 48, 0.5) !important;
     opacity: 1;
   }
 </style>

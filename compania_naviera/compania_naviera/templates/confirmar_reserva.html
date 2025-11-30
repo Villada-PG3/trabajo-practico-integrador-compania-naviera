@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .confirm-card {
+    border: 1px solid rgba(31, 58, 147, 0.12);
+    border-radius: 1.2rem;
+    background: #fff;
+    box-shadow: 0 18px 36px rgba(15, 30, 99, 0.12);
+    padding: 1.35rem 1.5rem;
+  }
+  .confirm-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1rem;
+  }
+  .confirm-grid--stack {
+    grid-template-columns: 1fr;
+  }
+  @media (max-width: 900px) {
+    .confirm-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="relative max-w-6xl mx-auto p-6 md:p-8 space-y-6">
+  <div class="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-br from-white/92 via-white/70 to-primary/8 shadow-[0_20px_50px_rgba(15,30,99,0.14)]"></div>
+  <div class="absolute -left-10 top-0 h-48 w-48 rounded-full bg-secondary/14 blur-3xl"></div>
+  <div class="absolute right-6 bottom-0 h-52 w-52 rounded-full bg-primary/12 blur-3xl"></div>
+
+  <header class="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <p class="uppercase tracking-[0.18em] text-xs font-semibold text-secondary">Paso 3 · Confirmación</p>
+      <h1 class="text-3xl md:text-4xl font-extrabold text-primary-dark leading-tight">Confirmar reserva</h1>
+      <p class="text-base text-text/70">Revisá los datos antes de finalizar. Podés volver si querés editar pasajeros o el camarote.</p>
+    </div>
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-md border border-primary/12 text-primary-dark font-semibold text-sm">
+      <i class="fa-solid fa-shield-heart text-secondary"></i> Detalles verificados
+    </div>
+  </header>
+
+  <div class="relative grid gap-4">
+    <div class="confirm-card">
+      <div class="confirm-grid">
+        <div>
+          <p class="text-xs uppercase tracking-[0.18em] text-primary/80 font-semibold">Viaje</p>
+          <h3 class="text-lg font-bold text-primary-dark mt-1">{{ viaje_navio.viaje.nombre }}</h3>
+          <p class="text-sm text-text/75">{{ viaje_navio.navio.nombre }}</p>
+          <p class="text-sm text-text/70 mt-2 flex items-center gap-2">
+            <i class="fa-solid fa-calendar-day text-secondary"></i>
+            Salida: {{ viaje_navio.viaje.fecha_de_salida|date:"d/m/Y" }} • Llegada: {{ viaje_navio.viaje.fecha_fin|date:"d/m/Y" }}
+          </p>
+        </div>
+        <div class="confirm-grid confirm-grid--stack gap-2">
+          <div class="flex items-center gap-2 text-sm text-text/75">
+            <i class="fa-solid fa-tag text-secondary"></i>
+            <span>Precio por viaje: <strong class="text-primary-dark">${{ viaje_navio.precio }}</strong></span>
+          </div>
+          <div class="flex items-center gap-2 text-sm text-text/75">
+            <i class="fa-solid fa-bed text-secondary"></i>
+            <span>Camarote: <strong class="text-primary-dark">{{ tipo.nombre }}</strong> · Capacidad máx: {{ capacidad_max }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="confirm-card">
+      <div class="confirm-grid">
+        <div>
+          <p class="text-xs uppercase tracking-[0.18em] text-primary/80 font-semibold">Tutor</p>
+          <h3 class="text-lg font-bold text-primary-dark mt-1">{{ cliente.nombre }} {{ cliente.apellido }}</h3>
+          <p class="text-sm text-text/75">DNI: {{ cliente.dni }}</p>
+        </div>
+        <div>
+          <p class="text-xs uppercase tracking-[0.18em] text-primary/80 font-semibold">Pasajeros</p>
+          <ul class="mt-2 space-y-1 text-sm text-text/80">
+            {% for p in pasajeros %}
+              <li class="flex items-center gap-2">
+                <i class="fa-solid fa-user text-secondary"></i>
+                <span>{{ p.nombre }} {{ p.apellido }}{% if p.dni %} — DNI: {{ p.dni }}{% endif %}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form method="post" class="relative flex flex-wrap items-center gap-3 pt-2">
+    {% csrf_token %}
+    <a href="{% url 'reserva_step2' %}" class="px-4 py-2 rounded-xl btn-secondary transition font-semibold hover:scale-[1.02]">
+      Volver
+    </a>
+    <button type="submit" class="px-5 py-2 rounded-xl btn-primary font-semibold shadow-md transition hover:scale-[1.01]">
+      Confirmar reserva
+    </button>
+  </form>
+</div>
+{% endblock %}

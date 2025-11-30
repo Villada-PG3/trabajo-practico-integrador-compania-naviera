@@ -170,9 +170,13 @@ class ItinerarioAdmin(ModelAdmin):
 # --- ORDEN ---
 @admin.register(Orden)
 class OrdenAdmin(ModelAdmin):
-    list_display = ('nombre', 'orden', 'itinerario')
+    list_display = ('nombre', 'orden', 'itinerario', 'imagen_miniatura')
     search_fields = ('nombre', 'itinerario__id')
     list_filter = ('itinerario',)
+
+    def imagen_miniatura(self, obj):
+        return _thumb(obj.imagen)
+    imagen_miniatura.short_description = "Imagen"
 
 # --- PUERTO ---
 @admin.register(Puerto)

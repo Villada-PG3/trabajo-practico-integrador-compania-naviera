@@ -4,36 +4,184 @@
 
 <main class="max-w-6xl mx-auto px-4 md:px-6 py-10 space-y-10">
 
-  <header>
-    <h1 class="text-3xl font-extrabold">Cruceros</h1>
-    <p class="text-text/75">Nuestros navíos disponibles.</p>
+  <header class="space-y-3 text-center md:text-left">
+    <p class="text-xs uppercase tracking-[0.4em] text-secondary">Colección exclusiva</p>
+    <h1 class="text-3xl font-extrabold text-text">Cruceros que enamoran</h1>
+    <p class="text-text/75 max-w-3xl mx-auto md:mx-0">
+      Descubrí navíos boutique con gastronomía de autor, terrazas panorámicas y suites luminosas.
+      Cada card te muestra los ambientes reales para que elijas tu próxima travesía con los ojos.
+    </p>
   </header>
-
-  <section>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<section>
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
     {% for navio in navios %}
-      <a href="{% url 'navio_detail' navio.pk %}" class="group block relative overflow-hidden rounded-2xl border border-secondary/20 card-surface shadow-neon transition duration-300 hover:-translate-y-1 hover:border-secondary/40">
-        <div class="aspect-[16/9] overflow-hidden rounded-t-2xl">
-          {% if navio.imagen %}
-            <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-          {% else %}
-            <div class="flex items-center justify-center text-5xl bg-bg/40">🛳️</div>
-          {% endif %}
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-surface/90 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100"></div>
-        <div class="relative p-5 space-y-2">
-          <h3 class="font-semibold text-lg text-text">{{ navio.nombre }}</h3>
-          <p class="text-text/80">Tipo: {{ navio.tipo_navio.nombre }}</p>
-          <p class="text-text/80">Capacidad: {{ navio.cantidad_maxima_de_pasajeros }} pasajeros</p>
-          <span class="inline-flex items-center gap-2 text-sm font-semibold link-secondary">
-            Ver detalles <i class="fa fa-arrow-right text-xs"></i>
-          </span>
-        </div>
+
+      <a href="{% url 'navio_detail' navio.pk %}" 
+         class="group block cursor-pointer">
+
+        <article 
+          class="relative overflow-hidden rounded-3xl border border-primary/35 bg-white/95 shadow-[0_25px_60px_rgba(15,30,99,0.10)] transition-all duration-300 
+                 group-hover:-translate-y-2 group-hover:shadow-[0_35px_70px_rgba(15,30,99,0.18)] group-hover:border-secondary/50">
+
+          <!-- Overlay invisible para mejorar la usabilidad -->
+          <span class="absolute inset-0 z-10"></span>
+
+          <!-- GALERÍA / SLIDER -->
+          <div class="relative aspect-[16/9] w-full overflow-hidden" data-slider>
+            <div class="flex h-full w-full transition-transform duration-500" 
+                 data-slider-track style="transform: translateX(0%);">
+              {% for image in navio.gallery %}
+                <figure class="relative h-full w-full flex-shrink-0">
+                  <img src="{{ image.url }}" alt="{{ image.label }}" loading="lazy"
+                       class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.035]">
+                  <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-4 py-4 text-[11px] font-semibold uppercase tracking-wide text-white space-y-1">
+                    <span class="block leading-snug">{{ image.label }}</span>
+                    <span class="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/15 px-3 py-1 text-[10px] tracking-[0.35em]">
+                      {% if image.type == "cabin" %}
+                        Camarote real
+                      {% elif image.type == "exterior" %}
+                        Exterior
+                      {% else %}
+                        {{ image.type|default:"ambiente"|title }}
+                      {% endif %}
+                    </span>
+                  </figcaption>
+                </figure>
+              {% endfor %}
+            </div>
+
+            {% if navio.gallery|length > 1 %}
+              <!-- FLECHA IZQ -->
+              <button type="button"
+                class="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-md transition hover:bg-white"
+                data-slider-prev
+                onclick="event.stopPropagation();"
+                aria-label="Imagen anterior de {{ navio.nombre }}">
+                <i class="fa-solid fa-chevron-left text-sm"></i>
+              </button>
+
+              <!-- FLECHA DER -->
+              <button type="button"
+                class="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-md transition hover:bg-white"
+                data-slider-next
+                onclick="event.stopPropagation();"
+                aria-label="Imagen siguiente de {{ navio.nombre }}">
+                <i class="fa-solid fa-chevron-right text-sm"></i>
+              </button>
+
+              <!-- INDICADORES -->
+              <div class="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+                {% for image in navio.gallery %}
+                  <span class="h-2 w-2 rounded-full bg-white/50 transition duration-300 
+                               {% if forloop.first %}opacity-100{% else %}opacity-40{% endif %}"
+                        data-slider-indicator></span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- INFO CARD -->
+          <div class="relative z-20 space-y-4 p-6">
+            <div>
+              <p class="cruise-card__eyebrow opacity-80">Colección Sea Star</p>
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="cruise-card__title">{{ navio.nombre }}</h3>
+                <span class="cruise-card__tag">{{ navio.tipo_navio.nombre }}</span>
+              </div>
+            </div>
+
+            <p class="cruise-card__description line-clamp-3">{{ navio.descripcion_card }}</p>
+
+            {% if navio.feature_tags %}
+              <ul class="cruise-card__highlights space-y-1">
+                {% for tag in navio.feature_tags %}
+                  <li>{{ tag }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+
+          </div>
+
+        </article>
+
       </a>
+
     {% endfor %}
   </div>
 </section>
 
+
 </main>
+
+<style>
+  .cruise-card {
+    backdrop-filter: blur(8px);
+  }
+  .cruise-card__info {
+    font-family: "Poppins", "Segoe UI", sans-serif;
+  }
+  .cruise-card__eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(15, 30, 99, 0.35);
+    margin-bottom: 0.35rem;
+  }
+  .cruise-card__title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0f1e63;
+    letter-spacing: -0.01em;
+  }
+  .cruise-card__tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    border-radius: 9999px;
+    border: 2px solid rgba(122, 62, 242, 0.25);
+    color: rgba(122, 62, 242, 0.9);
+    background: rgba(122, 62, 242, 0.08);
+  }
+  .cruise-card__description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(11, 19, 48, 0.7);
+  }
+  .cruise-card__highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+  .cruise-card__highlights li {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(15, 30, 99, 0.15);
+    background: rgba(243, 245, 255, 0.85);
+    color: rgba(15, 30, 99, 0.78);
+  }
+  .cruise-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+  }
+  .cruise-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #7a3ef2;
+    letter-spacing: 0.05em;
+  }
+  .cruise-card__capacity {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(11, 19, 48, 0.6);
+  }
+</style>
 
 {% endblock %}

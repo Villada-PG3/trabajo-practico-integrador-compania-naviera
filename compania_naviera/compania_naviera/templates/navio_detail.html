@@ -4,11 +4,48 @@
   <div class="grid gap-8 lg:grid-cols-[1.1fr,0.9fr] items-start">
     <!-- Información del navío -->
     <div class="space-y-6">
-      <div class="card-surface rounded-3xl shadow-neon overflow-hidden">
-        {% if navio.imagen %}
-          <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-64 object-cover">
+      <div class="card-surface rounded-3xl shadow-lg overflow-hidden">
+        {% if navio.gallery %}
+          <div class="relative h-80 w-full overflow-hidden" data-slider>
+            <div class="flex h-full w-full transition-transform duration-500" data-slider-track>
+              {% for image in navio.gallery %}
+                <figure class="relative h-full w-full flex-shrink-0">
+                  <img src="{{ image.url }}" alt="{{ navio.nombre }} - {{ image.label }}"
+                       class="h-full w-full object-cover" loading="lazy">
+                  <figcaption class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent px-5 py-3 text-xs font-semibold uppercase tracking-wide text-white space-y-1">
+                    <span class="block">{{ image.label }}</span>
+                    <span class="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.3em]">
+                      {{ image.type|default:"exterior"|title }}
+                    </span>
+                  </figcaption>
+                </figure>
+              {% endfor %}
+            </div>
+
+            {% if navio.gallery|length > 1 %}
+              <button type="button"
+                      class="absolute left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-primary shadow-lg transition hover:bg-white"
+                      data-slider-prev aria-label="Imagen anterior de {{ navio.nombre }}">
+                <i class="fa-solid fa-chevron-left text-sm"></i>
+              </button>
+              <button type="button"
+                      class="absolute right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-primary shadow-lg transition hover:bg-white"
+                      data-slider-next aria-label="Imagen siguiente de {{ navio.nombre }}">
+                <i class="fa-solid fa-chevron-right text-sm"></i>
+              </button>
+
+              <div class="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+                {% for image in navio.gallery %}
+                  <span class="h-2.5 w-2.5 rounded-full bg-white/50 transition duration-300 {% if forloop.first %}opacity-100{% else %}opacity-40{% endif %}"
+                        data-slider-indicator></span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% elif navio.imagen %}
+          <img src="{{ navio.imagen }}" alt="{{ navio.nombre }}" class="w-full h-80 object-cover">
         {% else %}
-          <div class="flex h-64 items-center justify-center text-5xl bg-bg/40">🛳️</div>
+          <div class="flex h-80 items-center justify-center text-5xl bg-bg/40">🛳️</div>
         {% endif %}
         <div class="p-8 space-y-3">
           <h1 class="text-3xl font-bold">{{ navio.nombre }}</h1>
@@ -17,15 +54,25 @@
           <p class="text-text/80">Capacidad máxima: {{ navio.cantidad_maxima_de_pasajeros }} pasajeros</p>
           <p class="text-text/80">Cantidad de motores: {{ navio.cantidad_de_motores }}</p>
           <p class="text-text/80">Autonomía de viaje: {{ navio.autonomia_de_viaje }} días</p>
+          {% if navio.gallery %}
+            <div class="pt-3 space-y-2">
+              <p class="text-sm font-semibold text-text/70 uppercase tracking-wide">Ambientes a bordo</p>
+              <div class="flex flex-wrap gap-2">
+                {% for image in navio.gallery %}
+                  <span class="badge-accent text-xs px-3 py-1">{{ image.label }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
         </div>
       </div>
 
-      <a href="{% url 'ofertas' %}" class="inline-flex items-center gap-3 btn-primary px-6 py-3 rounded-2xl font-semibold shadow-neon hover:scale-[1.02]">
+      <a href="{% url 'ofertas' %}" class="inline-flex items-center gap-3 btn-primary px-6 py-3 rounded-2xl font-semibold shadow-lg hover:scale-[1.02]">
         <i class="fa-solid fa-ticket"></i> Ver ofertas →
       </a>
     </div>
 
-    <aside class="card-surface rounded-3xl shadow-neon p-8 space-y-5">
+    <aside class="card-surface rounded-3xl shadow-lg p-8 space-y-5">
   <h2 class="text-2xl font-semibold">Características destacadas</h2>
   <ul class="space-y-3 text-text/80">
     <li class="flex items-center gap-3">

@@ -9,11 +9,68 @@
   <!-- ENCABEZADO -->
   <div class="flex flex-col md:flex-row gap-8 mb-10">
     <div class="md:w-1/2">
-      {% if oferta.navio.imagen %}
-        <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="w-full h-80 object-cover rounded-2xl shadow-lg">
+      {% with gallery=oferta.gallery|default:gallery %}
+      {% if gallery|length %}
+        <div class="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg bg-bg/60" data-slider aria-label="Postales de {{ oferta.viaje.nombre }}">
+          <div class="flex h-full w-full transition-transform duration-500" data-slider-track style="transform: translateX(0%);">
+            {% for image in gallery %}
+              <figure class="relative h-full w-full flex-shrink-0">
+                <img src="{{ image.url }}" alt="{{ oferta.viaje.nombre }} - {{ image.label }}"
+                     class="h-full w-full object-cover" loading="lazy">
+                <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent px-5 py-4 text-xs font-semibold uppercase tracking-wide text-white space-y-1">
+                  <span class="block leading-snug">{{ image.label }}</span>
+                  <span class="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/15 px-3 py-1 text-[10px] tracking-[0.35em]">
+                    {% if image.type == "destino" %}
+                      Destino
+                    {% elif image.type == "cabin" %}
+                      Camarote
+                    {% elif image.type == "interior" %}
+                      Interior
+                    {% elif image.type == "exterior" %}
+                      Exterior
+                    {% else %}
+                      {{ image.type|default:"Ambiente"|title }}
+                    {% endif %}
+                  </span>
+                </figcaption>
+              </figure>
+            {% endfor %}
+          </div>
+
+          {% if gallery|length > 1 %}
+            <button type="button"
+                    class="absolute left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-lg transition hover:bg-white"
+                    data-slider-prev aria-label="Imagen anterior de {{ oferta.viaje.nombre }}">
+              <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button type="button"
+                    class="absolute right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-primary shadow-lg transition hover:bg-white"
+                    data-slider-next aria-label="Imagen siguiente de {{ oferta.viaje.nombre }}">
+              <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+
+            <div class="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+              {% for image in gallery %}
+                <span class="h-2.5 w-2.5 rounded-full bg-white/55 transition duration-300 {% if forloop.first %}opacity-100{% else %}opacity-40{% endif %}"
+                      data-slider-indicator></span>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <span class="absolute top-3 right-3 inline-flex items-center rounded-full bg-gradient-to-br from-primary to-secondary px-3 py-1 text-white text-sm font-semibold shadow-lg">
+            USD {{ oferta.precio }}
+          </span>
+        </div>
+      {% elif oferta.navio.imagen %}
+        <div class="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg">
+          <img src="{{ oferta.navio.imagen }}" alt="{{ oferta.navio.nombre }}" class="h-full w-full object-cover">
+        </div>
       {% else %}
-        <img src="{% static 'placeholder.jpg' %}" alt="Imagen del viaje" class="w-full h-80 object-cover rounded-2xl shadow-lg">
+        <div class="relative h-80 w-full overflow-hidden rounded-2xl shadow-lg">
+          <img src="{% static 'placeholder.jpg' %}" alt="Imagen del viaje" class="h-full w-full object-cover">
+        </div>
       {% endif %}
+      {% endwith %}
     </div>
 
     <div class="md:w-1/2 flex flex-col justify-center">
@@ -27,10 +84,13 @@
         <li><i class="fa-solid fa-ship text-primary"></i> <strong>Navío:</strong> {{ oferta.navio.nombre }}</li>
         <li><i class="fa-solid fa-tag text-primary"></i> <strong>Precio:</strong> USD {{ oferta.precio }}</li>
         <li><i class="fa-solid fa-layer-group text-primary"></i> <strong>Categoría:</strong> {{ categoria_nombre }}</li>
+        {% if cabin_label %}
+          <li><i class="fa-solid fa-bed text-primary"></i> <strong>Camarote destacado:</strong> {{ cabin_label }}</li>
+        {% endif %}
       </ul>
 
       <div class="mt-6">
-        <a href="{% if user.is_authenticated %}{% url 'crear_reserva' %}?viaje_navio_id={{ oferta.id }}{% else %}{% url 'login' %}?next={% url 'detalle_oferta' oferta.id %}{% endif %}"
+        <a href="{% if user.is_authenticated %}{% url 'reserva_step1' %}?viaje_navio_id={{ oferta.id }}{% else %}{% url 'login' %}?next={% url 'detalle_oferta' oferta.id %}{% endif %}"
           class="btn-primary px-6 py-3 rounded-lg font-medium text-white shadow-md hover:scale-[1.03] transition">
           {% if user.is_authenticated %}Reservar ahora{% else %}Iniciar sesión para reservar{% endif %}
         </a>
@@ -39,46 +99,49 @@
   </div>
 
   <!-- ITINERARIO -->
-  {% if itinerarios %}
+  {% if itinerario %}
     <div class="mt-10">
       <h2 class="text-2xl font-semibold mb-6">🗺️ Itinerario del viaje</h2>
-      <div class="space-y-10">
-        {% for item in itinerarios %}
-          <div class="space-y-4">
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">Itinerario {{ forloop.counter }}</p>
-              <h3 class="text-xl font-semibold text-text">{{ item.itinerario.nombre }}</h3>
-              {% if item.itinerario.categoria.descripcion %}
-                <p class="text-sm text-text/65 max-w-2xl">{{ item.itinerario.categoria.descripcion }}</p>
-              {% endif %}
-            </div>
-
-            <div class="relative pl-10">
-              <div class="absolute left-4 top-0 bottom-0 w-px bg-secondary/30"></div>
-              <ul class="space-y-4">
-                {% for parada in item.itinerario.ordenes.all %}
-                  <li class="relative flex gap-5">
-                    <div class="absolute -left-6 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary/20 text-primary">
-                      <i class="fa-solid fa-location-dot text-xs"></i>
-                    </div>
-                    <div class="flex-1 rounded-2xl border border-secondary/25 bg-bg/50 px-6 py-5 shadow-sm backdrop-blur">
-                      <div class="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-text/50 mb-2">
-                        <span>Día {{ forloop.counter }}</span>
-                        <span>Orden {{ parada.orden }}</span>
-                      </div>
-                      <h4 class="text-lg font-semibold text-text mb-1">{{ parada.nombre }}</h4>
-                      <p class="text-sm text-text/70">{{ parada.descripcion }}</p>
-                    </div>
-                  </li>
-                {% empty %}
-                  <li class="rounded-2xl border border-secondary/25 bg-bg/40 px-6 py-5 text-sm text-text/70">
-                    Sin paradas detalladas para este itinerario.
-                  </li>
-                {% endfor %}
-              </ul>
-            </div>
+      <div class="space-y-6">
+        <div class="space-y-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">Itinerario</p>
+            <h3 class="text-xl font-semibold text-text">{{ itinerario.itinerario.nombre }}</h3>
+            {% if itinerario.itinerario.categoria.descripcion %}
+              <p class="text-sm text-text/65 max-w-2xl">{{ itinerario.itinerario.categoria.descripcion }}</p>
+            {% endif %}
           </div>
-        {% endfor %}
+
+          <div class="relative pl-10">
+            <div class="absolute left-4 top-0 bottom-0 w-px bg-secondary/30"></div>
+            <ul class="space-y-4">
+              {% for parada in itinerario.itinerario.ordenes.all %}
+                <li class="relative flex gap-5">
+                  <div class="absolute -left-6 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary/20 text-primary">
+                    <i class="fa-solid fa-location-dot text-xs"></i>
+                  </div>
+                  <div class="flex-1 rounded-2xl border border-secondary/25 bg-bg/50 px-6 py-5 shadow-sm backdrop-blur">
+                    <div class="flex items-center justify-between gap-2 text-xs font-medium uppercase tracking-wider text-text/50 mb-2">
+                      <span>Día {{ forloop.counter }}</span>
+                      <span>Orden {{ parada.orden }}</span>
+                    </div>
+                    <h4 class="text-lg font-semibold text-text mb-1">{{ parada.nombre }}</h4>
+                    <p class="text-sm text-text/70">{{ parada.descripcion }}</p>
+                    {% if parada.imagen %}
+                      <div class="mt-4">
+                        <img src="{{ parada.imagen }}" alt="Imagen de {{ parada.nombre }}" class="w-full max-h-60 object-cover rounded-xl border border-secondary/20 shadow-sm">
+                      </div>
+                    {% endif %}
+                  </div>
+                </li>
+              {% empty %}
+                <li class="rounded-2xl border border-secondary/25 bg-bg/40 px-6 py-5 text-sm text-text/70">
+                  Sin paradas detalladas para este itinerario.
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   {% endif %}

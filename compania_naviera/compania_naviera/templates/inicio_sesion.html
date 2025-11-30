@@ -1,14 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="flex items-center justify-center min-h-[calc(100vh-80px)] px-6 py-16 md:px-10">
-  <div class="relative isolate w-full max-w-lg overflow-hidden rounded-3xl border border-primary/25 bg-surface/95 p-8 md:p-12 shadow-[0_30px_65px_rgba(5,24,36,0.35)]">
-    <div class="absolute inset-0 -z-10 opacity-80"
-         style="background: radial-gradient(100% 80% at 0% 0%, rgba(24,183,190,0.16), transparent),
-                 radial-gradient(80% 70% at 120% -10%, rgba(255,111,94,0.14), transparent);"></div>
-
+  <div class="relative isolate w-full max-w-lg overflow-hidden rounded-3xl border border-primary/40 bg-surface p-8 md:p-12 shadow-lg">
     <div class="relative z-10 space-y-8">
       <div class="text-center space-y-3">
-        <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/20 text-primary text-xl shadow-[0_12px_30px_rgba(5,24,36,0.18)]">
+        <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary-dark text-xl shadow-[0_12px_30px_rgba(148,163,235,0.25)]">
           <i class="fa-solid fa-user-astronaut"></i>
         </span>
         <div class="space-y-1">
@@ -22,7 +18,7 @@
           {% for message in messages %}
             <li class="flex items-start gap-3 rounded-2xl border px-4 py-3 text-sm md:text-base
                        {% if message.tags == 'error' %}
-                         border-red-400/50 bg-red-500/10 text-red-100
+                         border-secondary/45 bg-secondary/20 text-secondary-dark
                        {% elif message.tags == 'success' %}
                          border-primary/40 bg-primary/15 text-primary
                        {% else %}
@@ -75,10 +71,10 @@
         </button>
       </form>
 
-      <div class="flex flex-col items-center gap-3 rounded-2xl border border-primary/15 bg-bg/60 p-5 text-sm text-text/70 md:flex-row md:justify-between md:text-base">
+      <div class="flex flex-col items-center gap-3 rounded-2xl border border-primary/35 bg-white/85 p-5 text-sm text-text/70 md:flex-row md:justify-between md:text-base">
         <span>¿Todavía no sos parte de SEA STAR?</span>
         <a href="{% url 'registro' %}"
-           class="inline-flex items-center gap-2 rounded-full border border-secondary/40 px-4 py-2 text-sm font-semibold transition hover:border-secondary hover:text-secondary">
+           class="inline-flex items-center gap-2 rounded-full border border-secondary/40 px-4 py-2 text-sm font-semibold transition hover:border-secondary-dark hover:text-secondary-dark">
           <i class="fa-solid fa-user-plus"></i>
           Crear cuenta
         </a>
