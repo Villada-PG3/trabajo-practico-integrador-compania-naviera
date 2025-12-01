@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
 <style>
   /* Ajustes locales para el bloque de acciones de pasajeros */
@@ -117,9 +119,33 @@
     <aside class="lg:col-span-1">
       <div class="p-6 rounded-3xl border border-primary/15 bg-white shadow-[0_20px_40px_rgba(15,30,99,0.16)] sticky top-24" style="z-index: 12000;">
         <div class="flex items-center gap-2 text-primary-dark font-semibold">
-          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/12 text-primary"><i class="fa-solid fa-clipboard-list"></i></span>
-          <h3 class="text-lg font-semibold">Resumen</h3>
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/12 text-primary">
+            <i class="fa-solid fa-clipboard-list"></i>
+          </span>
+          <h3 class="text-lg font-semibold text-text mb-3">Tu reserva</h3>
         </div>
+
+        <!-- Imagen fija (la primera disponible) -->
+        <div class="h-52 rounded-xl overflow-hidden shadow relative">
+          {% with gallery=viaje_navio.gallery %}
+            {% if gallery and gallery|length %}
+              <img src="{{ gallery.0.url }}"
+                  alt="{{ gallery.0.label }}"
+                  class="w-full h-52 object-cover">
+            
+            {% elif viaje_navio.navio.imagen %}
+              <img src="{{ viaje_navio.navio.imagen }}"
+                  alt="{{ viaje_navio.navio.nombre }}"
+                  class="w-full h-52 object-cover">
+
+            {% else %}
+              <img src="{% static 'placeholder.jpg' %}"
+                  alt="Imagen no disponible"
+                  class="w-full h-52 object-cover">
+            {% endif %}
+          {% endwith %}
+        </div>
+
         <div class="mt-3 text-sm space-y-3 leading-relaxed">
           <p><strong>Viaje:</strong><br>{{ carrito.viaje_display }}</p>
           <p><strong>Tipo:</strong><br>{{ carrito.tipo_display }}</p>
@@ -137,10 +163,10 @@
         </div>
       </div>
     </aside>
+
   </div>
 </div>
 
-<!-- JS: dinámico -->
 <script>
   const capacidadMax = parseInt("{{ carrito.capacidad_max|default:1 }}") || 1;
   const pasajerosArea = document.getElementById('pasajeros-area');
